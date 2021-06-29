@@ -33,7 +33,7 @@
                           <div class="col-md-7">
                             <select id="category_name_fr" name="category_parent" class="form-control">
                               <option selected>Chọn làm chuyên mục cha</option>
-                              {{#each listCategorys}}
+                              {{#each listCategories}}
                               <option value={{_id}} >{{this.categoryName}}</option>
                               {{/each}}
                             </select>
@@ -68,7 +68,7 @@
           <div class="form-group">
             <select id="tasg" class="form-control">
               <option selected>Tất cả chuyên mục con</option>
-              {{#each listCategorys}}
+              {{#each listCategories}}
               <option>{{this.categoryName}}</option>
               {{/each}}
             </select>
@@ -111,7 +111,7 @@
               </tr>
             </thead>
             <tbody>
-              {{#each listCategorys}}
+              {{#each listCategories}}
               <tr>
                 <td>
                   <div class="form-check-inline">
@@ -269,7 +269,7 @@
                             cha</b></label>
                         <div class="col-md-8">
                           <select id="categorysub_parent" name="categorysub_parent" class="form-control">
-                            {{#each listCategorys}}
+                            {{#each listCategories}}
                             <option>{{this.categoryName}}</option>
                             {{/each}}
                           </select>
