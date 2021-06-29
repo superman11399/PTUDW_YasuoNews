@@ -1,0 +1,133 @@
+<div class="card" style="min-width: 44rem;">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3 border-right">
+            <h4>Danh sách bài viết</h4>
+        </div>     
+        <div class="col">
+          <button type="button" class="btn btn-md btn-success float-right" onclick="window.location='/admin/post'">Thêm bài viết</button>
+        </div>   
+      </div>
+      <!-- filter -->
+      <div class="row align-items-center justify-content-center">
+        <div class="col pt-3">
+          <div class="form-group">
+            <select id="categories" class="form-control">
+              <option selected>Tất cả chuyên mục</option>
+              <option>Nông nghiệp</option>
+              <option>Kinh tế</option>
+              <option>Ẩm thực</option>
+              <option>Thể thao</option>
+            </select>
+          </div>
+        </div>
+        <div class="col pt-3">
+          <div class="form-group">
+            <select id="tasg" class="form-control">
+              <option selected>Tất cả thẻ tag</option>
+              <option>Nông nghiệp</option>
+              <option>Kinh tế</option>
+              <option>Ẩm thực</option>
+              <option>Thể thao</option>
+            </select>
+          </div>
+        </div>
+        <div class="col pt-3">
+            <div class="form-group">
+              <select id="tasg" class="form-control">
+                <option selected>Tất cả trạng thái</option>
+                <option>Đã duyệt</option>
+                <option>Bị từ chối</option>
+              </select>
+            </div>
+          </div>
+        <div class="col-md-3">
+          <button type="button" class="btn btn-primary btn-block"><i class="fa fa-filter"></i> Lọc</button>
+        </div>
+      </div> <!-- end filter-->
+             {{# if hasError }}
+            <div class="alert alert-danger" role="alert">
+                {{# each errors }}
+                    {{ this }}</br>
+                {{/ each }}
+            </div>
+        {{ else }}
+          {{# if hasSuccess }}
+            <div class="alert alert-success" role="alert">
+                {{# each success }}
+                    {{ this }}</br>
+                {{/ each }}
+            </div>
+          {{/ if }}
+        {{/ if }}
+            <div class="row">
+        <div class="col-md-12">
+          <table class="table table-hover ">
+            <thead class="bg-light ">
+              <tr>
+                {{!-- <th>
+                  <div class="form-check-inline">
+                      <label class="form-check-label">
+                        <input type="checkbox" class="form-check-input" value="">
+                       </label>
+                   </div>
+                </th>   --}}
+                                {{#unless notEdit}}
+                  <th>Edit</th>
+                {{/unless}}   
+                <th>Title</th>
+                <th>Author</th>
+                <th>Categories</th>
+                {{!-- <th>Tags</th> --}}
+                {{!-- <th>Comments</th> --}}
+                <th>Ngày viết</th>
+                <th>Trạng thái</th>
+                <th>Ngày đăng</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {{#each listArticles}}
+              {{!-- Aritcle --}}
+              <tr>
+                                {{#unless ../notEdit}}
+                  <td>
+                    <a href="/user/admin/edit/{{this.id}}"><i class="fa fa-edit"></i></a>
+                    {{!-- <a href="#"><i class="fa fa-eye"></i></a> --}}
+                    {{!-- <a href="#"><i class="fa fa-trash"></i></a> --}}
+                    <button type="submit" class="btn btn-link" id="{{this.id}}" onclick="deleteArticle(this.id)"><i class="fa fa-trash" title="Xóa người dùng"></i></button>
+                  </td>
+                {{/unless}}   
+                <td><a href="#"><small>{{this.title}}</small></a></td>
+                <td><small>{{this.writer.pseudonym}}</small></td>
+                <td><small>{{this.categoryMain.categoryName}} / {{this.categorySub.categoryName}}</small></td>
+
+                {{!-- <td><small>{{this.arrayOfTags.length}}</small></td> --}}
+                {{!-- <td><a href="#"><small>{{this.comments.length}}</small></a></td> --}}
+                <td><small>{{formatDate writeDate day="numeric" month="long" year="numeric"}}</small></td>
+                <td><small>
+                  {{#if_equal status "approved"}}
+                  Đã xuất bản
+                  {{else}}
+                  Chưa xuất bản
+                  {{/if_equal}}
+                </small></td>
+                {{#if postDate}}
+                <td><small>{{formatDate postDate day="numeric" month="long" year="numeric"}}</small></td>
+                {{else}}
+                <td><small>Chưa xuất bản</small></td>
+                {{/if}}
+
+              </tr>
+              {{else}}
+              <div class="alert alert-danger" role="alert">
+                <strong> Không có bài viết nào </strong>
+              </div>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden>
