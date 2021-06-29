@@ -1,19 +1,20 @@
-const knex = require("knex")({
-  client: "mysql2",
+const knex = require('knex')({
+  client: 'mysql2',
   connection: {
-    host: "127.0.0.1",
-    user: "root",
-    password: "",
-    database: "qlbh",
-    port: 3306,
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'root',
+    database: 'qlbh',
+    port: 3306
   },
   pool: {
     min: 0,
-    max: 50,
-  },
+    max: 50
+  }
 });
 
 module.exports = knex;
+
 
 // const { MongoClient } = require('mongodb');
 // const uri = "mongodb+srv://yasuo_news_app:IOk7oc6lAsAIUuFP@cluster0.v8zx5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
