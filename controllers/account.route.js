@@ -7,7 +7,7 @@ const auth = require('../middlewares/auth.mdw');
 
 const router = express.Router();
 
-router.get('/profile', auth, function (req, res) {
+router.get('/profile', function (req, res) {
   res.render('accountView/profile',{
     layout: 'account.hbs'
   });
@@ -76,7 +76,7 @@ router.post('/login', async function (req, res) {
   res.redirect(url);
 })
 
-router.post('/logout', auth, async function (req, res) {
+router.post('/logout', async function (req, res) {
   req.session.auth = false;
   req.session.authUser = null;
   req.session.retUrl = '';
