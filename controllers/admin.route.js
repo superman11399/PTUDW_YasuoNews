@@ -30,17 +30,11 @@ router.get('/manage/tag', function (req, res) {
 
 router.get('/manage/user', async function (req, res) {
     const list = await userModel.all();
+
     res.render('adminView/user', {
         layout: 'admin.hbs',
         title: 'Admin | Quản lí người dùng',
         userList: list,
-    });
-});
-
-router.get('/manage/user', function (req, res) {
-    res.render('adminView/user', {
-        layout: 'admin.hbs',
-        title: 'Admin | Quản lí người dùng',
     });
 });
 
