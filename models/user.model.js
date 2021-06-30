@@ -17,7 +17,6 @@ module.exports = {
     const row = await db('nguoidung').where('LoaiNguoiDung', type);
     if (rows.length === 0)
       return null;
-    
     return row;
   },
 
