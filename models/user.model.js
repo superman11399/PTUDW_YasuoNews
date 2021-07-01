@@ -25,6 +25,15 @@ module.exports = {
     return this.patch('idNguoiDung', id, 'nguoidung', 'LoaiNguoiDung', value);
   },
 
+  async assignCate(row){
+    isExisted = await this.checkExist('idBTV',row.idBTV,'editor');
+    console.log(isExisted);
+    if(isExisted)
+      return this.patch('idBTV',row.idBTV,'editor','idChuyenMucChinh', row.idChuyenMucChinh);
+    else
+      return this.add(row,'editor');
+  },
+
   async checkExist(IDname, idVal, table){
     row = await db(table).where(IDname, idVal);
     if (row.length === 0)
@@ -63,4 +72,38 @@ module.exports = {
       return null;
     return row;
   },
+
+  async findSubscriberWithDetail() {
+    const query = `select *, TIMESTAMPDIFF(MINUTE,NOW(),s.NgayHetHan) as soPhut
+    from nguoidung nd JOIN subscriber s ON nd.idNguoiDung = s.idDocGia`;
+    row = await db.schema.raw(query);
+    if (row.length === 0)
+      return null;
+    return row[0];
+  },
+
+  async findEditorWithDetail() {
+    const row = await db('nguoidung').join('editor', 'idNguoiDung','=','idBTV').join('chuyenmucchinh','chuyenmucchinh.idChuyenMucChinh','=','editor.idChuyenMucChinh');
+    if (row.length === 0)
+      return null;
+    return row;
+  },
+
+  async findWriterWithDetail() {
+    const query =`SELECT *
+    FROM (SELECT nd.*, w.ButDanh, COUNT(b.idBaiBao) as tongBaiBao 
+          FROM (nguoidung nd JOIN writer w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
+          WHERE nd.LoaiNguoiDung ='writer'
+          GROUP BY nd.idNguoiDung) as A
+          LEFT JOIN
+          (SELECT wp.idPV, COUNT(bd.idBaiBao) as soBaiDaDang
+          FROM (writer wp LEFT JOIN baibao bp on wp.idPV = bp.idTacGia) LEFT JOIN baibaoduocduyet bd on bp.idBaiBao = bd.idBaiBao
+          GROUP BY wp.idPV) as B
+          on A.idNguoiDung = B.idPV`;
+    row = await db.schema.raw(query);
+    if (row.length === 0)
+      return null;
+    return row[0];
+  },
+
 };
