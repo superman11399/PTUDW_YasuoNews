@@ -1,8 +1,16 @@
 const express = require("express");
 const morgan = require("morgan");
+var hbs = require('handlebars');
 
 const app = express();
+
 app.use(morgan("dev"));
+
+hbs.registerHelper('dateFormat', require('handlebars-dateformat'));
+hbs.registerHelper('ifEquals', function(arg1, arg2, options) {
+  console.log(arg1,arg2);
+  return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+});
 
 app.use(
   express.urlencoded({
