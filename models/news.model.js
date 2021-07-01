@@ -46,29 +46,53 @@ module.exports = {
     'BaiBaoDuocDuyet.idBaiBao').limit(1);
     return db.union(id1, true).union(id2, true).union(id3, true).union(id4, true).union(id5, true).union(id6, true);
   },
-  LayDanhSachBaiVietTheoChuyenMucPhu(idChuyenMucPhu)
+  LayDanhSachBaiVietTheoChuyenMucPhu(idChuyenMucPhu,offset)
   {
     return db('BaiBao').where('BaiBao.idChuyenMucPhu',idChuyenMucPhu).where('BaiBao.TinhTrangDuyet','Đã xuất bản').join('ChuyenMucPhu','BaiBao.idChuyenMucPhu','=',
     'ChuyenMucPhu.idChuyenMucPhu').join('PhongVien','BaiBao.idTacGia','=',
     'PhongVien.idPV').join('BaiBaoDuocDuyet','BaiBao.idBaiBao','=',
-    'BaiBaoDuocDuyet.idBaiBao');
+    'BaiBaoDuocDuyet.idBaiBao').offset(offset).limit(6);
   },
-  LayDanhSachBaiVietTheoChuyenMucChinh(idChuyenMucChinh)
+  LayDanhSachBaiVietTheoChuyenMucChinh(idChuyenMucChinh,offset)
   {
     return db('BaiBao').where('BaiBao.TinhTrangDuyet','Đã xuất bản').join('ChuyenMucPhu','BaiBao.idChuyenMucPhu','=',
     'ChuyenMucPhu.idChuyenMucPhu').join('ChuyenMucChinh','ChuyenMucPhu.idChuyenMucChinh','=','ChuyenMucChinh.idChuyenMucChinh').where('ChuyenMucChinh.idChuyenMucChinh',idChuyenMucChinh).join('PhongVien','BaiBao.idTacGia','=',
     'PhongVien.idPV').join('BaiBaoDuocDuyet','BaiBao.idBaiBao','=',
-    'BaiBaoDuocDuyet.idBaiBao');
+    'BaiBaoDuocDuyet.idBaiBao').offset(offset).limit(6);
   },
   LayTagBaiBao()
   {
       return db('BaiBao_Tag').join('Tag','Tag.idTag','=','BaiBao_Tag.idTag').join('BaiBao','BaiBao.idBaiBao','=','BaiBao_Tag.idBaiBao').where('BaiBao.TinhTrangDuyet','Đã xuất bản');
   },
-  LayDanhSachBaiVietTheoTag(idTag)
+  LayDanhSachBaiVietTheoTag(idTag,offset)
   {
     return db('BaiBao_Tag').where('BaiBao_Tag.idTag',idTag).join('Tag','Tag.idTag','=','BaiBao_Tag.idTag').join('BaiBao','BaiBao.idBaiBao','=','BaiBao_Tag.idBaiBao').join('ChuyenMucPhu','BaiBao.idChuyenMucPhu','=',
     'ChuyenMucPhu.idChuyenMucPhu').join('PhongVien','BaiBao.idTacGia','=',
     'PhongVien.idPV').join('BaiBaoDuocDuyet','BaiBao.idBaiBao','=',
-    'BaiBaoDuocDuyet.idBaiBao').where('BaiBao.TinhTrangDuyet','Đã xuất bản');
+    'BaiBaoDuocDuyet.idBaiBao').where('BaiBao.TinhTrangDuyet','Đã xuất bản').offset(offset).limit(6);
+  },
+  async countChuyenMucPhu(idChuyenMucPhu) {
+    const rows = await db('BaiBao').where('BaiBao.idChuyenMucPhu',idChuyenMucPhu).where('BaiBao.TinhTrangDuyet','Đã xuất bản').join('ChuyenMucPhu','BaiBao.idChuyenMucPhu','=',
+    'ChuyenMucPhu.idChuyenMucPhu').join('PhongVien','BaiBao.idTacGia','=',
+    'PhongVien.idPV').join('BaiBaoDuocDuyet','BaiBao.idBaiBao','=',
+    'BaiBaoDuocDuyet.idBaiBao').count('*', { as: 'total' });
+
+    return rows[0].total;
+  },
+  async countChuyenMucChinh(idChuyenMucChinh) {
+    const rows = await db('BaiBao').where('BaiBao.TinhTrangDuyet','Đã xuất bản').join('ChuyenMucPhu','BaiBao.idChuyenMucPhu','=',
+    'ChuyenMucPhu.idChuyenMucPhu').join('ChuyenMucChinh','ChuyenMucPhu.idChuyenMucChinh','=','ChuyenMucChinh.idChuyenMucChinh').where('ChuyenMucChinh.idChuyenMucChinh',idChuyenMucChinh).join('PhongVien','BaiBao.idTacGia','=',
+    'PhongVien.idPV').join('BaiBaoDuocDuyet','BaiBao.idBaiBao','=',
+    'BaiBaoDuocDuyet.idBaiBao').count('*', { as: 'total' });
+
+    return rows[0].total;
+  },
+  async countTag(idTag) {
+    const rows = await  db('BaiBao_Tag').where('BaiBao_Tag.idTag',idTag).join('Tag','Tag.idTag','=','BaiBao_Tag.idTag').join('BaiBao','BaiBao.idBaiBao','=','BaiBao_Tag.idBaiBao').join('ChuyenMucPhu','BaiBao.idChuyenMucPhu','=',
+    'ChuyenMucPhu.idChuyenMucPhu').join('PhongVien','BaiBao.idTacGia','=',
+    'PhongVien.idPV').join('BaiBaoDuocDuyet','BaiBao.idBaiBao','=',
+    'BaiBaoDuocDuyet.idBaiBao').where('BaiBao.TinhTrangDuyet','Đã xuất bản').count('*', { as: 'total' });
+
+    return rows[0].total;
   },
 };

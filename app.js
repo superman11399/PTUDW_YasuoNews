@@ -17,9 +17,13 @@ app.use(
     extended: true,
   })
 );
+
 app.use(express.static(__dirname + "/public"));
 app.use("/account/", express.static(__dirname + "/public"));
 app.use("/news/", express.static(__dirname + "/public"));
+app.use("/news/newslist/idChuyenMucChinh", express.static(__dirname + "/public"));
+app.use("/news/newslist/idChuyenMucPhu", express.static(__dirname + "/public"));
+app.use("/news/newslist/idTag", express.static(__dirname + "/public"));
 app.use("/admin/", express.static(__dirname + "/public"));
 app.use("/writer/", express.static(__dirname + "/public"));
 

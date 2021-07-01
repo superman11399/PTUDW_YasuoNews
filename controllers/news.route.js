@@ -23,36 +23,99 @@ router.get('/home', async function (req, res) {
   });
 });
 
-router.get('/newslist',async function (req, res) {
-  const listTag = await news.LayTagBaiBao();
-  if (req.query.idChuyenMucPhu){
-    const listBaiBao = await news.LayDanhSachBaiVietTheoChuyenMucPhu(req.query.idChuyenMucPhu);
-    res.render('newsView/newslist', {
-      listBaiBao: listBaiBao,
-      listTag: listTag,
-      emptyList: listBaiBao===0,
-  });
-  }
-  if (req.query.idChuyenMucChinh){
-    const listBaiBao = await news.LayDanhSachBaiVietTheoChuyenMucChinh(req.query.idChuyenMucChinh);
-    res.render('newsView/newslist', {
-      listBaiBao: listBaiBao,
-      listTag: listTag,
-      emptyList: listBaiBao===0,
-  });
-  }
-  if (req.query.idTag){
-    const listBaiBao = await news.LayDanhSachBaiVietTheoTag(req.query.idTag);
-    res.render('newsView/newslist', {
-      listBaiBao: listBaiBao,
-      listTag:listTag,
-      emptyList: listBaiBao===0,
+router.get('/newslist/idChuyenMucPhu/:id',async function (req, res) {
+  const idChuyenMucPhu = req.params.id || 1;
+  const limit = 6;
+  const page = req.query.page || 1;
+  if (page < 1) page = 1;
+  const total = await news.countChuyenMucPhu(idChuyenMucPhu);
+  let nPages = Math.floor(total / limit);
+  if (total % limit > 0) nPages++;
+  const page_numbers = [];
+  for (i = 1; i <= nPages; i++) {
+    page_numbers.push({
+      value: i,
+      isCurrent: i === +page
     });
   }
-  
+
+  const offset = (page - 1) * limit;
+
+  const listTag = await news.LayTagBaiBao();
+  const listBaiBao = await news.LayDanhSachBaiVietTheoChuyenMucPhu(idChuyenMucPhu,offset);
+  res.render('newsView/newslist', {
+      listBaiBao: listBaiBao,
+      listTag: listTag,
+      emptyList: listBaiBao===0,
+      page_numbers
+  });
 });
 
+router.get('/newslist/idTag/:id',async function (req, res) {
+  const idTag = req.params.id || 1;
+  const limit = 6;
+  const page = req.query.page || 1;
+  if (page < 1) page = 1;
+  const total = await news.countTag(idTag);
+  let nPages = Math.floor(total / limit);
+  if (total % limit > 0) nPages++;
+  const page_numbers = [];
+  for (i = 1; i <= nPages; i++) {
+    page_numbers.push({
+      value: i,
+      isCurrent: i === +page
+    });
+  }
 
+  const offset = (page - 1) * limit;
+
+  const listTag = await news.LayTagBaiBao();
+  const listBaiBao = await news.LayDanhSachBaiVietTheoTag(idTag,offset);
+  res.render('newsView/newslist', {
+      listBaiBao: listBaiBao,
+      listTag: listTag,
+      emptyList: listBaiBao===0,
+      page_numbers
+  });
+});
+
+router.get('/newslist/idChuyenMucChinh/:id',async function (req, res) {
+  const idChuyenMucChinh = req.params.id || 1;
+  const limit = 6;
+  const page = req.query.page || 1;
+  if (page < 1) page = 1;
+  const total = await news.countChuyenMucChinh(idChuyenMucChinh);
+  let nPages = Math.floor(total / limit);
+  if (total % limit > 0) nPages++;
+  const page_numbers = [];
+  for (i = 1; i <= nPages; i++) {
+    page_numbers.push({
+      value: i,
+      isCurrent: i === +page
+    });
+  }
+
+  const offset = (page - 1) * limit;
+
+  const listTag = await news.LayTagBaiBao();
+  const listBaiBao = await news.LayDanhSachBaiVietTheoChuyenMucChinh(idChuyenMucChinh,offset);
+  res.render('newsView/newslist', {
+      listBaiBao: listBaiBao,
+      listTag: listTag,
+      emptyList: listBaiBao===0,
+      page_numbers
+  });
+});
+
+router.get('/newslist/idTag/:id',async function (req, res) {
+  const listTag = await news.LayTagBaiBao();
+  const listBaiBao = await news.LayDanhSachBaiVietTheoTag(req.params.id);
+  res.render('newsView/newslist', {
+    listBaiBao: listBaiBao,
+    listTag:listTag,
+    emptyList: listBaiBao===0,
+  });
+});
 
 router.get('/newscontent', function (req, res) {
   res.render('newsView/newscontent');
