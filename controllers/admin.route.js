@@ -30,7 +30,6 @@ router.get('/manage/tag', function (req, res) {
 
 router.get('/manage/user', async function (req, res) {
     const list = await userModel.all();
-
     res.render('adminView/user', {
         layout: 'admin.hbs',
         title: 'Admin | Quản lí người dùng',
@@ -38,31 +37,11 @@ router.get('/manage/user', async function (req, res) {
     });
 });
 
-router.post('/manage/user', async function (req, res) {
-    if(req.body.TypeUser === 'all')
-        res.redirect('/admin/manage/user');
-    const list = await userModel.findByUserType(req.body.TypeUser);
-
+router.get('/manage/user', function (req, res) {
     res.render('adminView/user', {
         layout: 'admin.hbs',
         title: 'Admin | Quản lí người dùng',
-        userList: list,
     });
-});
-
-router.post('/delUser', async function (req, res) {
-    if (typeof req.body.id !== 'undefined')
-        await userModel.del('idNguoiDung',+req.body.id, 'nguoidung');
-    res.redirect('/admin/manage/user');
-});
-
-router.post('/patchRole', async function (req, res) {
-    console.log(req.body.role);
-    console.log(req.body.oldrole);
-    if (typeof req.body.id !== 'undefined')
-        await userModel.patchRole(req.body.id, req.body.role);
-            
-    res.redirect('/admin/manage/user');
 });
 
 module.exports = router;

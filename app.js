@@ -31,10 +31,10 @@ app.use("/news/newscontent", express.static(__dirname + "/public"));
 app.use("/admin/", express.static(__dirname + "/public"));
 app.use("/writer/", express.static(__dirname + "/public"));
 
-require('./middlewares/session.mdw')(app);
-require('./middlewares/view.mdw')(app);
-require('./middlewares/locals.mdw')(app);
-require('./middlewares/routes.mdw.js')(app);
+require("./middlewares/session.mdw")(app);
+require("./middlewares/view.mdw")(app);
+require("./middlewares/locals.mdw")(app);
+require("./middlewares/routes.mdw.js")(app);
 
 const PORT = 3000;
 app.listen(PORT, function () {
