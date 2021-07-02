@@ -312,7 +312,6 @@ module.exports = {
       )
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
       .count("*", { as: "total" });
-
     return rows[0].total;
   },
   async ChiTietBaiViet(idBaiBao) {
@@ -365,4 +364,14 @@ module.exports = {
     const sql = `select ThoiGianBinhLuan,HoTen, NoiDung from binhluan join baibao on baibao.idBaiBao=binhluan.idBaiBao join nguoidung on nguoidung.idNguoiDung=binhluan.idNguoiDung where baibao.idBaiBao=${idBaiBao}`;
     return db.raw(sql);
   },
+  search(text,offset){
+    const query = "SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4 ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('"+text+"' IN NATURAL LANGUAGE MODE) LIMIT "+offset+",6;";
+    return db.raw(query);
+  },
+  async countSearch(text){
+    const query = "SELECT COUNT(*) total FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('"+text+"' IN NATURAL LANGUAGE MODE);";
+    const rows = await db.raw(query);
+    console.log(rows[0][0])
+    return rows[0][0].total;
+  }
 };
