@@ -1,13 +1,21 @@
+{{#section 'css'}}
+
+{{/section}}
+
+{{#section 'js'}}
+<script src="/js/admin-manager.js"></script>
+{{/section}}
+
 <div class="card" style="min-width: 44rem;">
   <div class="card-body">
     <div class="row">
       <div class="col-md-3 border-right">
-        <h4>Danh sách Tags</h4>
+        <h4><i class="fa fa-tags"></i> Danh sách Tags</h4>
       </div>
       <div class="col-md-6 float-right">
         <div class="form-group">
           <div class="input-group">
-            <input type="text" class="form-control search-menu" placeholder="Tìm kiếm..." />
+            <input id="Search" type="text" class="form-control search-menu" placeholder="Tìm kiếm..." />
             <div class="input-group-append">
               <button type="button" class="btn btn-primary btn-block"><i class="fa fa-search"
                   aria-hidden="true"></i></button>
@@ -16,143 +24,105 @@
         </div>
       </div>
       <div class="col-md-3">
-        <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#addTag">Thêm tag
-          mới</button>
-        <div class="modal fade" id="addTag" tabindex="-1" role="dialog" aria-labelledby="addTagTitle"
-          aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-              <form action="/user/admin/manager-tag" method="POST" class="form-horizontal">
-                <fieldset>
-                  <div class="modal-header">
-                    <legend> ADD TAG</legend>
-                  </div>
-                  <div class="modal-body">
-                    <div class="text-right">
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="tagname"><b>Tag Name</b></label>
-                        <div class="col-md-7">
-                          <input id="tagname" name="tagname" placeholder="Input tag name" class="form-control input-md"
-                            required="" type="text" />
-                        </div>
-                      </div>
-                      <input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden />
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                  </div>
-                </fieldset>
-              </form>
-            </div>
-          </div>
-        </div>
+        <button href="#addTagModal" class="btn btn-success float-right" data-toggle="modal"><i class="fa fa-tag" title="Thêm tag"></i> Thêm tag mới</button>
       </div>
     </div>
-    <div class="row">
+    <div class="row pt-4">
       <div class="col-md-12">
         <table class="table table-hover">
           <thead class="bg-light">
             <tr>
-              <th>
-                <div class="form-check-inline">
-                  <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" value="" />
-                  </label>
-                  All
-                </div>
-              </th>
+              <th>idTag</th>
               <th>Tên tag</th>
-
+              <th>Số bài báo chứa tag</th>
               <th>
                 <center>Thao tác</center>
               </th>
             </tr>
           </thead>
           <tbody>
-            {{#each this.listTags}}
+            {{#each tagList}}
             <tr>
-              <td>
-                <div class="form-check-inline">
-                  <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input" value="" />
-                  </label>
-                </div>
-              </td>
-              <td><a href="/list-articles/tag/{{_id}}">#{{tagName}}</a></td>
-              {{!-- <td>
-                <center><small>{{_id}}</small></center>
-              </td> --}}
-              {{!-- <td><a href="/list-articles/tag/{{_id}}">
-                  <center><small>{{arrayOfArticles.length}}</small></center>
-                </a></td> --}}
+              <td>{{idTag}}</td>
+              <td>{{TenTag}}</td>
+              <td>{{numberOfNews}}</td>
               <td>
                 <center>
-                  <a href="javascript:;" id="{{_id}}" title="{{tagName}}" data-toggle="modal" data-target="#updateTag"
-                    onclick="return updateTag(id,title)"><i class="fas fa-pencil-alt" title="Sửa tag"></i></a>
-                  <a href="javascript:;" id="{{_id}}" title="{{tagName}}" data-toggle="modal" data-target="#deleteTag"
-                    onclick="return deleteTag(id,title)"><i class="fa fa-trash" title="Xóa tag"></i></a>
+                  <button href="#renameTagModal" class="btn btn-primary btn-sm p-1 patchTagName" data-toggle="modal"
+                    data-id="{{this.idTag}}" data-content="{{this.TenTag}}" style="width: 20%;"><i
+                      class="fa fa-pencil-square" title="Chỉnh sửa tag"></i></button>
+                  <button href="#deleteTagModal" class="btn btn-primary btn-sm p-1 delTagConfirm" data-toggle="modal"
+                    data-id="{{this.idTag}}" data-content="{{this.TenTag}}" style="width: 20%;"><i class="fa fa-trash"
+                      title="Xóa Tag"></i></button>
                 </center>
               </td>
             </tr>
             {{/each}}
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <div class="modal fade" id="updateTag" tabindex="-1" role="dialog" aria-labelledby="updateTagModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-              <form action="/user/admin/manager-tag/update" method="POST" class="form-horizontal">
-                <fieldset>
-                  <div class="modal-header">
-                    <legend> UPDATE TAG</legend>
-                  </div>
-                  <div class="modal-body">
-                    <div class="text-right">
-                      <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="tagnameUpdate"><b>Tag Name</b></label>
-                        <div class="col-md-7">
-                          <input id="tagnameUpdate" name="tagnameUpdate" placeholder="Input tag name"
-                            class="form-control input-md" required="" type="text" />
-                        </div>
-                      </div>
-                      <input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden />
-                      <input type="text" id="tagid" name="tagid" hidden />
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                  </div>
-                </fieldset>
-              </form>
-            </div>
-          </div>
-        </div>
+<div class="modal fade" id="deleteTagModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Xác nhận</h3>
+      </div>
+      <div class="modal-body">
+        <p id="content"></p>
+      </div>
+      <div class="modal-footer">
+        <form action="/admin/manage/tag/delTag" method="POST" id="formDelTag">
+          <input type="hidden" id="del" name="id" value="">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+          <button class="btn btn-primary" type="submit">Xác nhận</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <!-- Modal xóa thư tag-->
-        <div class="modal fade" id="deleteTag" tabindex="-1" role="dialog" aria-labelledby="deleteTagModalLabel"
-          aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="deleteTagTitle">Xóa Tag</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <span id="content_delete"></span>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <a href="" id="deleteTagId" class="btn btn-primary" tabindex="-1" role="button">Xác nhận</a>
-              </div>
-            </div>
-          </div>
-        </div>
+<div class="modal fade" id="renameTagModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Phân công chuyên mục</h3>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/manage/tag/rename" method="POST" id="formTagRenaming">
+          <label style="font-style: italic; font-weight: bold;" for="newTagName">Thay đổi tên tag: </label>
+          <div class="row px-3"><input class="w-100" id="tagName" type="text" name="newTagName"></div>
+          <input type="hidden" id="idTag" name="id" value="">
+        </form>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        <button class="btn btn-primary" type="submit" form="formTagRenaming">Xác nhận</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addTagModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Thêm tag mới</h3>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/manage/tag/add" method="POST" id="formAddTag">
+          <label style="font-style: italic; font-weight: bold;" for="newTag">Thêm tag: </label>
+          <div class="row px-3"><input class="w-100" type="text" name="newTag"></div>
+        </form>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        <button class="btn btn-primary" type="submit" form="formAddTag">Xác nhận</a>
       </div>
     </div>
   </div>
