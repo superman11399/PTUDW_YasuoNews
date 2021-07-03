@@ -24,7 +24,8 @@
         </div>
       </div>
       <div class="col-md-3">
-        <button href="#addTagModal" class="btn btn-success float-right" data-toggle="modal"><i class="fa fa-tag" title="Thêm tag"></i> Thêm tag mới</button>
+        <button href="#addTagModal" class="btn btn-success float-right" data-toggle="modal"><i class="fa fa-tag"
+            title="Thêm tag"></i> Thêm tag mới</button>
       </div>
     </div>
     <div class="row pt-4">
@@ -49,10 +50,10 @@
               <td>
                 <center>
                   <button href="#renameTagModal" class="btn btn-primary btn-sm p-1 patchTagName" data-toggle="modal"
-                    data-id="{{this.idTag}}" data-content="{{this.TenTag}}" style="width: 20%;"><i
+                    data-id="{{this.idTag}}" data-content="{{this.TenTag}}" style="width: 25px;"><i
                       class="fa fa-pencil-square" title="Chỉnh sửa tag"></i></button>
                   <button href="#deleteTagModal" class="btn btn-primary btn-sm p-1 delTagConfirm" data-toggle="modal"
-                    data-id="{{this.idTag}}" data-content="{{this.TenTag}}" style="width: 20%;"><i class="fa fa-trash"
+                    data-id="{{this.idTag}}" data-content="{{this.TenTag}}" style="width: 25px;"><i class="fa fa-trash"
                       title="Xóa Tag"></i></button>
                 </center>
               </td>
@@ -107,18 +108,21 @@
   </div>
 </div>
 
-<div class="modal fade" id="addTagModal">
-  <div class="modal-dialog">
+<div class="modal fade bd-example-modal-lg" id="addTagModal" tabindex="-1" role="dialog"
+  aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Thêm tag mới</h3>
       </div>
       <div class="modal-body">
         <form action="/admin/manage/tag/add" method="POST" id="formAddTag">
-          <label style="font-style: italic; font-weight: bold;" for="newTag">Thêm tag: </label>
-          <div class="row px-3"><input class="w-100" type="text" name="newTag"></div>
+          <div class="row">
+            <label class="col-md-3 col-form-label text-right" style="font-style: italic; font-weight: bold;" for="newTag">Thêm tag: </label>
+            <div class="col-md-8"><input class="w-100 form-control input-md" required="" type="text"
+                name="newTag"></div>
+          </div>
         </form>
-        </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
