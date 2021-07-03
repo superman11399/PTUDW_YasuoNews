@@ -1,6 +1,13 @@
 
                 <!-- Login Form Start -->
                 <div class="login--form">
+                    {{#if this.message}}
+                    <div class="alert alert-info" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Thông báo:</span>
+                    {{message}}
+                    </div>
+                    {{/if}}
                     <div class="title">
                         <h1 class="h1">Đăng Nhập</h1>
                         <p>Điền vào khung bên dưới để đăng nhập</p>

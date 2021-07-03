@@ -20,19 +20,26 @@ router.get('/register', function (req, res) {
 })
 
 router.post('/register', async function (req, res) {
-  const hash = bcrypt.hashSync(req.body.raw_password, 10);
-  const dob = moment(req.body.raw_dob, 'DD/MM/YYYY').format('YYYY-MM-DD');
+  console.log(req.body);
+  const hash = bcrypt.hashSync(req.body.password, 10);
+  const dob = req.body.dob + ' 00:00:00';
+  console.log(dob);
   const user = {
-    username: req.body.username,
-    password: hash,
-    dob: dob,
-    name: req.body.name,
-    email: req.body.email,
-    permission: 0
+    HoTen: req.body.fullname,
+    NgaySinh: dob,
+    GioiTinh: req.body.gender,
+    Email: req.body.email,
+    TenDangNhap: req.body.username,
+    MatKhau: hash,
+    LoaiNguoiDung: 'guest',
+    TinhTrang: 1
   }
 
-  await userModel.add(user);
-  res.render('vwAccount/register');
+  await userModel.addNewGuest(user);
+  res.render('accountView/login', {
+    layout: 'account.hbs',
+    message: 'Đã đăng ký thành công! Vui lòng đăng nhập.'
+  });
 })
 
 router.get('/is-available', async function (req, res) {
@@ -41,7 +48,6 @@ router.get('/is-available', async function (req, res) {
   if (user === null) {
     return res.json(true);
   }
-
   res.json(false);
 })
 
