@@ -21,8 +21,22 @@ module.exports = {
     return db(table).where(IDname, idVal).del();
   },
 
+  delMainCate(id){
+    return this.del("idChuyenMucChinh",id, "chuyenmucchinh");
+  },
+
+  delSubCate(id){
+    return this.del("idChuyenMucPhu",id, "chuyenmucphu");
+  },
+
   patch(IDname, idVal, table, field, newVal) {
     return db(table).where(IDname, idVal).update(field, newVal);
+  },
+
+  patchRow(row, idName, table){
+    const id = row.id;
+    delete row.id;
+    return db(table).where(idName, id).update(row);
   },
 
   async findNonAssignedCate(){
@@ -35,6 +49,22 @@ module.exports = {
     row = await db.schema.raw(query);
     if (row.length === 0)
       return null;
+    return row[0];
+  },
+
+  async findCategoryWithDetail(){
+    const query = `SELECT c.*, COUNT(b.idBaiBao) as soBaiBao, COUNT(DISTINCT p.idChuyenMucPhu) as soChuyenMucCon
+    FROM (chuyenmucchinh c LEFT JOIN chuyenmucphu p on c.idChuyenMucChinh = p.idChuyenMucChinh) LEFT JOIN baibao b on b.idChuyenMucPhu = p.idChuyenMucPhu
+    GROUP BY c.idChuyenMucChinh`;
+    row = await db.raw(query);
+    return row[0];
+  },
+
+  async findSubCategoryWithDetail(){
+    const query = `SELECT p.*, c.TenChuyenMuc, COUNT(b.idBaiBao) as soBaiBao
+    FROM (chuyenmucchinh c JOIN chuyenmucphu p on c.idChuyenMucChinh = p.idChuyenMucChinh) LEFT JOIN baibao b on b.idChuyenMucPhu = p.idChuyenMucPhu
+    GROUP BY b.idChuyenMucPhu`;
+    row = await db.raw(query);
     return row[0];
   }
 };
