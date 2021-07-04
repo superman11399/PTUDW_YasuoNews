@@ -2,15 +2,15 @@ const db = require("../utils/db");
 
 module.exports = {
   all() {
-    return db("NguoiDung").whereNot("TinhTrang", 0);
+    return db("nguoidung").whereNot("TinhTrang", 0);
   },
 
   add(user) {
-    return db('NguoiDung').insert(user);
+    return db('nguoidung').insert(user);
   },
 
   addUserWithDetail(user, type, detail) {
-    return db("NguoiDung").insert(user);
+    return db("nguoidung").insert(user);
   },
 
   add(row, table) {
@@ -83,7 +83,7 @@ module.exports = {
   },
 
   async findByUsername(username) {
-    const rows = await db("NguoiDung")
+    const rows = await db("nguoidung")
       .whereNot("TinhTrang", 0)
       .andWhere("TenDangNhap", username);
     if (rows.length === 0) return null;
@@ -92,7 +92,7 @@ module.exports = {
   },
 
   async findByID(id) {
-    const rows = await db("NguoiDung")
+    const rows = await db("nguoidung")
       .whereNot("TinhTrang", 0)
       .andWhere("idNguoiDung", id);
     if (rows.length === 0) return null;
@@ -101,7 +101,7 @@ module.exports = {
   },
 
   async findByUserType(type) {
-    const row = await db("NguoiDung")
+    const row = await db("nguoidung")
       .whereNot("TinhTrang", 0)
       .andWhere("LoaiNguoiDung", type);
     if (row.length === 0) return null;
@@ -116,7 +116,7 @@ module.exports = {
     CASE WHEN TIMESTAMPDIFF(MINUTE,NOW(),s.NgayHetHan) > 0 THEN 'Còn hạn'
     ELSE 'Hết hạn'
     END AS TTrang
-from NguoiDung nd JOIN subscriber s ON nd.idNguoiDung = s.idDocGia
+from nguoidung nd JOIN subscriber s ON nd.idNguoiDung = s.idDocGia
 WHERE nd.TinhTrang != 0`;
     row = await db.schema.raw(query);
     if (row.length === 0) return null;
@@ -125,7 +125,7 @@ WHERE nd.TinhTrang != 0`;
 
   async findEditorWithDetail() {
     const query = `SELECT nd.*, c.*
-    FROM (NguoiDung nd JOIN editor e on nd.idNguoiDung = e.idBTV) LEFT JOIN chuyenmucchinh c on e.idChuyenMucChinh = c.idChuyenMucChinh
+    FROM (nguoidung nd JOIN editor e on nd.idNguoiDung = e.idBTV) LEFT JOIN chuyenmucchinh c on e.idChuyenMucChinh = c.idChuyenMucChinh
     WHERE nd.TinhTrang != 0`;
     row = await db.schema.raw(query);
     if (row.length === 0) return null;
@@ -135,7 +135,7 @@ WHERE nd.TinhTrang != 0`;
   async findWriterWithDetail() {
     const query = `SELECT *
     FROM (SELECT nd.*, w.ButDanh, COUNT(b.idBaiBao) as tongBaiBao 
-          FROM (NguoiDung nd JOIN writer w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
+          FROM (nguoidung nd JOIN writer w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
           WHERE nd.LoaiNguoiDung ='writer'
           GROUP BY nd.idNguoiDung) as A
           LEFT JOIN
@@ -159,7 +159,7 @@ WHERE nd.TinhTrang != 0`;
     type = String(row.LoaiNguoiDung);
     if (type === 'editor'){
       const query = `SELECT nd.*, c.*
-      FROM (NguoiDung nd JOIN editor e on nd.idNguoiDung = e.idBTV) LEFT JOIN chuyenmucchinh c on e.idChuyenMucChinh = c.idChuyenMucChinh
+      FROM (nguoidung nd JOIN editor e on nd.idNguoiDung = e.idBTV) LEFT JOIN chuyenmucchinh c on e.idChuyenMucChinh = c.idChuyenMucChinh
       WHERE nd.TinhTrang != 0 AND nd.idNguoiDung = ${id}`;
       user = await db.raw(query);
       if (user.length === 0) return null;
@@ -168,7 +168,7 @@ WHERE nd.TinhTrang != 0`;
     else if (type === 'writer'){
       const query = `SELECT *
       FROM (SELECT nd.*, w.ButDanh, COUNT(b.idBaiBao) as tongBaiBao 
-            FROM (NguoiDung nd JOIN writer w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
+            FROM (nguoidung nd JOIN writer w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
             WHERE nd.LoaiNguoiDung ='writer'
             GROUP BY nd.idNguoiDung) as A
             LEFT JOIN
@@ -190,7 +190,7 @@ WHERE nd.TinhTrang != 0`;
       CASE WHEN TIMESTAMPDIFF(MINUTE,NOW(),s.NgayHetHan) > 0 THEN 'Còn hạn'
       ELSE 'Hết hạn'
       END AS TTrang
-  from NguoiDung nd JOIN subscriber s ON nd.idNguoiDung = s.idDocGia
+  from nguoidung nd JOIN subscriber s ON nd.idNguoiDung = s.idDocGia
   WHERE nd.TinhTrang != 0 AND nd.idNguoiDung = ${id}`;
       user = await db.raw(query);
       if (user.length === 0) return null;
@@ -200,7 +200,4 @@ WHERE nd.TinhTrang != 0`;
       return row;
     }
   },
-
-
-
 };
