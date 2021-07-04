@@ -1,8 +1,10 @@
-module.exports = function (app) {
+passport = require('passport')
+
+module.exports = function (app, passport) {
   app.get('/', function (req, res) {
     // res.send('<b>Hello</b> World!');
     // res.render('home');
-    res.redirect('/admin');
+    res.redirect('/news');
   });
   
   app.use('/news/', require('../controllers/news.route'));
