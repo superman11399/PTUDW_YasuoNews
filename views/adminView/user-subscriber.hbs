@@ -10,7 +10,7 @@
   <div class="card-body">
     <div class="row">
       <div class="col-md-3 border-right">
-        <h4><i class="fa fa-users"></i> Danh sách users</h4>
+        <h4><i class="fa fa-users"></i> Danh sách độc giả vip</h4>
       </div>
       <div class="col-md-6 float-right">
         <div class="form-group">
@@ -32,28 +32,17 @@
     <div class="row align-items-center justify-content-center">
       <div class="col pt-3">
         <div class="form-group">
-          <select id="TypeUser" name="TypeUser" class="form-control">
-            <option selected>Loại người dùng</option>
+          <select id="RemainingTime" name="RemainingTime" class="form-control">
             <option value="all">Tất cả</option>
-            <option value="guest">Độc giả vãng lai</option>
-            <option value="subscriber">Độc giả</option>
-            <option value="writer">Phóng viên</option>
-            <option value="editor">Biên tập viên</option>
-            <option value="admin">Administrator</option>
+            <option value="Hết hạn">Đã hết hạn</option>
+            <option value="Còn hạn">Còn hạn</option>
           </select>
         </div>
       </div>
       <div class="col pt-3">
-        {{!-- <div class="form-group">
-          <select id="tasg" class="form-control">
-            <option selected>Trạng thái</option>
-            <option>Hoạt động</option>
-            <option>Bị chặn</option>
-          </select>
-        </div> --}}
       </div>
       <div class="col-md-3">
-        <button id="general-filter" type="button" class="btn btn-primary btn-block"><i class="fa fa-filter"></i>
+        <button id="subs-filter" type="button" class="btn btn-primary btn-block"><i class="fa fa-filter"></i>
           Lọc</button>
       </div>
     </div> <!-- end filter-->
@@ -66,7 +55,8 @@
               <th>Tên đăng nhập</th>
               <th>Tên người dùng</th>
               <th>Email</th>
-              <th>Loại người dùng</th>
+              <th>Thời hạn còn lại</th>
+              <th>Tình trạng</th>
               <th class="text-center">Thao tác</th>
             </tr>
           </thead>
@@ -77,16 +67,23 @@
               <td>{{TenDangNhap}}</td>
               <td>{{HoTen}}</td>
               <td style="font-style: italic;">{{Email}}</td>
-              <td><strong>{{LoaiNguoiDung}}</strong></td>
+              <td><strong>{{soPhut}} </strong>phút</td>
+              <td>{{TTrang}}</td>
               <td class="text-center btn-groups btn-group-justified">
                 <a class="btn btn-primary btn-sm p-1" href="/admin/manage/user/profile/{{this.idNguoiDung}}"
                   style="width: 25px;"><i class="fa fa-eye" title="Xem thông tin chi tiết"></i></a>
-                <button href="#patchRole" class="btn btn-primary btn-sm p-1 roleConfirm" data-toggle="modal"
-                  data-id="{{this.idNguoiDung}}" data-content="{{this.LoaiNguoiDung}}" style="width: 25px;"><i
-                    class="fa fa-user-circle" title="Thay đổi vai trò"></i></button>
+                <button href="#patchRole" class="btn btn-primary btn-sm p-1 roleConfirm"
+                  data-title="Thay đổi vai trò người dùng " data-toggle="modal" data-id="{{this.idNguoiDung}}"
+                  data-content="{{this.LoaiNguoiDung}}" style="width: 25px;"><i class="fa fa-user-circle"
+                    title="Thay đổi vai trò"></i></button>
                 <button href="#confirm_del_user" class="btn btn-primary btn-sm p-1 delUserConfirm" data-toggle="modal"
-                  data-title="{{this.LoaiNguoiDung}}" data-id="{{this.idNguoiDung}}" data-content="{{this.TenDangNhap}}"
-                  data-type="delUser" style="width: 25px;"><i class="fa fa-trash" title="Xóa người dùng"></i></button>
+                  data-title="Bạn có chắc muốn xóa người dùng " data-id="{{this.idNguoiDung}}"
+                  data-content="{{this.TenDangNhap}}" data-type="delUser" style="width: 25px;"><i class="fa fa-trash"
+                    title="Xóa người dùng"></i></button>
+                <button href="#regSubs" class="btn btn-primary btn-sm p-1 regConfirm" data-toggle="modal"
+                  data-title="Xác nhận gia hạn 7 ngày tính từ hiện tại cho " data-id="{{this.idNguoiDung}}"
+                  data-content="{{this.TenDangNhap}}" style="width: 25px;"><i
+                    class="fa fa-calendar-plus-o" title="Gia hạn độc giả vip"></i></i></button>
               </td>
             </tr>
             {{/each}}
@@ -145,6 +142,26 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
         <button class="btn btn-primary" type="submit" form="formRole">Xác nhận</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="regSubs">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Gia hạn thời gian sử dụng</h3>
+      </div>
+      <div class="modal-body">
+        <p id="SubsContent"></p>
+      </div>
+      <div class="modal-footer">
+        <form action="/admin/manage/user/renewal" method="POST" id="formSubs">
+          <input type="hidden" id="idsubs" name="id" value="">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+          <button class="btn btn-primary" type="submit">Xác nhận</a>
+        </form>
       </div>
     </div>
   </div>

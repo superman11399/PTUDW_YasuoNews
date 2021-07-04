@@ -186,7 +186,6 @@ router.post("/manage/user/patchRole", async function (req, res) {
 });
 
 router.post("/manage/user/renewal", async function (req, res) {
-  console.log(req.body.id);
   if (typeof req.body.id !== "undefined")
     await userModel.renewSubs(req.body.id);
 
@@ -206,11 +205,13 @@ router.post("/manage/user/assignCate", async function (req, res) {
 router.get("/manage/user/profile/:id", async function (req, res) {
   const userId = +req.params.id || 0;
   result = await userModel.findUserWithDetail(userId);
+  const url = req.headers.referer || '/';
 
   res.render("adminView/user-profile", {
     layout: "admin.hbs",
     title: "Admin | Thông tin người dùng",
     user: result,
+    backurl: url
   });
 });
 
