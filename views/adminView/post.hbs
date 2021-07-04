@@ -1,111 +1,109 @@
 <div class="card" style="min-width: 44rem;">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-3 border-right">
-            <h4>Danh sách bài viết</h4>
-        </div>     
-        <div class="col">
-          <button type="button" class="btn btn-md btn-success float-right" onclick="window.location='/admin/post'">Thêm bài viết</button>
-        </div>   
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-3 border-right">
+        <h4>Danh sách bài viết</h4>
       </div>
-      <!-- filter -->
-      <div class="row align-items-center justify-content-center">
-        <div class="col pt-3">
-          <div class="form-group">
-            <select id="categories" class="form-control">
-              <option selected>Tất cả chuyên mục</option>
-              <option>Nông nghiệp</option>
-              <option>Kinh tế</option>
-              <option>Ẩm thực</option>
-              <option>Thể thao</option>
-            </select>
-          </div>
-        </div>
-        <div class="col pt-3">
-          <div class="form-group">
-            <select id="tasg" class="form-control">
-              <option selected>Tất cả thẻ tag</option>
-              <option>Nông nghiệp</option>
-              <option>Kinh tế</option>
-              <option>Ẩm thực</option>
-              <option>Thể thao</option>
-            </select>
-          </div>
-        </div>
-        <div class="col pt-3">
-            <div class="form-group">
-              <select id="tasg" class="form-control">
-                <option selected>Tất cả trạng thái</option>
-                <option>Đã duyệt</option>
-                <option>Bị từ chối</option>
-              </select>
+      <div class="col-md-6 float-right">
+        <div class="form-group">
+          <div class="input-group">
+            <input id="Search" type="text" class="form-control search-menu" placeholder="Tìm kiếm..." />
+            <div class="input-group-append">
+              <button type="button" class="btn btn-primary btn-block"><i class="fa fa-search"
+                  aria-hidden="true"></i></button>
             </div>
           </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-primary btn-block"><i class="fa fa-filter"></i> Lọc</button>
         </div>
-      </div> <!-- end filter-->
-            <div class="row">
-        <div class="col-md-12">
-          <table class="table table-hover ">
-            <thead class="bg-light ">
-              <tr>
-                                {{#unless notEdit}}
-                  <th>Edit</th>
-                {{/unless}}   
-                <th>Title</th>
-                <th>Author</th>
-                <th>Categories</th>
-                {{!-- <th>Tags</th> --}}
-                {{!-- <th>Comments</th> --}}
-                <th>Ngày viết</th>
-                <th>Trạng thái</th>
-                <th>Ngày đăng</th>
-
-              </tr>
-            </thead>
-            <tbody>
-              {{#each listArticles}}
-              {{!-- Aritcle --}}
-              <tr>
-                                {{#unless ../notEdit}}
-                  <td>
-                    <a href="/user/admin/edit/{{this.id}}"><i class="fa fa-edit"></i></a>
-                    {{!-- <a href="#"><i class="fa fa-eye"></i></a> --}}
-                    {{!-- <a href="#"><i class="fa fa-trash"></i></a> --}}
-                    <button type="submit" class="btn btn-link" id="{{this.id}}" onclick="deleteArticle(this.id)"><i class="fa fa-trash" title="Xóa người dùng"></i></button>
-                  </td>
-                {{/unless}}   
-                <td><a href="#"><small>{{this.title}}</small></a></td>
-                <td><small>{{this.writer.pseudonym}}</small></td>
-                <td><small>{{this.categoryMain.categoryName}} / {{this.categorySub.categoryName}}</small></td>
-
-                {{!-- <td><small>{{this.arrayOfTags.length}}</small></td> --}}
-                {{!-- <td><a href="#"><small>{{this.comments.length}}</small></a></td> --}}
-                <td><small>{{formatDate writeDate day="numeric" month="long" year="numeric"}}</small></td>
-                <td><small>
-                  {{#if_equal status "approved"}}
-                  Đã xuất bản
-                  {{else}}
-                  Chưa xuất bản
-                  {{/if_equal}}
-                </small></td>
-                {{#if postDate}}
-                <td><small>{{formatDate postDate day="numeric" month="long" year="numeric"}}</small></td>
-                {{else}}
-                <td><small>Chưa xuất bản</small></td>
-                {{/if}}
-
-              </tr>
+      </div>
+      <div class="col">
+        <button type="button" class="btn btn-md btn-success float-right" onclick="window.location='/admin/post'">Thêm
+          bài viết</button>
+      </div>
+    </div>
+    <!-- filter -->
+    <div id="post-filter" class="row align-items-center justify-content-center">
+      <div class="col pt-3">
+        <div class="form-group">
+          <select id="cate" class="form-control">
+            <option selected>Tất cả chuyên mục</option>
+            {{#each listCategory}}
+            <option>{{this.TenChuyenMuc}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      <div class="col pt-3">
+        <div class="form-group">
+          <select id="tag" class="form-control">
+            <option selected>Tất cả thẻ tag</option>
+            {{#each listTag}}
+            <option>{{this.TenTag}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      <div class="col pt-3">
+        <div class="form-group">
+          <select id="tasg" class="form-control">
+            <option selected>Tất cả trạng thái</option>
+            <option>Đã duyệt - Chờ xuất bản</option>
+            <option>Đã xuất bản</option>
+            <option>Chưa được duyệt</option>
+            <option>Bị từ chối</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <button type="button" class="btn btn-primary btn-block"><i class="fa fa-filter"></i> Lọc</button>
+      </div>
+    </div> <!-- end filter-->
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-hover ">
+          <thead class="bg-light ">
+            <tr>
+              <th>Tiêu đề</th>
+              <th>Tác giả</th>
+              <th>Chuyên mục</th>
+              <th>Tags</th>
+              <th>Ngày sửa</th>
+              <th>Trạng thái</th>
+              <th>Ngày đăng</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each listArticle}}
+            {{!-- Aritcle --}}
+            <tr>
+              <td><a href="#"><small>{{this.TieuDe}}</small></a></td>
+              <td><small>{{this.ButDanh}}</small></td>
+              <td><small>{{this.TenChuyenMuc}} / {{this.TenChuyenMucPhu}}</small></td>
+              <td><small>tags</small></td>
+              <td><small>{{this.NgayCuoiChinhSua}}</small></td>
+              <td><small>{{this.TinhTrangDuyet}}</small></td>
+              {{#if this.NgayDang}}
+              <td><small>{{this.NgayDang}}</small></td>
               {{else}}
-              <div class="alert alert-danger" role="alert">
-                <strong> Không có bài viết nào </strong>
-              </div>
-              {{/each}}
-            </tbody>
-          </table>
-        </div>
+              <td><small>Chưa xuất bản</small></td>
+              {{/if}}
+              <td>
+                <a class="btn btn-primary btn-sm p-1" href="/admin/manage/post/{{this.idBaiBao}}"
+                  style="width: 25px;"><i class="fa fa-eye" title="Xem thông tin chi tiết"></i></a>
+                <button href="#delPostConfirmModal" class="btn btn-primary btn-sm p-1 delPostConfirm" data-toggle="modal"
+                  data-title="{{this.TieuDe}}" data-id="{{this.idBaiBao}}" data-content="{{this.ButDanh}}"
+                  data-type="delUser" style="width: 25px;"><i class="fa fa-trash" title="Xóa bài báo"></i></button>
+              </td>
+            </tr>
+            {{else}}
+            <div class="alert alert-danger" role="alert">
+              <strong> Không có bài viết nào </strong>
+            </div>
+            {{/each}}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-  <input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden>
+</div>
+<input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden>

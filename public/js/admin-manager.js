@@ -23,7 +23,6 @@ $(document).on("click", ".delTagConfirm", function () {
 
   $("#cate-filter").on("click", function (e) {
     var value = $('#type-cate option:selected').text();
-    console.log(value);
     if (value === 'Tất cả chuyên mục')
       value = '';
     $("tbody tr").filter(function () {

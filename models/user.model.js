@@ -57,14 +57,13 @@ module.exports = {
       return db.raw(query);
     }
     if (role === "writer"){
-      const query  = `INSERT INTO writer value(${id},'Ẩn danh')`;
+      const query  = `INSERT INTO PhongVien value(${id},'Ẩn danh')`;
       return db.raw(query);
     }
   },
 
   async assignCate(row) {
     isExisted = await this.checkExist("idBTV", row.idBTV, "editor");
-    console.log(isExisted);
     if (isExisted)
       return this.patch(
         "idBTV",
@@ -135,12 +134,12 @@ WHERE nd.TinhTrang != 0`;
   async findWriterWithDetail() {
     const query = `SELECT *
     FROM (SELECT nd.*, w.ButDanh, COUNT(b.idBaiBao) as tongBaiBao 
-          FROM (nguoidung nd JOIN writer w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
+          FROM (nguoidung nd JOIN PhongVien w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
           WHERE nd.LoaiNguoiDung ='writer'
           GROUP BY nd.idNguoiDung) as A
           LEFT JOIN
           (SELECT wp.idPV, COUNT(bd.idBaiBao) as soBaiDaDang
-          FROM (writer wp LEFT JOIN baibao bp on wp.idPV = bp.idTacGia) LEFT JOIN baibaoduocduyet bd on bp.idBaiBao = bd.idBaiBao
+          FROM (PhongVien wp LEFT JOIN baibao bp on wp.idPV = bp.idTacGia) LEFT JOIN baibaoduocduyet bd on bp.idBaiBao = bd.idBaiBao
           GROUP BY wp.idPV) as B
           on A.idNguoiDung = B.idPV
     WHERE TinhTrang != 0`;
@@ -168,12 +167,12 @@ WHERE nd.TinhTrang != 0`;
     else if (type === 'writer'){
       const query = `SELECT *
       FROM (SELECT nd.*, w.ButDanh, COUNT(b.idBaiBao) as tongBaiBao 
-            FROM (nguoidung nd JOIN writer w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
+            FROM (nguoidung nd JOIN PhongVien w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
             WHERE nd.LoaiNguoiDung ='writer'
             GROUP BY nd.idNguoiDung) as A
             LEFT JOIN
             (SELECT wp.idPV, COUNT(bd.idBaiBao) as soBaiDaDang
-            FROM (writer wp LEFT JOIN baibao bp on wp.idPV = bp.idTacGia) LEFT JOIN baibaoduocduyet bd on bp.idBaiBao = bd.idBaiBao
+            FROM (PhongVien wp LEFT JOIN baibao bp on wp.idPV = bp.idTacGia) LEFT JOIN baibaoduocduyet bd on bp.idBaiBao = bd.idBaiBao
             GROUP BY wp.idPV) as B
             on A.idNguoiDung = B.idPV
       WHERE TinhTrang != 0 AND idNguoiDung = ${id}`;

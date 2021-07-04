@@ -1,0 +1,150 @@
+{{#section 'js'}}
+<script>
+    $(document).ready(function () {
+        var color = "aliceblue";
+        const role = $('#userRole').text();
+        if (role === 'subscriber'){
+            color = "khaki";
+            $("#card_content #userRole").text("Độc giả VIP");
+        }
+        if (role === 'editor'){
+            color = "greenyellow";
+            $("#card_content #userRole").text("Biên tập viên");
+        }   
+        if (role === 'writer'){
+            color = "lightcoral";
+            $("#card_content #userRole").text("Phóng viên");
+        }
+        if (role === 'admin'){
+            color = "violet";
+            $("#card_content #userRole").text("Administrator");
+        }
+        if (role === 'guest'){
+            $("#card_content #userRole").text("Độc giả thường");
+        }
+        $("#card_content").css("background-color", color);
+    });
+    </script>
+{{/section}}
+
+
+<div class="card" style="min-width: 44rem;">
+<div class="col-md-3 text-left px-4 mt-3">
+    <a href="{{backurl}}" class="btn btn-primary"><i class="fa fa-arrow-left"></i>
+        Quay lại</i></a>
+</div>
+<hr>
+<div class="text-center card-box " style="color:">
+    <div class="member-card pt-2 pb-2">
+        <div id="card_content" class="parent w-75 mx-auto rounded">
+            <div class="thumb-lg member-thumb mx-auto"><img src="/img/default-avatar.png"
+                    class="mt-4 rounded-circle img-thumbnail" width="150" alt="profile-image"></div>
+            <div class="mt-3">
+                <h5 id="userRole">{{user.LoaiNguoiDung}}</h5>
+            </div>
+            <div class="mt-4 text-left mx-auto" style="width: 90%;">
+                <hr>
+                <div class="row">
+                    <div class="col-sm-4 col-md-3">
+                        <h6 class="mb-0">Tên đăng nhập</h6>
+                    </div>
+                    <div class="col-sm-8 col-md-9 text-dark">
+                        {{user.TenDangNhap}}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-4 col-md-3">
+                        <h6 class="mb-0">Họ và tên</h6>
+                    </div>
+                    <div class="col-sm-8 col-md-9 text-dark">
+                        {{user.HoTen}}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-4 col-md-3">
+                        <h6 class="mb-0">Giới tính</h6>
+                    </div>
+                    <div class="col-sm-2 col-md-3 text-dark border-right">
+                        {{user.GioiTinh}}
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        <h6 class="mb-0">Ngày sinh</h6>
+                    </div>
+                    <div class="col-sm-3 col-md-3 text-dark">
+                        {{dateFormat user.NgaySinh "DD/MM/YYYY"}}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-4 col-md-3">
+                        <h6 class="mb-0">Email</h6>
+                    </div>
+                    <div class="col-sm-8 col-md-9 text-dark">
+                        {{user.Email}}
+                    </div>
+                </div>
+                <hr>
+                {{#ifEqual user.LoaiNguoiDung 'editor'}}
+                <div class="row">
+                    <div class="col-sm-4 col-md-3">
+                        <h6 class="mb-0">Chuyên mục</h6>
+                    </div>
+                    <div class="col-sm-8 col-md-9 text-dark">
+                        {{user.TenChuyenMuc}}
+                    </div>
+                </div>
+                <hr>
+                {{/ifEqual}}
+                {{#ifEqual user.LoaiNguoiDung 'subscriber'}}
+                <div class="row">
+                    <div class="col-sm-4 col-md-3">
+                        <h6 class="mb-0">Số phút còn</h6>
+                    </div>
+                    <div class="col-sm-2 col-md-3 text-dark border-right">
+                        {{user.soPhut}}
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        <h6 class="mb-0">Tình trạng</h6>
+                    </div>
+                    <div class="col-sm-3 col-md-3 text-dark">
+                        {{user.TTrang}}
+                    </div>
+                </div>
+                <hr>
+                {{/ifEqual}}
+                {{#ifEqual user.LoaiNguoiDung 'writer'}}
+                <div class="row">
+                    <div class="col-sm-4 col-md-3">
+                        <h6 class="mb-0">Bút danh</h6>
+                    </div>
+                    <div class="col-sm-8 col-md-9 text-dark">
+                        {{user.ButDanh}}
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-4 col-md-3">
+                        <h6 class="mb-0">Số bài viết</h6>
+                    </div>
+                    <div class="col-sm-2 col-md-3 text-dark border-right">
+                        {{user.tongBaiBao}}
+                    </div>
+                    <div class="col-sm-3 col-md-3">
+                        <h6 class="mb-0">Số bài được đăng</h6>
+                    </div>
+                    <div class="col-sm-3 col-md-3 text-dark">
+                        {{user.soBaiDaDang}}
+                    </div>
+                </div>
+                <hr>
+                {{/ifEqual}}
+                {{!-- <div class="row" id="groupButton">
+                    <button class="btn btn-info mx-3 mb-4">Edit</button>
+                </div> --}}
+            </div>
+        </div>
+    </div>
+</div>
+</div>

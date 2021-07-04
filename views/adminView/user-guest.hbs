@@ -10,7 +10,7 @@
   <div class="card-body">
     <div class="row">
       <div class="col-md-3 border-right">
-        <h4><i class="fa fa-users"></i> Danh sách users</h4>
+        <h5><i class="fa fa-users"></i> Danh sách độc giả thường</h5>
       </div>
       <div class="col-md-6 float-right">
         <div class="form-group">
@@ -31,19 +31,8 @@
     <!-- filter -->
     <div class="row align-items-center justify-content-center">
       <div class="col pt-3">
-        <div class="form-group">
-          <select id="TypeUser" name="TypeUser" class="form-control">
-            <option selected>Loại người dùng</option>
-            <option value="all">Tất cả</option>
-            <option value="guest">Độc giả vãng lai</option>
-            <option value="subscriber">Độc giả</option>
-            <option value="writer">Phóng viên</option>
-            <option value="editor">Biên tập viên</option>
-            <option value="admin">Administrator</option>
-          </select>
-        </div>
       </div>
-      <div class="col pt-3">
+      <div class="col py-3">
         {{!-- <div class="form-group">
           <select id="tasg" class="form-control">
             <option selected>Trạng thái</option>
@@ -51,10 +40,6 @@
             <option>Bị chặn</option>
           </select>
         </div> --}}
-      </div>
-      <div class="col-md-3">
-        <button id="general-filter" type="button" class="btn btn-primary btn-block"><i class="fa fa-filter"></i>
-          Lọc</button>
       </div>
     </div> <!-- end filter-->
     <div class="row">
@@ -80,13 +65,15 @@
               <td><strong>{{LoaiNguoiDung}}</strong></td>
               <td class="text-center btn-groups btn-group-justified">
                 <a class="btn btn-primary btn-sm p-1" href="/admin/manage/user/profile/{{this.idNguoiDung}}"
-                  style="width: 25px;"><i class="fa fa-eye" title="Xem thông tin chi tiết"></i></a>
-                <button href="#patchRole" class="btn btn-primary btn-sm p-1 roleConfirm" data-toggle="modal"
-                  data-id="{{this.idNguoiDung}}" data-content="{{this.LoaiNguoiDung}}" style="width: 25px;"><i
-                    class="fa fa-user-circle" title="Thay đổi vai trò"></i></button>
+                  style="width: 20%;"><i class="fa fa-eye" title="Xem thông tin chi tiết"></i></a>
+                <button href="#patchRole" class="btn btn-primary btn-sm p-1 roleConfirm"
+                 data-toggle="modal" data-id="{{this.idNguoiDung}}"
+                  data-content="{{this.LoaiNguoiDung}}" style="width: 20%;"><i class="fa fa-user-circle"
+                    title="Thay đổi vai trò"></i></button>
                 <button href="#confirm_del_user" class="btn btn-primary btn-sm p-1 delUserConfirm" data-toggle="modal"
-                  data-title="{{this.LoaiNguoiDung}}" data-id="{{this.idNguoiDung}}" data-content="{{this.TenDangNhap}}"
-                  data-type="delUser" style="width: 25px;"><i class="fa fa-trash" title="Xóa người dùng"></i></button>
+                  data-title="Bạn có chắc muốn xóa người dùng " data-id="{{this.idNguoiDung}}"
+                  data-content="{{this.TenDangNhap}}" data-type="delUser" style="width: 20%;"><i class="fa fa-trash"
+                    title="Xóa người dùng"></i></button>
               </td>
             </tr>
             {{/each}}
