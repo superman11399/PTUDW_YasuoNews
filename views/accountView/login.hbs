@@ -1,16 +1,30 @@
 
                 <!-- Login Form Start -->
                 <div class="login--form">
+                    {{#if this.succ_message}}
+                    <div class="alert alert-success" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Thông báo:</span>
+                    {{this.succ_message}}
+                    </div>
+                    {{/if}}
+                    {{#if this.err_message}}
+                    <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Lỗi:</span>
+                    {{this.err_message}}
+                    </div>
+                    {{/if}}
                     <div class="title">
                         <h1 class="h1">Đăng Nhập</h1>
                         <p>Điền vào khung bên dưới để đăng nhập</p>
                     </div>
 
-                    <form action="#" data-form="validate">
+                    <form action="/account/login" method="POST">
                         <div class="form-group">
                             <label>
                                 <span>Tên đăng nhập</span>
-                                <input type="email" name="email" class="form-control" required>
+                                <input type="text" name="username" class="form-control" required>
                             </label>
                         </div>
 
