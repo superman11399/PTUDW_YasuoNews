@@ -29,12 +29,13 @@ router.post('/register', async function (req, res) {
 
   await authen.addGuest(user);
   req.flash('succ_message','Đã đăng ký thành công! Vui lòng đăng nhập.');
-  res.redirect('account/login');
+  res.redirect('login');
 })
 
 router.get('/is-available', async function (req, res) {
   const username = req.query.user;
-  const user = await userModel.findByUsername(username);
+  const user = await authen.checkUsername(username);
+  console.log(user);
   if (user === null) {
     return res.json(true);
   }
