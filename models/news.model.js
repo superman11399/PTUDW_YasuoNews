@@ -373,5 +373,8 @@ module.exports = {
     const rows = await db.raw(query);
     console.log(rows[0][0])
     return rows[0][0].total;
+  },
+  all(){
+    return db("baibao").leftJoin("baibaoduocduyet","baibao.idBaiBao","=","baibaoduocduyet.idBaiBao").leftJoin("PhongVien","baibao.idTacGia","=","PhongVien.idPV").leftJoin("chuyenmucphu","chuyenmucphu.idChuyenMucPhu","=","baibao.idChuyenMucPhu").leftJoin("chuyenmucchinh","chuyenmucphu.idChuyenMucChinh","=","chuyenmucchinh.idChuyenMucChinh");
   }
 };

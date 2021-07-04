@@ -23,9 +23,12 @@ router.get("/manage/category", async function (req, res) {
 });
 
 router.get("/manage/post", async function (req, res) {
+  const list = await newsModel.all();
+
   res.render("adminView/post", {
     layout: "admin.hbs",
     title: "Admin | Quản lí bài viết",
+    listArticle: list
   });
 });
 
