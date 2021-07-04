@@ -1,17 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const moment = require('moment');
-
-const userModel = require('../models/user.model');
+const authen = require('../models/authen.model');
 const auth = require('../middlewares/auth.mdw');
-
+const passport = require('passport');
 const router = express.Router();
 
-router.get('/profile', function (req, res) {
-  res.render('accountView/profile',{
-    layout: 'account.hbs'
-  });
-});
 
 router.get('/register', function (req, res) {
   res.render('accountView/register', {
@@ -20,7 +13,6 @@ router.get('/register', function (req, res) {
 })
 
 router.post('/register', async function (req, res) {
-  console.log(req.body);
   const hash = bcrypt.hashSync(req.body.password, 10);
   const dob = req.body.dob + ' 00:00:00';
   console.log(dob);
@@ -35,11 +27,9 @@ router.post('/register', async function (req, res) {
     TinhTrang: 1
   }
 
-  await userModel.addNewGuest(user);
-  res.render('accountView/login', {
-    layout: 'account.hbs',
-    message: 'Đã đăng ký thành công! Vui lòng đăng nhập.'
-  });
+  await authen.addGuest(user);
+  req.flash('succ_message','Đã đăng ký thành công! Vui lòng đăng nhập.');
+  res.redirect('account/login');
 })
 
 router.get('/is-available', async function (req, res) {
@@ -51,36 +41,32 @@ router.get('/is-available', async function (req, res) {
   res.json(false);
 })
 
-router.get('/login', async function (req, res) {
+router.get('/login', isAuth, async function (req, res) {
+  const err_message = req.flash('err_message');
+  const succ_message = req.flash('succ_message');
+  console.log(err_message);
+  console.log(succ_message);
   res.render('accountView/login', {
-    layout: 'account.hbs'
+    layout: 'account.hbs',
+    err_message: err_message,
+    succ_message: succ_message
   });
 });
 
-router.post('/login', async function (req, res) {
-  const user = await userModel.findByUsername(req.body.username);
-  if (user === null) {
-    return res.render('vwAccount/login', {
-      layout: false,
-      err_message: 'Invalid username!'
-    })
+// process the login form
+router.post('/login', passport.authenticate('local-login', {
+  session :false,
+  failureRedirect : '/account/login', // redirect back to the signup page if there is an error
+  failureFlash : true // allow flash messages
+}), (req, res) => {
+  if (req.body.remember) {
+    req.session.cookie.maxAge = 1000 * 60 * 3;
+  } else {
+    req.session.cookie.expires = false;
   }
-
-  const ret = bcrypt.compareSync(req.body.password, user.password);
-  if (ret === false) {
-    return res.render('vwAccount/login', {
-      layout: false,
-      err_message: 'Invalid password!'
-    })
-  }
-
-  delete user.password;
-  req.session.auth = true;
-  req.session.authUser = user;
-
-  const url = req.session.retUrl || '/';
-  res.redirect(url);
-})
+  console.log(req);
+  res.redirect('/news/home');
+});
 
 router.post('/logout', async function (req, res) {
   req.session.auth = false;
@@ -91,4 +77,26 @@ router.post('/logout', async function (req, res) {
   res.redirect(url);
 })
 
+router.get('/profile', function (req, res) {
+  res.render('accountView/profile',{
+    layout: 'account.hbs'
+  });
+});
+
+
 module.exports = router;
+
+function isAuth(req, res, next) {
+  if (!res.locals.auth) {
+      next();
+  } else {
+      res.redirect('/news/home');
+  }
+}
+function isNotAuth(req, res, next) {
+  if (res.locals.auth) {
+      next();
+  } else {
+      res.redirect('/');
+  }
+}

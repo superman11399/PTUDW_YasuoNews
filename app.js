@@ -1,6 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 var hbs = require("handlebars");
+const passport = require('passport');
+var flash    = require('connect-flash');
 
 const app = express();
 
@@ -34,6 +36,8 @@ app.use("/writer/", express.static(__dirname + "/public"));
 require('./middlewares/session.mdw')(app);
 require('./middlewares/view.mdw')(app);
 require('./middlewares/locals.mdw')(app);
+require('./middlewares/passport.mdw.js')(app);
+app.use(flash());
 require('./middlewares/routes.mdw.js')(app);
 
 const PORT = 3000;

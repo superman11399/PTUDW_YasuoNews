@@ -5,7 +5,7 @@ module.exports = {
     return db("NguoiDung").whereNot("TinhTrang", 0);
   },
 
-  addNewGuest(user) {
+  add(user) {
     return db('NguoiDung').insert(user);
   },
 
