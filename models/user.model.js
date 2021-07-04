@@ -47,7 +47,6 @@ module.exports = {
   },
 
   addRowWhenPatchRole(id, role){
-    console.log("This is id: "+id);
     if (role === "editor"){
       const query = `INSERT INTO editor value(${id},NULL)`;
       return db.raw(query);
