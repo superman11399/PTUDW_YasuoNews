@@ -360,21 +360,49 @@ module.exports = {
       .orderByRaw("RAND()")
       .limit(5);
   },
+
   LayBinhLuanCuaBaiViet(idBaiBao) {
     const sql = `select ThoiGianBinhLuan,HoTen, NoiDung from binhluan join baibao on baibao.idBaiBao=binhluan.idBaiBao join nguoidung on nguoidung.idNguoiDung=binhluan.idNguoiDung where baibao.idBaiBao=${idBaiBao}`;
     return db.raw(sql);
   },
-  search(text,offset){
-    const query = "SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4 ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('"+text+"' IN NATURAL LANGUAGE MODE) LIMIT "+offset+",6;";
+
+  search(text, offset) {
+    const query =
+      "SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4 ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('" +
+      text +
+      "' IN NATURAL LANGUAGE MODE) LIMIT " +
+      offset +
+      ",6;";
     return db.raw(query);
   },
-  async countSearch(text){
-    const query = "SELECT COUNT(*) total FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('"+text+"' IN NATURAL LANGUAGE MODE);";
+
+  async countSearch(text) {
+    const query =
+      "SELECT COUNT(*) total FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('" +
+      text +
+      "' IN NATURAL LANGUAGE MODE);";
     const rows = await db.raw(query);
-    console.log(rows[0][0])
+    console.log(rows[0][0]);
     return rows[0][0].total;
   },
-  all(){
-    return db("baibao").leftJoin("baibaoduocduyet","baibao.idBaiBao","=","baibaoduocduyet.idBaiBao").leftJoin("PhongVien","baibao.idTacGia","=","PhongVien.idPV").leftJoin("chuyenmucphu","chuyenmucphu.idChuyenMucPhu","=","baibao.idChuyenMucPhu").leftJoin("chuyenmucchinh","chuyenmucphu.idChuyenMucChinh","=","chuyenmucchinh.idChuyenMucChinh");
-  }
+
+  async all() {
+    const query = `SELECT b.*, cp.TenChuyenMucPhu, cc.TenChuyenMuc, p.ButDanh, bd.NgayDang, bd.LuotXem
+    FROM baibao b LEFT JOIN baibaoduocduyet bd on b.idBaiBao = bd.idBaiBao LEFT JOIN phongvien p on p.idPV = b.idTacGia LEFT JOIN chuyenmucphu cp on cp.idChuyenMucPhu = b.idChuyenMucPhu LEFT JOIN chuyenmucchinh cc on cp.idChuyenMucChinh = cc.idChuyenMucChinh`;
+    articles = await db.raw(query);
+    if (articles.length === 0) return null;
+    return articles[0];
+  },
+
+  getAllTagWithDetail(){
+    return db("BaiBao_Tag")
+    .join("Tag", "Tag.idTag", "=", "BaiBao_Tag.idTag")
+    .join("BaiBao", "BaiBao.idBaiBao", "=", "BaiBao_Tag.idBaiBao")
+    .select("BaiBao.idBaiBao", "Tag.idTag", "Tag.TenTag");
+  },
+
+  async del(id) {
+    await db("baibao_tag").where("idBaiBao", id).del();
+    return db("baibao").where("idBaiBao", id).del();
+  },
 };
