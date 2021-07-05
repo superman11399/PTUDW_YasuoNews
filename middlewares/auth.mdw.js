@@ -1,8 +1,7 @@
-module.exports = function auth(req, res, next) {
-  if (req.session.auth === false) {
-    req.session.retUrl = req.originalUrl;
-    return res.redirect('/account/login');
-  }
+module.exports = function isLoggedIn(req, res, next) {
+  // if user is authenticated in the session, carry on
+  if (req.isAuthenticated()) return next();
 
-  next();
-}
+  // if they aren't redirect them to the home page
+  res.redirect("/");
+};

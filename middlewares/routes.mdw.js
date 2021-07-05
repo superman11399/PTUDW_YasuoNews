@@ -1,6 +1,8 @@
 module.exports = function (app) {
   app.get("/", function (req, res) {
-    res.redirect("/news/home");
+    // res.send('<b>Hello</b> World!');
+    res.redirect("/news");
+    // res.redirect('/admin');
   });
 
   app.use("/news/", require("../controllers/news.route"));

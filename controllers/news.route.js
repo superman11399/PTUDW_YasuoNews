@@ -116,18 +116,32 @@ router.get("/newslist/idChuyenMucChinh/:id", async function (req, res) {
   });
 });
 
-router.get("/newslist/idTag/:id", async function (req, res) {
+router.get('/newslist',async function (req, res) {
+  var textSearch = req.query.search || 'nullllll';
+  const limit = 6;
+  const page = req.query.page || 1;
+  if (page < 1) page = 1;
+  const total = await news.countSearch(textSearch);
+  let nPages = Math.floor(total / limit);
+  if (total % limit > 0) nPages++;
+  const page_numbers = [];
+  for (i = 1; i <= nPages; i++) {
+    page_numbers.push({
+      search: textSearch,
+      value: i,
+      isCurrent: i === +page
+    });
+  }
+  console.log(page_numbers);
+  const offset = (page - 1) * limit;
+  const listBaiBao = await news.search(textSearch,offset);
   const listTag = await news.LayTagBaiBao();
-  const listBaiBao = await news.LayDanhSachBaiVietTheoTag(req.params.id);
-  res.render("newsView/newslist", {
-    listBaiBao: listBaiBao,
-    listTag: listTag,
-    emptyList: listBaiBao === 0,
+  res.render('newsView/newslist_search', {
+      listBaiBao: listBaiBao[0],
+      listTag: listTag,
+      emptyList: listBaiBao===0,
+      page_numbers
   });
-});
-
-router.get("/newscontent", function (req, res) {
-  res.render("newsView/newscontent");
 });
 
 router.get("/newscontent/:id", async function (req, res) {

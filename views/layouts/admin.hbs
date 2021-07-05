@@ -14,7 +14,9 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand px-2 mr-auto" href="/"><i class="fa fa-home fa-fw"></i> Website</a>
+        {{!-- <div id="btn-show" class="navbar-brand pr-2 border-right btn btn-link"><i class="fa fa-bars fa-fw"></i></div> --}}
+        <a class="navbar-brand pl-0 ml-0 pr-2 mr-auto" href="/"><i class="fa fa-home fa-fw"></i>
+            Website</a>
         <form id="frmLogout" action="/account/logout" method="POST"></form>
         <!-- Navbar-->
         <ul class="navbar-nav px-2">
@@ -55,10 +57,10 @@
                             data-parent="#sidenavAccordion">
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" href="/admin/manage/user">General</a>
-                                <a class="nav-link" href="">Guest</a>
-                                <a class="nav-link" href="">Subscriber</a>
-                                <a class="nav-link" href="">Editor</a>
-                                <a class="nav-link" href="">Writer</a>
+                                <a class="nav-link" href="/admin/manage/user/guest">Guest</a>
+                                <a class="nav-link" href="/admin/manage/user/subscriber">Subscriber</a>
+                                <a class="nav-link" href="/admin/manage/user/editor">Editor</a>
+                                <a class="nav-link" href="/admin/manage/user/writer">Writer</a>
                             </nav>
                         </div>
                         <a class="nav-link" href="/admin/manage/tag">
@@ -79,7 +81,7 @@
             <footer class="py-3 bg-light mt-auto">
                 <div class="container-fluid px-3">
                     <div class="d-flex align-items-center justify-content-between small">
-                        <div class="text-muted">Copyright &copy; Your Website 2021</div>
+                        <div class="text-muted">Copyright &copy; CeiNeT's Website 2021</div>
                         <div>
                             <a href="#">Privacy Policy</a>
                             &middot;
