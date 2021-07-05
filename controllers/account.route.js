@@ -1,9 +1,34 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const authen = require('../models/authen.model');
-const auth = require('../middlewares/auth.mdw');
 const passport = require('passport');
 const router = express.Router();
+var nodemailer =  require('nodemailer');
+function sendOTP(email) {
+    var transporter =  nodemailer.createTransport({ // config mail server
+        service: 'Gmail',
+        auth: {
+            user: 'tqtnk20003@gmail.com',
+            pass: 'wBh7x5P3ETm72JgMqRWn'
+        }
+    });
+    const randomOTP = Math.floor(100000 + Math.random() * 900000);
+    var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
+        from: 'Yasuo News',
+        to: email,
+        subject: 'Xác nhận đăng ký tài khoản Yasuo News',
+        html: '<b>Xin chào,</b><p>Bạn đã đăng ký thành công tài khoản tại Yasuo News. Mã OTP của bạn là: </p> <h1>'+randomOTP+'</h1><p>Vui lòng sử dụng mã OTP này để hoàn tất việc đăng ký tài khoản. OTP có hiệu lực trong 3 giờ.</p></br><p>Yasuo News</p>'
+    }
+    transporter.sendMail(mainOptions, function(err, info){
+        if (err) {
+            console.log(err);
+            return null;
+        } else {
+            console.log('Message sent: ' +  info.response);
+        }
+    });
+    return randomOTP;
+};
 
 
 router.get('/register', function (req, res) {
@@ -15,7 +40,6 @@ router.get('/register', function (req, res) {
 router.post('/register', async function (req, res) {
   const hash = bcrypt.hashSync(req.body.password, 10);
   const dob = req.body.dob + ' 00:00:00';
-  console.log(dob);
   const user = {
     HoTen: req.body.fullname,
     NgaySinh: dob,
@@ -26,27 +50,40 @@ router.post('/register', async function (req, res) {
     LoaiNguoiDung: 'guest',
     TinhTrang: 1
   }
-
-  await authen.addGuest(user);
-  req.flash('succ_message','Đã đăng ký thành công! Vui lòng đăng nhập.');
+  const OTPcheck = await authen.checkOTP(req.body.OTP,req.body.email);
+  if (OTPcheck)
+    {
+    await authen.addGuest(user);
+    req.flash('succ_message','Đã đăng ký thành công! Vui lòng đăng nhập.');
+    }
+  else {
+    req.flash('err_message','OTP bị lỗi hoặc đã quá hạn!');
+  }
   res.redirect('login');
+})
+
+router.get('/send-OTP',async function (req,res){
+  const email = req.query.email;
+  const OTP = sendOTP(email);
+  if (OTP === null) {
+    return res.json(false);
+  }
+  await authen.saveOTP(OTP,email);
+  res.json(true);
 })
 
 router.get('/is-available', async function (req, res) {
   const username = req.query.user;
   const user = await authen.checkUsername(username);
-  console.log(user);
   if (user === null) {
     return res.json(true);
   }
   res.json(false);
 })
 
-router.get('/login', isAuth, async function (req, res) {
+router.get('/login', isNotAuth, async function (req, res) {
   const err_message = req.flash('err_message');
   const succ_message = req.flash('succ_message');
-  console.log(err_message);
-  console.log(succ_message);
   res.render('accountView/login', {
     layout: 'account.hbs',
     err_message: err_message,
@@ -55,7 +92,7 @@ router.get('/login', isAuth, async function (req, res) {
 });
 
 // process the login form
-router.post('/login', passport.authenticate('local-login', {
+router.post('/login',isNotAuth, passport.authenticate('local-login', {
   session :false,
   failureRedirect : '/account/login', // redirect back to the signup page if there is an error
   failureFlash : true // allow flash messages
@@ -65,11 +102,10 @@ router.post('/login', passport.authenticate('local-login', {
   } else {
     req.session.cookie.expires = false;
   }
-  console.log(req);
   res.redirect('/news/home');
 });
 
-router.post('/logout', async function (req, res) {
+router.post('/logout',isAuth, async function (req, res) {
   req.session.auth = false;
   req.session.authUser = null;
   req.session.retUrl = '';
@@ -78,26 +114,24 @@ router.post('/logout', async function (req, res) {
   res.redirect(url);
 })
 
-router.get('/profile', function (req, res) {
-  res.render('accountView/profile',{
-    layout: 'account.hbs'
-  });
+router.get('/profile',isAuth, function (req, res) {
+  res.render('accountView/profile');
 });
 
 
 module.exports = router;
 
 function isAuth(req, res, next) {
-  if (!res.locals.auth) {
+  if (res.locals.auth) {
       next();
   } else {
       res.redirect('/news/home');
   }
 }
 function isNotAuth(req, res, next) {
-  if (res.locals.auth) {
+  if (!res.locals.auth) {
       next();
   } else {
-      res.redirect('/');
+      res.redirect('/news/home');
   }
 }

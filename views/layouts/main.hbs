@@ -57,6 +57,7 @@
         </div>
     </div>
     <!-- Preloader End -->
+    <form id="formLogout" action="/account/logout" method="POST"></form>
 
     <!-- Wrapper Start -->
     <div class="wrapper">
@@ -76,11 +77,6 @@
                     </div>
 
                     <div class="float--right float--xs-none text-xs-center">
-                        <!-- Header Topbar Action Start -->
-                        <ul class="header--topbar-action nav">
-                            <li><a href="/account/login"><i class="fa fm fa-user-o"></i>Login/Register</a></li>
-                        </ul>
-                        <!-- Header Topbar Action End -->
                         <!-- Header Topbar Language Start -->
                         <ul class="header--topbar-lang nav">
                             <li class="dropdown">
@@ -103,6 +99,21 @@
                             <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
                         </ul>
                         <!-- Header Topbar Social End -->
+                        {{#if auth}}
+                            <ul class="header--topbar-lang nav">
+                                <li class="dropdown pull-right">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fm"></i>Chào, <span> {{authUser.HoTen}}</span><i class="fa flm fa-angle-down"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="fa fa-user" href="/account/profile">Thông tin cá nhân</a></li>
+                                    <li><a class="fa fa-sign-out" href="javascript: $('#formLogout').submit();">Đăng xuất</a></li>
+                                </ul>
+                                </li>
+                            </ul>
+                        {{else}}
+                            <ul class="header--topbar-action nav">
+                            <li><a href="/account/login"><i class="fa fm fa-user-o"></i>Login/Register</a></li>
+                            </ul>
+                        {{/if}}
                     </div>
                 </div>
             </div>
