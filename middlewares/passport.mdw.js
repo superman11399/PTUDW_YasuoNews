@@ -47,7 +47,7 @@ module.exports = function (app) {
                 req.session.auth=true;
                 req.session.authUser = rows[0];
                 // Authen successfully
-                return done(null, rows[0],req.flash('succ_message','Đăng nhập thành công'));
+                return done(null, rows[0],req.flash('login_message','Đăng nhập thành công'));
             }
     ));
 
