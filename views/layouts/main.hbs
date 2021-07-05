@@ -57,6 +57,7 @@
         </div>
     </div>
     <!-- Preloader End -->
+    <form id="formLogout" action="/account/logout" method="POST"></form>
 
     <!-- Wrapper Start -->
     <div class="wrapper">
@@ -68,19 +69,14 @@
                     <div class="float--left float--xs-none text-xs-center">
                         <!-- Header Topbar Info Start -->
                         <ul class="header--topbar-info nav">
-                            <li><i class="fa fm fa-map-marker"></i>Ho Chi Minh City</li>
-                            <li><i class="fa fm fa-mixcloud"></i>21<sup>0</sup> C</li>
-                            <li><i class="fa fm fa-calendar"></i>Today (Sat 26 Jun 2021)</li>
+                            <li><i class="fa fm fa-map-marker"><span id="location"></span></i></li>
+                            <li><i class="fa fm fa-mixcloud"></i><span id="temp"></span><sup>o</sup> C</li>
+                            <li><i class="fa fm fa-calendar"></i><span id="date"></span></li>
                         </ul>
                         <!-- Header Topbar Info End -->
                     </div>
 
                     <div class="float--right float--xs-none text-xs-center">
-                        <!-- Header Topbar Action Start -->
-                        <ul class="header--topbar-action nav">
-                            <li><a href="/account/login"><i class="fa fm fa-user-o"></i>Login/Register</a></li>
-                        </ul>
-                        <!-- Header Topbar Action End -->
                         <!-- Header Topbar Language Start -->
                         <ul class="header--topbar-lang nav">
                             <li class="dropdown">
@@ -103,6 +99,21 @@
                             <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
                         </ul>
                         <!-- Header Topbar Social End -->
+                        {{#if auth}}
+                            <ul class="header--topbar-lang nav">
+                                <li class="dropdown pull-right">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fm"></i>Chào, <span> {{authUser.HoTen}}</span><i class="fa flm fa-angle-down"></i></a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="fa fa-user" href="/account/profile">Thông tin cá nhân</a></li>
+                                    <li><a class="fa fa-sign-out" href="javascript: $('#formLogout').submit();">Đăng xuất</a></li>
+                                </ul>
+                                </li>
+                            </ul>
+                        {{else}}
+                            <ul class="header--topbar-action nav">
+                            <li><a href="/account/login"><i class="fa fm fa-user-o"></i>Login/Register</a></li>
+                            </ul>
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -568,8 +579,38 @@
     <script src="js/retina.min.js"></script>
 
     <!-- ==== Google Map API ==== -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK9f7sXWmqQ1E-ufRXV3VpXOn_ifKsDuc"></script>
+    {{!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK9f7sXWmqQ1E-ufRXV3VpXOn_ifKsDuc"></script> --}}
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+    <script>
+    $.ajax({
+    url: "https://geolocation-db.com/jsonp",
+    jsonpCallback: "callback",
+    dataType: "jsonp",
+    async: true,
+    success: function(location) {
+        console.log(location);
+        $('#location').html(location.city+'-'+location.country_name);
+        const settings = {
+	    "async": true,
+	    "crossDomain": true,
+        dataType: "jsonp",
+	    "url": "https://api.openweathermap.org/data/2.5/weather?q="+location.city+"&lang=vi&units=%22metric%22&appid=a9ac54e61a30901b709f9c26493aa2d3",
+	    "method": "GET",
+        };
+        $.ajax(settings).done(function (temperature) {
+	        console.log(temperature);
+            $('#temp').html(temperature.main.temp);
+        });
+        }
+    });
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
 
+    today = dd + '/' + mm + '/' + yyyy;
+    $('#date').html(today);
+    </script>
     <!-- ==== Main JavaScript ==== -->
     <script src="js/main.js"></script>
 
