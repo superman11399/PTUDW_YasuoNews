@@ -1,6 +1,8 @@
 const express = require("express");
+const { AddComment } = require("../models/news.model");
 // const { LayNgauNhien5BaiCungChuyenMuc } = require("../models/news.model");
 const news = require("../models/news.model");
+const date = require("date-and-time");
 const router = express.Router();
 
 router.get("/", function (req, res) {
@@ -137,6 +139,12 @@ router.get("/newscontent/:id", async function (req, res) {
   );
   const comments = await news.LayBinhLuanCuaBaiViet(newsID);
   const cmts = comments[0];
+  const result = await news.TangView(newsID);
+  // console.log("res", result);
+  if (result === null) {
+    console.log("ID k ton tai");
+    return res.redirect("/news/home");
+  }
   if (details === null) {
     return res.redirect("/news/home");
   }
@@ -148,11 +156,25 @@ router.get("/newscontent/:id", async function (req, res) {
     related5: related5,
     emptyList: details === 0,
   });
-  console.log(details);
-  console.log(listTag);
-  console.log(cmts);
-  console.log(related5);
-  console.log("IDchuyenMuc:", details.idChuyenMucChinh);
+});
+
+router.post("/newscontent/:id", async function (req, res) {
+  const newsID = +req.params.id;
+  const now = new Date();
+  const cmt = {
+    tenNguoiDung: req.body.tenNguoiDung,
+    idBaiBao: newsID,
+    ThoiGianBinhLuan: date.format(now, "YYYY-MM-DD HH:mm:ss"),
+    NoiDung: req.body.NoiDung,
+  };
+  console.log("cmt", cmt);
+  const result = await AddComment(cmt);
+
+  if (result === null) {
+    console.log("Lỗi add cmt");
+    return res.redirect("/news/home");
+  }
+  res.redirect("/news/newscontent/" + newsID);
 });
 
 module.exports = router;

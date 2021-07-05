@@ -362,7 +362,14 @@ module.exports = {
       .limit(5);
   },
   LayBinhLuanCuaBaiViet(idBaiBao) {
-    const sql = `select ThoiGianBinhLuan,HoTen, NoiDung from binhluan join baibao on baibao.idBaiBao=binhluan.idBaiBao join nguoidung on nguoidung.idNguoiDung=binhluan.idNguoiDung where baibao.idBaiBao=${idBaiBao}`;
+    const sql = `select ThoiGianBinhLuan,tenNguoiDung, NoiDung from binhluan where binhluan.idBaiBao=${idBaiBao}`;
     return db.raw(sql);
+  },
+  TangView(idBaiBao) {
+    const sql = `update baibao join baibaoduocduyet on baibao.idBaiBao=baibaoduocduyet.idBaiBao set LuotXem=LuotXem+1 where baibao.idBaiBao=${idBaiBao}`;
+    return db.raw(sql);
+  },
+  AddComment(cmt) {
+    return db("binhluan").insert(cmt);
   },
 };

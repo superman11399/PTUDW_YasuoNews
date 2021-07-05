@@ -320,7 +320,7 @@
 
                   <div class="comment--info">
                     <div class="comment--header clearfix">
-                      <p class="name">{{HoTen}}</p>
+                      <p class="name">{{tenNguoiDung}}</p>
                       <p class="date">{{dateFormat ThoiGianBinhLuan "DD/MM/YYYY"}}</p>
 
                       <a href="#" class="reply"><i
@@ -354,7 +354,7 @@
             <!-- Post Items Title End -->
 
             <div class="comment-respond">
-              <form action="#" data-form="validate">
+              <form action="/news/newscontent/{{this.details.idBaiBao}}" data-form="validate" method="POST">
                 <p>Don’t worry ! Your email address will not be published.
                   Required fields are marked (*).</p>
 
@@ -363,7 +363,7 @@
                     <label>
                       <span>Comment *</span>
                       <textarea
-                        name="comment"
+                        name="NoiDung" id="NoiDung"
                         class="form-control"
                         required
                       ></textarea>
@@ -375,7 +375,7 @@
                       <span>Name *</span>
                       <input
                         type="text"
-                        name="name"
+                        name="tenNguoiDung" 
                         class="form-control"
                         required
                       />
@@ -391,10 +391,6 @@
                       />
                     </label>
 
-                    <label>
-                      <span>Website</span>
-                      <input type="text" name="website" class="form-control" />
-                    </label>
                   </div>
 
                   <div class="col-md-12">
