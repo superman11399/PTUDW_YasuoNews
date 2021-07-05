@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="col-md-3">
-        <a href="/user/admin/manager-user/add-user" class="btn btn-success float-right"><i class="fa fa-user-plus"></i>
+        <a href="/admin/manage/user/add" class="btn btn-success float-right"><i class="fa fa-user-plus"></i>
           Thêm user</i></a>
       </div>
     </div>
@@ -79,12 +79,12 @@
               <td style="font-style: italic;">{{Email}}</td>
               <td><strong>{{LoaiNguoiDung}}</strong></td>
               <td class="text-center btn-groups btn-group-justified">
-                <a class="btn btn-primary btn-sm p-1" href="/admin/manage/user/profile/{{this.idNguoiDung}}"
+                <a class="btn btn-primary btn-sm p-1 mb-1" href="/admin/manage/user/profile/{{this.idNguoiDung}}"
                   style="width: 25px;"><i class="fa fa-eye" title="Xem thông tin chi tiết"></i></a>
-                <button href="#patchRole" class="btn btn-primary btn-sm p-1 roleConfirm" data-toggle="modal"
+                <button href="#patchRole" class="btn btn-primary btn-sm p-1 mb-1 roleConfirm" data-toggle="modal"
                   data-id="{{this.idNguoiDung}}" data-content="{{this.LoaiNguoiDung}}" style="width: 25px;"><i
                     class="fa fa-user-circle" title="Thay đổi vai trò"></i></button>
-                <button href="#confirm_del_user" class="btn btn-primary btn-sm p-1 delUserConfirm" data-toggle="modal"
+                <button href="#confirm_del_user" class="btn btn-primary btn-sm p-1 mb-1 delUserConfirm" data-toggle="modal"
                   data-title="{{this.LoaiNguoiDung}}" data-id="{{this.idNguoiDung}}" data-content="{{this.TenDangNhap}}"
                   data-type="delUser" style="width: 25px;"><i class="fa fa-trash" title="Xóa người dùng"></i></button>
               </td>

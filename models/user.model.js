@@ -5,12 +5,35 @@ module.exports = {
     return db("nguoidung").whereNot("TinhTrang", 0);
   },
 
-  add(user) {
-    return db('nguoidung').insert(user);
+  addUserWithDetail(user, detail) {
+    if(user.LoaiNguoiDung === 'writer'){
+      return this.addWriter(user);
+    }
+    else if(user.LoaiNguoiDung === 'subscriber'){
+      return this.addSubscriber(user);
+    }
+    else if(user.LoaiNguoiDung === 'editor'){
+      return this.addEditor(user, detail);
+    }
+    else return db("nguoidung").insert(user);
   },
 
-  addUserWithDetail(user, type, detail) {
-    return db("nguoidung").insert(user);
+  async addWriter(user){
+    const id = await this.add(user,"nguoidung");
+    const query = `INSERT INTO PhongVien value(${id[0]},'Ẩn danh')`;
+    return db.raw(query);
+  },
+
+  async addSubscriber(user){
+    const id = await this.add(user,"nguoidung");
+    const query = `INSERT INTO subscriber value(${id[0]},NOW() + INTERVAL 7 DAY)`;
+    return db.raw(query);
+  },
+
+  async addEditor(user, cateID){
+    const id = await this.add(user,"nguoidung");
+    const query = `INSERT INTO editor value(${id[0]},${cateID})`;
+    return db.raw(query);
   },
 
   add(row, table) {

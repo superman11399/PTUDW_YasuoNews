@@ -1,0 +1,145 @@
+{{#section 'js'}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"
+    integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
+<script>
+    $("#role_select").on('blur', function () {
+        const cate = $(this).val();
+        if (cate === 'editor') {
+            $("#cate_select").attr('disabled', false);
+        }
+        else {
+            $("#cate_select").attr('disabled', 'disabled');
+        }
+    });
+
+    $('#username').on('blur', function () {
+        $.getJSON(`/account/is-available?user=${username}`, function (data) {
+            if (data === false) {
+                $('#username_alert').attr('hidden', false);
+            }
+            else {
+                $('#username_alert').attr('hidden', 'hidden');
+            }
+        });
+    });
+
+    $('#re-pass').on('blur', function () {
+        const pass = $("#pass").val();
+        const repass = $(this).val();
+        if (pass != repass) {
+            $('#password_alert').attr('hidden', false);
+        }
+        else {
+            $('#password_alert').attr('hidden', 'hidden');
+        }
+    });
+</script>
+{{/section}}
+
+<div class="col-md-3 text-left pl-0 mb-4">
+    <a href="{{backurl}}" class="btn btn-primary"><i class="fa fa-arrow-left"></i>
+        Quay lại</i></a>
+</div>
+<div class="card mx-auto" style="min-width: 44rem; background-color:lavender; width:80%;">
+    <div class="text-center card-box ">
+        <div class="member-card pt-2 pb-2">
+            <form action="/admin/manage/user/add" id="frmAddUser" method="post">
+                <div id="card_content" class="parent mx-auto rounded">
+                    <div class="thumb-lg member-thumb mx-auto"><img src="/img/default-avatar.png"
+                            class="mt-3 rounded-circle img-thumbnail" width="150" alt="profile-image"></div>
+                    <div class="mt-4 text-left mx-auto" style="width: 90%;">
+                        <hr>
+                        <div class="row m-2">
+                            <div class="col-sm-4 col-md-3 my-auto">
+                                <h6 class="">Tên đăng nhập</h6>
+                            </div>
+                            <input class="col-sm-8 col-md-9 text-dark form-control" id="username" name="username"
+                                required type="text">
+                        </div>
+                        <div class="row m-2" id="username_alert" hidden>
+                            <div class="col-sm-4 col-md-3 my-auto"></div>
+                            <div class="col-sm-8 col-md-9 alert alert-danger text-danger" role="alert">Tên đăng nhập
+                                không khả dụng</div>
+                        </div>
+                        <div class="row m-2">
+                            <div class="col-sm-4 col-md-3 my-auto">
+                                <h6 class="">Mật khẩu</h6>
+                            </div>
+                            <input class="col-sm-8 col-md-9 text-dark form-control" id="pass" name="password" required
+                                type="password">
+                        </div>
+                        <div class="row m-2">
+                            <div class="col-sm-4 col-md-3 my-auto">
+                                <h6 class="">Xác nhận mật khẩu</h6>
+                            </div>
+                            <input class="col-sm-8 col-md-9 text-dark form-control" id="re-pass" required
+                                type="password">
+                        </div>
+                        <div class="row m-2" id="password_alert" hidden>
+                            <div class="col-sm-4 col-md-3 my-auto"></div>
+                            <div class="col-sm-8 col-md-9 alert alert-danger text-danger" role="alert">Mật khẩu không
+                                khớp
+                            </div>
+                        </div>
+                        <div class="row m-2">
+                            <div class="col-sm-4 col-md-3 my-auto">
+                                <h6 class="">Họ và tên</h6>
+                            </div>
+                            <input class="col-sm-8 col-md-9 text-dark form-control" name="fullname" required
+                                type="text">
+                        </div>
+                        <div class="row m-2">
+                            <label class="col-sm-4 col-md-3 col-form-label my-auto" id="gender" for="gender">
+                                <h6>Giới tính</h6>
+                            </label>
+                            <select class="form-control col-sm-2 col-md-3" name="gender" id="gender_select">
+                                <option value="Nam" selected>Nam</option>
+                                <option value="Nữ">Nữ</option>
+                            </select>
+                            <div class="col-sm-3 col-md-2 my-auto">
+                                <h6 class="ml-3 border-left">Ngày sinh</h6>
+                            </div>
+                            <input id="txtDOB" type="date" name="dob" class="form-control col-sm-3 col-md-4" required>
+                        </div>
+                        <div class="row m-2">
+                            <div class="col-sm-4 col-md-3 my-auto">
+                                <h6 class="">Email</h6>
+                            </div>
+                            <input class="col-sm-8 col-md-9 text-dark form-control" name="email" required type="text">
+                        </div>
+                        <div class="row m-2">
+                            <label class="col-sm-4 col-md-3 col-form-label my-auto" for="role">
+                                <h6>Vai trò</h6>
+                            </label>
+                            <select class="form-control col-sm-8 col-md-9" name="role" id="role_select">
+                                <option value="guest" selected>Độc giả vãng lai</option>
+                                <option value="subscriber">Độc giả</option>
+                                <option value="writer">Phóng viên</option>
+                                <option value="editor">Biên tập viên</option>
+                                <option value="admin">Quản trị viên</option>
+                            </select>
+                        </div>
+                        <div class="row m-2">
+                            <label class="col-sm-4 col-md-3 my-auto col-form-label" id="asgnCate" for="cate">
+                                <h6 class="">Quản lý chuyên mục</h6>
+                            </label>
+                            <select disabled class="form-control col-sm-8 col-md-9" name="idcate" id="cate_select">
+                                <option value="" selected>Chọn chuyên mục</option>
+                                {{#each cateList}}
+                                <option value="{{this.idChuyenMucChinh}}">{{this.TenChuyenMuc}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <hr>
+                        <div class="row" id="groupButton">
+                            <div class="col text-right">
+                                <button type="submit" class="btn btn-info mb-3 mr-2">Xác nhận</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<hr>

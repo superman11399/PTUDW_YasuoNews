@@ -24,7 +24,7 @@
         </div>
       </div>
       <div class="col-md-3">
-        <a href="/user/admin/manager-user/add-user" class="btn btn-success float-right"><i class="fa fa-user-plus"></i>
+        <a href="/admin/manage/user/add" class="btn btn-success float-right"><i class="fa fa-user-plus"></i>
           Thêm user</i></a>
       </div>
     </div>
@@ -70,17 +70,17 @@
               <td><strong>{{soPhut}} </strong>phút</td>
               <td>{{TTrang}}</td>
               <td class="text-center btn-groups btn-group-justified">
-                <a class="btn btn-primary btn-sm p-1" href="/admin/manage/user/profile/{{this.idNguoiDung}}"
+                <a class="btn btn-primary btn-sm p-1 mb-1" href="/admin/manage/user/profile/{{this.idNguoiDung}}"
                   style="width: 25px;"><i class="fa fa-eye" title="Xem thông tin chi tiết"></i></a>
-                <button href="#patchRole" class="btn btn-primary btn-sm p-1 roleConfirm"
+                <button href="#patchRole" class="btn btn-primary btn-sm p-1 mb-1 roleConfirm"
                   data-title="Thay đổi vai trò người dùng " data-toggle="modal" data-id="{{this.idNguoiDung}}"
                   data-content="{{this.LoaiNguoiDung}}" style="width: 25px;"><i class="fa fa-user-circle"
                     title="Thay đổi vai trò"></i></button>
-                <button href="#confirm_del_user" class="btn btn-primary btn-sm p-1 delUserConfirm" data-toggle="modal"
+                <button href="#confirm_del_user" class="btn btn-primary btn-sm p-1 mb-1 delUserConfirm" data-toggle="modal"
                   data-title="Bạn có chắc muốn xóa người dùng " data-id="{{this.idNguoiDung}}"
                   data-content="{{this.TenDangNhap}}" data-type="delUser" style="width: 25px;"><i class="fa fa-trash"
                     title="Xóa người dùng"></i></button>
-                <button href="#regSubs" class="btn btn-primary btn-sm p-1 regConfirm" data-toggle="modal"
+                <button href="#regSubs" class="btn btn-primary btn-sm p-1 mb-1 regConfirm" data-toggle="modal"
                   data-title="Xác nhận gia hạn 7 ngày tính từ hiện tại cho " data-id="{{this.idNguoiDung}}"
                   data-content="{{this.TenDangNhap}}" style="width: 25px;"><i
                     class="fa fa-calendar-plus-o" title="Gia hạn độc giả vip"></i></i></button>
