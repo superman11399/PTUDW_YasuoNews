@@ -120,4 +120,12 @@ module.exports = {
         return db('nguoidung').whereNot("TinhTrang", 0).where('idNguoiDung',id)
         .update({MatKhau:hash});
     },
+    findByFacebookID(FacebookID)
+    {
+        return db('nguoidung').whereNot("TinhTrang", 0).where('FacebookID',FacebookID);
+    },
+    addNewFacebookUser(newUser)
+    {
+        return db('nguoidung').insert(newUser);
+    }
 }

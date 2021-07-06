@@ -1,4 +1,7 @@
 
+{{#section 'js'}}
+{{/section}}
+
                 <!-- Login Form Start -->
                 <div class="login--form">
                     {{#if this.succ_message}}
@@ -48,6 +51,17 @@
                             <a href="/account/reset_password" class="btn-link pull-left">Quên mật khẩu?</a>
                             <a href="/account/register" class="btn-link pull-right">Đăng ký tài khoản</a>
                         </p>
+                        
                     </form>
+                    <form id="facebookLogin" action="/account/facebook-login" method="GET">
+                    <div class="form-group text-center">
+                        <div class="text-center">Hoặc</div>
+                        <a onclick="$('#facebookLogin').submit();" class="btn btn-primary">
+                            <i class="fa fa-facebook-square"></i>
+                            Đăng nhập với Facebook
+                        </a>
+                        </div>
+                    </form>
+
                 </div>
                 <!-- Login Form End -->

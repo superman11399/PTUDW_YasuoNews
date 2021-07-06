@@ -1,7 +1,6 @@
 const passport = require('passport')
 const LocalStrategy = require("passport-local").Strategy;
 const FacebookStrategy = require("passport-facebook").Strategy;
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const bcrypt = require("bcryptjs");
 
 const authen = require("../models/authen.model");
@@ -46,11 +45,46 @@ module.exports = function (app) {
                 delete rows[0].MatKhau;
                 req.session.auth=true;
                 req.session.authUser = rows[0];
-                // Authen successfully
+                // Đăng nhập thành công
                 return done(null, rows[0],req.flash('login_message','Đăng nhập thành công'));
             }
     ));
-
+    passport.use('facebook-login', new FacebookStrategy({
+        clientID: '788821835170949',
+        clientSecret: 'ea575cf3f441cb71a6a96e47ba70abfb',
+        callbackURL: "/account/facebook-login/callback",
+        profileFields: ['id','displayName']
+      },
+      async function(accessToken, refreshToken, profile, done) {
+            console.log(profile);
+            const rows = await authen.findByFacebookID(profile.id);
+            if (!rows || rows.length === 0)
+            {
+                const hash = bcrypt.hashSync(profile.id, 10);
+                const newUser = {
+                    TenDangNhap: profile.id,
+                    FacebookID: profile.id,
+                    HoTen: profile.displayName,
+                    Email: profile.id,
+                    LoaiNguoiDung: 'guest',
+                    MatKhau: hash,
+                    TinhTrang: 1
+                };
+                await authen.addNewFacebookUser(newUser);
+                const newrows = await authen.findByFacebookID(profile.id);
+                delete newrows[0].MatKhau;
+                const user = newrows[0];
+                // Đăng ký mới và đăng nhập thành công
+                return done(null, user);
+            }
+            else
+            {
+                delete rows[0].MatKhau;
+                const user = rows[0];
+                return done(null, user);
+            }
+        }
+    ));
     app.use(passport.initialize());
     app.use(passport.session());
 };

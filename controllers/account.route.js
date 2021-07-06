@@ -155,6 +155,25 @@ router.post('/login',authen.isNotAuth, passport.authenticate('local-login', {
   res.redirect('/news/home');
 });
 
+router.get('/facebook-login',authen.isNotAuth, passport.authenticate('facebook-login', {
+  session :false,
+  successRedirect : '/',
+  failureRedirect : '/account/login', // redirect back to the signup page if there is an error
+}));
+
+router.get('/facebook-login/callback',authen.isNotAuth, passport.authenticate('facebook-login', {
+  session :false,
+  failureRedirect : '/account/login', // redirect back to the signup page if there is an error
+  failureFlash : true // allow flash messages
+}), (req, res) => {
+  
+  console.log(req.user);
+  req.session.auth=true;
+  req.session.authUser = req.user;
+  res.redirect('/news/home');
+});
+
+
 router.post('/logout',authen.isAuth, async function (req, res) {
   req.session.auth = false;
   req.session.authUser = null;
