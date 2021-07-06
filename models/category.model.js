@@ -62,8 +62,8 @@ module.exports = {
 
   async findSubCategoryWithDetail(){
     const query = `SELECT p.*, c.TenChuyenMuc, COUNT(b.idBaiBao) as soBaiBao
-    FROM (chuyenmucchinh c JOIN chuyenmucphu p on c.idChuyenMucChinh = p.idChuyenMucChinh) LEFT JOIN baibao b on b.idChuyenMucPhu = p.idChuyenMucPhu
-    GROUP BY b.idChuyenMucPhu`;
+    FROM (chuyenmucphu p JOIN chuyenmucchinh c on c.idChuyenMucChinh = p.idChuyenMucChinh) LEFT JOIN baibao b on b.idChuyenMucPhu = p.idChuyenMucPhu
+    GROUP BY p.idChuyenMucPhu`;
     row = await db.raw(query);
     return row[0];
   }
