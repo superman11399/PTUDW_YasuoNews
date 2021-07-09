@@ -4,14 +4,30 @@ var hbs = require("handlebars");
 const passport = require("passport");
 var flash = require("connect-flash");
 
+const bodyParser = require("body-parser");
+
 const app = express();
 
 app.use(morgan("dev"));
-
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 hbs.registerHelper("dateFormat", require("handlebars-dateformat"));
 hbs.registerHelper("ifEquals", function (arg1, arg2, options) {
   //console.log(arg1, arg2);
   return arg1 == arg2 ? options.fn(this) : options.inverse(this);
+});
+hbs.registerHelper("ifIn", function (elem, list, options) {
+  console.log("elem", elem, "list", list);
+  console.log(typeof list);
+  if (list.indexOf(elem) > -1) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
 });
 
 app.use(

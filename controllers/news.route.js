@@ -1,6 +1,4 @@
 const express = require("express");
-const { AddComment } = require("../models/news.model");
-// const { LayNgauNhien5BaiCungChuyenMuc } = require("../models/news.model");
 const news = require("../models/news.model");
 const date = require("date-and-time");
 const router = express.Router();
@@ -116,8 +114,8 @@ router.get("/newslist/idChuyenMucChinh/:id", async function (req, res) {
   });
 });
 
-router.get('/newslist',async function (req, res) {
-  var textSearch = req.query.search || 'nullllll';
+router.get("/newslist", async function (req, res) {
+  var textSearch = req.query.search || "nullllll";
   const limit = 6;
   const page = req.query.page || 1;
   if (page < 1) page = 1;
@@ -129,18 +127,18 @@ router.get('/newslist',async function (req, res) {
     page_numbers.push({
       search: textSearch,
       value: i,
-      isCurrent: i === +page
+      isCurrent: i === +page,
     });
   }
   console.log(page_numbers);
   const offset = (page - 1) * limit;
-  const listBaiBao = await news.search(textSearch,offset);
+  const listBaiBao = await news.search(textSearch, offset);
   const listTag = await news.LayTagBaiBao();
-  res.render('newsView/newslist_search', {
-      listBaiBao: listBaiBao[0],
-      listTag: listTag,
-      emptyList: listBaiBao===0,
-      page_numbers
+  res.render("newsView/newslist_search", {
+    listBaiBao: listBaiBao[0],
+    listTag: listTag,
+    emptyList: listBaiBao === 0,
+    page_numbers,
   });
 });
 
@@ -148,6 +146,10 @@ router.get("/newscontent/:id", async function (req, res) {
   const newsID = +req.params.id;
   const listTag = await news.LayTagBaiBao();
   const details = await news.ChiTietBaiViet(newsID);
+  if (details === null) {
+    console.log("ID k ton tai");
+    return res.redirect("/news/home");
+  }
   const related5 = await news.LayNgauNhien5BaiCungChuyenMuc(
     details.idChuyenMucPhu || 1
   );
@@ -182,7 +184,7 @@ router.post("/newscontent/:id", async function (req, res) {
     NoiDung: req.body.NoiDung,
   };
   console.log("cmt", cmt);
-  const result = await AddComment(cmt);
+  const result = await news.AddComment(cmt);
 
   if (result === null) {
     console.log("Lỗi add cmt");

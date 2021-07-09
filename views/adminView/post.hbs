@@ -7,17 +7,27 @@
       <div class="col-md-6 float-right">
         <div class="form-group">
           <div class="input-group">
-            <input id="Search" type="text" class="form-control search-menu" placeholder="Tìm kiếm..." />
+            <input
+              id="Search"
+              type="text"
+              class="form-control search-menu"
+              placeholder="Tìm kiếm..."
+            />
             <div class="input-group-append">
-              <button type="button" class="btn btn-primary btn-block"><i class="fa fa-search"
-                  aria-hidden="true"></i></button>
+              <button type="button" class="btn btn-primary btn-block"><i
+                  class="fa fa-search"
+                  aria-hidden="true"
+                ></i></button>
             </div>
           </div>
         </div>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-md btn-success float-right" onclick="window.location='/admin/post'">Thêm
-          bài viết</button>
+        <button
+          type="button"
+          class="btn btn-md btn-success float-right"
+          onclick="window.location='/admin/post'"
+        >Thêm bài viết</button>
       </div>
     </div>
     <!-- filter -->
@@ -27,7 +37,7 @@
           <select id="cate" class="form-control">
             <option selected>Tất cả chuyên mục</option>
             {{#each listCategory}}
-            <option>{{this.TenChuyenMuc}}</option>
+              <option>{{this.TenChuyenMuc}}</option>
             {{/each}}
           </select>
         </div>
@@ -37,7 +47,7 @@
           <select id="tag" class="form-control">
             <option selected>Tất cả thẻ tag</option>
             {{#each listTag}}
-            <option>{{this.TenTag}}</option>
+              <option>{{this.TenTag}}</option>
             {{/each}}
           </select>
         </div>
@@ -54,13 +64,17 @@
         </div>
       </div>
       <div class="col-md-3">
-        <button type="button" class="btn btn-primary btn-block"><i class="fa fa-filter"></i> Lọc</button>
+        <button type="button" class="btn btn-primary btn-block"><i
+            class="fa fa-filter"
+          ></i>
+          Lọc</button>
       </div>
-    </div> <!-- end filter-->
+    </div>
+    <!-- end filter-->
     <div class="row">
       <div class="col-md-12">
-        <table class="table table-hover ">
-          <thead class="bg-light ">
+        <table class="table table-hover">
+          <thead class="bg-light">
             <tr>
               <th>Tiêu đề</th>
               <th>Tác giả</th>
@@ -74,31 +88,43 @@
           </thead>
           <tbody>
             {{#each listArticle}}
-            {{!-- Aritcle --}}
-            <tr>
-              <td><a href="#"><small>{{this.TieuDe}}</small></a></td>
-              <td><small>{{this.ButDanh}}</small></td>
-              <td><small>{{this.TenChuyenMuc}} / {{this.TenChuyenMucPhu}}</small></td>
-              <td><small>tags</small></td>
-              <td><small>{{this.NgayCuoiChinhSua}}</small></td>
-              <td><small>{{this.TinhTrangDuyet}}</small></td>
-              {{#if this.NgayDang}}
-              <td><small>{{this.NgayDang}}</small></td>
-              {{else}}
-              <td><small>Chưa xuất bản</small></td>
-              {{/if}}
-              <td>
-                <a class="btn btn-primary btn-sm p-1" href="/admin/manage/post/{{this.idBaiBao}}"
-                  style="width: 25px;"><i class="fa fa-eye" title="Xem thông tin chi tiết"></i></a>
-                <button href="#delPostConfirmModal" class="btn btn-primary btn-sm p-1 delPostConfirm" data-toggle="modal"
-                  data-title="{{this.TieuDe}}" data-id="{{this.idBaiBao}}" data-content="{{this.ButDanh}}"
-                  data-type="delUser" style="width: 25px;"><i class="fa fa-trash" title="Xóa bài báo"></i></button>
-              </td>
-            </tr>
+              {{! Aritcle }}
+              <tr>
+                <td><a href="#"><small>{{this.TieuDe}}</small></a></td>
+                <td><small>{{this.ButDanh}}</small></td>
+                <td><small>{{this.TenChuyenMuc}}
+                    /
+                    {{this.TenChuyenMucPhu}}</small></td>
+                <td><small>tags</small></td>
+                <td><small>{{this.NgayCuoiChinhSua}}</small></td>
+                <td><small>{{this.TinhTrangDuyet}}</small></td>
+                {{#if this.NgayDang}}
+                  <td><small>{{this.NgayDang}}</small></td>
+                {{else}}
+                  <td><small>Chưa xuất bản</small></td>
+                {{/if}}
+                <td>
+                  <a
+                    class="btn btn-primary btn-sm p-1"
+                    href="/admin/manage/post/{{this.idBaiBao}}"
+                    style="width: 25px;"
+                  ><i class="fa fa-eye" title="Xem thông tin chi tiết"></i></a>
+                  <button
+                    href="#delPostConfirmModal"
+                    class="btn btn-primary btn-sm p-1 delPostConfirm"
+                    data-toggle="modal"
+                    data-title="{{this.TieuDe}}"
+                    data-id="{{this.idBaiBao}}"
+                    data-content="{{this.ButDanh}}"
+                    data-type="delUser"
+                    style="width: 25px;"
+                  ><i class="fa fa-trash" title="Xóa bài báo"></i></button>
+                </td>
+              </tr>
             {{else}}
-            <div class="alert alert-danger" role="alert">
-              <strong> Không có bài viết nào </strong>
-            </div>
+              <div class="alert alert-danger" role="alert">
+                <strong> Không có bài viết nào </strong>
+              </div>
             {{/each}}
           </tbody>
         </table>
@@ -106,4 +132,4 @@
     </div>
   </div>
 </div>
-<input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden>
+<input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden />

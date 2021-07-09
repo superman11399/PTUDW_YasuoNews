@@ -1,35 +1,15 @@
 <div class="container-fluid">
   <div class="card" style="min-width: 44rem;">
     <div class="card-body">
-      <div class="row">
+      <div class="row my-2">
         <div class="col-12">
             <h4>{{title}}</h4>
         </div>      
       </div>
-      <!-- filter -->
-      <div class="row align-items-center justify-content-center">
-        <div class="col pt-3">
-          <div class="form-group">
-            <select id="categories" class="form-control">
-              <option selected>Tất cả chuyên mục</option>
-            </select>
-          </div>
-        </div>
-        <div class="col pt-3">
-          <div class="form-group">
-            <select id="tasg" class="form-control">
-              <option selected>Tất cả thẻ tag</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-primary btn-block">Lọc</button>
-        </div>
-      </div> <!-- end filter-->
       {{# if hasError }}
           <div class="alert alert-danger" role="alert">
               <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-              {{# each messages }}
+              {{# each errors }}
                   {{ this }}</br>
               {{/ each }}
           </div>
@@ -57,14 +37,14 @@
               </tr>
             </thead>
             <tbody>
-              {{#each listArticles}}
+              {{#each listNews}}
               {{!-- Aritcle --}}
               <tr> 
-                <td><a href="#"><small>{{this.title}}</small></a></td>
-                <td><small>{{this.writer.pseudonym}}</small></td>
-                <td><small>{{this.categoryMain.categoryName}} / {{this.categorySub.categoryName}}</small></td>
-                <td><small>{{formatDate writeDate day="numeric" month="long" year="numeric"}}</small></td>
-                <td><a href="/user/editor/post/{{this._id}}"><i class="fas fa-pencil-alt" title="Duyệt bài viết"></i></a></td>
+                <td><a href="#"><small>{{TieuDe}}</small></a></td>
+                <td><small>{{ButDanh}}</small></td>
+                <td><small>{{TenChuyenMucPhu}}</small></td>
+                <td><small>{{dateFormat NgayCuoiChinhSua "DD/MM/YYYY"}}</small></td>
+                <td><a href="/editor/view/{{idBaiBao}}"><i class="fas fa-pencil-alt" title="Xem bài viết"></i></a></td>
               </tr>
               {{!-- Aritcle End --}}
               {{else}}
