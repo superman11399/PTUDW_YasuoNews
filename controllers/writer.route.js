@@ -107,6 +107,9 @@ router.get("/post/:id", async function (req, res) {
   }
   // console.log(tags);
   else {
+    let deny = false;
+    console.log("khac", article.LyDoTuChoi !== "");
+    if (article.LyDoTuChoi !== "") deny = true;
     res.render("writerView/post", {
       actionpost: "/writer/post",
       action: "/writer/edit",
@@ -117,6 +120,7 @@ router.get("/post/:id", async function (req, res) {
       tags: tags,
       listSub: listSub,
       tagsOfNews: list,
+      deny,
     });
   }
 });
@@ -159,6 +163,7 @@ router.post("/edit", async function (req, res) {
           AnhDaiDien,
           NgayCuoiChinhSua,
           TinhTrangDuyet: "Chưa được duyệt",
+          LyDoTuChoi: "",
         },
         baibao
       );
