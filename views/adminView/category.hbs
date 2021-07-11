@@ -72,7 +72,7 @@
           <tbody>
             {{#each listCategory}}
             <tr>
-              <td><a href="">{{this.TenChuyenMuc}}</a></td>
+              <td><a href="/news/newslist/idChuyenMucChinh/{{this.idChuyenMucChinh}}">{{this.TenChuyenMuc}}</a></td>
               <td>{{this.soChuyenMucCon}}</td>
               <td>{{this.soBaiBao}}</td>
               <td>
@@ -109,7 +109,7 @@
           <tbody>
             {{#each listSubCategory}}
             <tr>
-              <td><a href="">{{this.TenChuyenMucPhu}}</a></td>
+              <td><a href="/news/newslist/idChuyenMucPhu/{{this.idChuyenMucPhu}}">{{this.TenChuyenMucPhu}}</a></td>
               <td>{{this.TenChuyenMuc}}</td>
               <td>{{this.soBaiBao}}</td>
               <td>
@@ -196,8 +196,8 @@
         <div id="alert" class="text-danger m-3"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" form="frmNewDataSub" class="btn btn-primary">Update</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        <button type="submit" form="frmNewDataSub" class="btn btn-primary">Xác nhận</button>
       </div>
     </div>
   </div>

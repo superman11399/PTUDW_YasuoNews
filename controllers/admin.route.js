@@ -3,6 +3,7 @@ const userModel = require("../models/user.model");
 const newsModel = require("../models/news.model");
 const cateModel = require("../models/category.model");
 const tagModel = require("../models/tag.model");
+const bcrypt = require("bcryptjs");
 
 const router = express.Router();
 
@@ -23,13 +24,27 @@ router.get("/manage/category", async function (req, res) {
 });
 
 router.get("/manage/post", async function (req, res) {
-  const list = await newsModel.all();
+  const articles = await newsModel.all();
+  const categories = await cateModel.allMainCate();
+  const tags = await tagModel.all();
+  const tagsOfArticle = await newsModel.getAllTagWithDetail();
+  console.log(tagsOfArticle);
+  console.log(articles);
 
   res.render("adminView/post", {
     layout: "admin.hbs",
     title: "Admin | Quản lí bài viết",
-    listArticle: list,
+    listArticle: articles,
+    listCate: categories,
+    listTagOfArticle: tagsOfArticle,
+    listTag: tags,
   });
+});
+
+router.post("/manage/post/del", async function (req, res) {
+  const id = req.body.id;
+  if (typeof id !== "undefined") await newsModel.del(id);
+  res.redirect("/admin/manage/post/");
 });
 
 router.get("/manage/tag", async function (req, res) {
@@ -76,6 +91,37 @@ router.get("/manage/user", async function (req, res) {
     title: "Admin | Quản lí người dùng",
     userList: list,
   });
+});
+
+router.get("/manage/user/add", async function (req, res) {
+  const catelist = await cateModel.findNonAssignedCate();
+
+  res.render("adminView/user-add", {
+    layout: "admin.hbs",
+    title: "Admin | Thêm người dùng",
+    cateList: catelist,
+  });
+});
+
+router.post("/manage/user/add", async function (req, res) {
+  const hash = bcrypt.hashSync(req.body.password, 10);
+  const dob = req.body.dob + " 00:00:00";
+  const cateID = req.body.idcate;
+  const user = {
+    HoTen: req.body.fullname,
+    NgaySinh: dob,
+    GioiTinh: req.body.gender,
+    Email: req.body.email,
+    TenDangNhap: req.body.username,
+    MatKhau: hash,
+    LoaiNguoiDung: req.body.role,
+    avatar: "/img/default-avatar.png",
+    TinhTrang: 1,
+  };
+
+  const url = req.session.retUrl || "/admin/manage/user";
+  await userModel.addUserWithDetail(user, cateID);
+  res.redirect(url);
 });
 
 router.get("/manage/user/guest", async function (req, res) {

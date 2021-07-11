@@ -6,6 +6,10 @@ module.exports = {
     return db(table).insert(row);
   },
 
+  all(){
+    return db("tag");
+  },
+
   del(IDname, idVal, table) {
     return db(table).where(IDname, idVal).del();
   },

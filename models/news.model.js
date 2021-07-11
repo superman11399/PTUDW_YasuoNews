@@ -397,6 +397,7 @@ module.exports = {
       .orderByRaw("RAND()")
       .limit(5);
   },
+
   LayBinhLuanCuaBaiViet(idBaiBao) {
     const sql = `select ThoiGianBinhLuan,tenNguoiDung, NoiDung from binhluan where binhluan.idBaiBao=${idBaiBao}`;
     return db.raw(sql);
@@ -408,6 +409,7 @@ module.exports = {
   AddComment(cmt) {
     return db("binhluan").insert(cmt);
   },
+
   search(text, offset) {
     const query =
       "SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4 ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('" +
@@ -417,6 +419,7 @@ module.exports = {
       ",6;";
     return db.raw(query);
   },
+
   async countSearch(text) {
     const query =
       "SELECT COUNT(*) total FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('" +
@@ -493,5 +496,24 @@ module.exports = {
     const sql = `select * from editor e join chuyenmucphu p on p.idChuyenMucChinh=e.idChuyenMucChinh join baibao b on b.idChuyenMucPhu=p.idChuyenMucPhu join phongvien pv on pv.idPV=b.idTacGia where idbtv=${idBTV} and TinhTrangDuyet="${tinhTrang}"`;
     //LEFT JOIN baibao_tag bt on bt.idBaiBao=b.idBaiBao left join tag on tag.idTag=bt.idTag
     return db.raw(sql);
+  },
+  async all() {
+    const query = `SELECT b.*, cp.TenChuyenMucPhu, cc.TenChuyenMuc, p.ButDanh, bd.NgayDang, bd.LuotXem
+    FROM baibao b LEFT JOIN baibaoduocduyet bd on b.idBaiBao = bd.idBaiBao LEFT JOIN phongvien p on p.idPV = b.idTacGia LEFT JOIN chuyenmucphu cp on cp.idChuyenMucPhu = b.idChuyenMucPhu LEFT JOIN chuyenmucchinh cc on cp.idChuyenMucChinh = cc.idChuyenMucChinh`;
+    articles = await db.raw(query);
+    if (articles.length === 0) return null;
+    return articles[0];
+  },
+
+  getAllTagWithDetail() {
+    return db("BaiBao_Tag")
+      .join("Tag", "Tag.idTag", "=", "BaiBao_Tag.idTag")
+      .join("BaiBao", "BaiBao.idBaiBao", "=", "BaiBao_Tag.idBaiBao")
+      .select("BaiBao.idBaiBao", "Tag.idTag", "Tag.TenTag");
+  },
+
+  async del(id) {
+    await db("baibao_tag").where("idBaiBao", id).del();
+    return db("baibao").where("idBaiBao", id).del();
   },
 };

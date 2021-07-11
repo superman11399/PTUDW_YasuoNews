@@ -1,5 +1,11 @@
 {{#section 'js'}}
 <script>
+    function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+    }
+</script>
+<script>
     $(document).ready(function () {
         var color = "aliceblue";
         const role = $('#userRole').text();
@@ -23,22 +29,29 @@
             $("#card_content #userRole").text("ĐỘC GIẢ THƯỜNG");
         }
         $("#card_content").css("background-color", color);
+        var idNguoiDung = $('#idNguoiDung').text();
+        $.getJSON(`/account/get-ButDanh?id=${idNguoiDung}`,function (data2) {
+            console.log(data2);
+            $("#txtButDanh").val(data2);
+        });
     });
-    $('#formProfilePassword').on('submit', function (e) {
-        var password = $('#txtNewPassword').val();
-        var repassword = $('#txtRepassword').val();
-        if (password!=repassword)
-        {
-            alert('Mật khẩu không khớp!');
-            e.preventDefault();
-            return;
+
+    $('#editProfile').on('click', async function (e) {
+        if($("#submitBtn").is(":visible")){
+            $("#submitBtn").hide();
+            $('#txtName').prop('readonly', true);
+            $('#txtEmail').prop('readonly', true);
+            $('#txtDOB').prop('readonly', true);
+            $("#txtButDanh").prop('readonly', true);
         }
-        if(!confirm('Bạn xác nhận muốn đổi mật khẩu?'))
-        {return false;}
-
+        else {
+            $("#submitBtn").show();
+            $('#txtName').prop('readonly', false);
+            $('#txtEmail').prop('readonly', false);
+            $('#txtDOB').prop('readonly', false);
+            $("#txtButDanh").prop('readonly', false);
+        };
     });
-
-  
 
     </script>
 {{/section}}
@@ -63,32 +76,40 @@
                         <div class="sticky-content-inner">
                             <!-- Page Title Start -->
                             <div class="page--title pd--30-0">
-                                <h2 class="h2">Đổi mật khẩu </h2>
-                                <p>Vui lòng điền vào form sau để đổi mật khẩu</p>
+                                <h2 class="h2">Thông tin cá nhân <button id="editProfile" class="fa fa-edit pull-right"></button></h2>
                                 <div class="content">
                                     <div class="login--form">
-                                    <form id="formProfilePassword" action="/account/profile_password" method="POST">
+                                    <form id="formProfile" action="/account/change_profile" method="POST">
                                         <div class="form-group">
                                             <label>
-                                                <span>Mật khẩu cũ</span>
-                                                <input style="color: black; font-style: italic;" id="txtOldPassword" type="password" name="oldpassword" class="form-control" required>
+                                                <span>Họ và tên</span>
+                                                <input style="color: black; font-style: italic;" id="txtName" type="text" name="fullname" readonly="readonly" value="{{authUser.HoTen}}" class="form-control">
                                             </label>
                                         </div>
 
                                         <div class="form-group">
                                             <label>
-                                                <span>Mật khẩu mới</span>
-                                                <input style="color: black; font-style: italic;" id="txtNewPassword" type="password" name="newpassword" class="form-control" required>
+                                                <span>Email liên lạc</span>
+                                                <input style="color: black; font-style: italic;" id="txtEmail" type="email" name="email" readonly="readonly" value="{{authUser.Email}}" class="form-control" >
                                             </label>
                                         </div>
 
                                         <div class="form-group" >
                                             <label>
-                                                <span>Điền lại mật khẩu mới</span>
-                                                <input style="color: black; font-style: italic;" id="txtRepassword" type="password" name="renewpassword" class="form-control" required>
+                                                <span>Ngày sinh</span>
+                                                <input style="color: black; font-style: italic;" id="txtDOB" type="date" readonly="readonly" name="dob" value="{{dateFormat authUser.NgaySinh "YYYY-MM-DD"}}" class="form-control">
                                             </label>
                                         </div>
-                                        <button id="submitBtn" type="submit" class="btn btn-lg btn-block btn-primary">Xác nhận</button>
+                                        {{#ifEqual authUser.LoaiNguoiDung 'writer'}}
+                                            <div class="form-group" >
+                                            <label>
+                                                <span>Bút danh</span>
+                                                <input style="color: black; font-style: italic;" id="txtButDanh" type="text" readonly="readonly" name="ButDanh" class="form-control">
+                                            </label>
+                                        </div>
+                                        {{/ifEqual}}
+                                        
+                                        <button style="display: none;" id="submitBtn" type="submit" class="btn btn-lg btn-block btn-primary">Xác nhận</button>
                                     </form>
                                     </div>
                                 </div>
