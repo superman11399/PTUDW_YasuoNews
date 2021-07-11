@@ -26,16 +26,35 @@ router.get("/manage/category", async function (req, res) {
 router.get("/manage/post", async function (req, res) {
   const articles = await newsModel.all();
   const categories = await cateModel.allMainCate();
+  const subCategories = await cateModel.all();
   const tags = await tagModel.all();
   const tagsOfArticle = await newsModel.getAllTagWithDetail();
-  console.log(tagsOfArticle);
-  console.log(articles);
 
   res.render("adminView/post", {
     layout: "admin.hbs",
     title: "Admin | Quản lí bài viết",
     listArticle: articles,
     listCate: categories,
+    listSubCate: subCategories,
+    listTagOfArticle: tagsOfArticle,
+    listTag: tags
+  });
+});
+
+router.get("/manage/post/:id", async function (req, res) {
+  const id = +req.params.id;
+  const details = await newsModel.getDetailOfPostForAdmin(id);
+  const comment = await newsModel.getCommentOfArticle(id);
+  const subCateList = await cateModel.allSubCate();
+  const tags = await tagModel.all();
+  const tagsOfArticle = await newsModel.getAllTagWithDetail();
+
+  res.render("adminView/post-detail", {
+    layout: "admin.hbs",
+    title: "Admin | Quản lí bài viết",
+    article: details,
+    comments: comment,
+    listSubCate: subCateList,
     listTagOfArticle: tagsOfArticle,
     listTag: tags
   });
@@ -46,6 +65,24 @@ router.post("/manage/post/del", async function (req, res) {
   if (typeof(id) !== "undefined") 
     await newsModel.del(id);
   res.redirect("/admin/manage/post/");
+});
+
+router.post("/manage/post/delCom", async function (req, res) {
+  const id = req.body.id; 
+  const url = req.headers.referer || '/admin/manage/post/';
+  if (typeof(id) !== "undefined") 
+    await newsModel.delCom(id);
+  res.redirect(url);
+});
+
+router.post("/manage/post/update", async function (req, res) {
+  const id = req.body.postID;
+  const subID = req.body.subID;
+  const status = req.body.newStatus;
+  const url = req.headers.referer || '/admin/manage/post/';
+  if (typeof(id) !== "undefined") 
+    await newsModel.updatePost(id,subID,status);
+  res.redirect(url);
 });
 
 router.get("/manage/tag", async function (req, res) {

@@ -394,15 +394,40 @@ module.exports = {
     return articles[0];
   },
 
-  getAllTagWithDetail(){
+  getAllTagWithDetail() {
     return db("BaiBao_Tag")
-    .join("Tag", "Tag.idTag", "=", "BaiBao_Tag.idTag")
-    .join("BaiBao", "BaiBao.idBaiBao", "=", "BaiBao_Tag.idBaiBao")
-    .select("BaiBao.idBaiBao", "Tag.idTag", "Tag.TenTag");
+      .join("Tag", "Tag.idTag", "=", "BaiBao_Tag.idTag")
+      .join("BaiBao", "BaiBao.idBaiBao", "=", "BaiBao_Tag.idBaiBao")
+      .select("BaiBao.idBaiBao", "Tag.idTag", "Tag.TenTag");
   },
 
   async del(id) {
     await db("baibao_tag").where("idBaiBao", id).del();
     return db("baibao").where("idBaiBao", id).del();
+  },
+
+  async getCommentOfArticle(idBaiBao) {
+    const query = `select * from binhluan join baibao on baibao.idBaiBao=binhluan.idBaiBao join nguoidung on nguoidung.idNguoiDung=binhluan.idNguoiDung where baibao.idBaiBao=${idBaiBao}`;
+    row = await db.raw(query);
+    if (row.length === 0) return null;
+    return row[0];
+  },
+
+  delCom(id) {
+    return db("binhluan").where("idBL", id).del();
+  },
+
+  updatePost(id, subID, status) {
+    return db("baibao")
+      .where("idBaiBao", id)
+      .update("idChuyenMucPhu", subID)
+      .update("TinhTrangDuyet", status);
+  },
+
+  async getDetailOfPostForAdmin(id) {
+    row = await db("baibao").where("idBaiBao",id).leftJoin("chuyenmucphu","baibao.idChuyenMucPhu","=","chuyenmucphu.idChuyenMucPhu");
+    if(row.length===0)
+      return null;
+    return row[0];
   },
 };
