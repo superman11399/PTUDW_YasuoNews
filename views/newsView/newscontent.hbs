@@ -38,7 +38,7 @@
                 <li><span><i
                       class="fa fm fa-eye"
                     ></i>{{this.details.LuotXem}}</span></li>
-                <li><a href="#"><i class="fa fm fa-comments-o"></i>03</a></li>
+                <li><a href="#"><i class="fa fm fa-comments-o"></i>{{this.cmt_count}}</a></li>
               </ul>
 
               <div class="title">
@@ -48,25 +48,12 @@
 
             <div class="post--img">
               <a href="#" class="thumb"><img
-                  src="img/news-single-img/post-img-01.jpg"
-                  alt=""
+                  src="img/BaiBao/{{this.details.AnhDaiDien}}"
+                  alt="cover"
                 /></a>
               <a href="#" class="icon"><i class="fa fa-star-o"></i></a>
 
-              <div class="post--map">
-                <p class="btn-link"><i class="fa fa-map-o"></i>Location in
-                  Google Map</p>
-
-                <div class="map--wrapper">
-                  <div
-                    data-map-latitude="23.790546"
-                    data-map-longitude="90.375583"
-                    data-map-zoom="6"
-                    data-map-marker="[[23.790546, 90.375583]]"
-                  ></div>
-                </div>
               </div>
-            </div>
 
             <div class="post--content">
               {{{this.details.NoiDungChiTiet}}}
@@ -78,7 +65,7 @@
           <div class="ad--space pd--20-0-40">
             <a href="#">
               <img
-                src="img/ads-img/ad-728x90-02.jpg"
+                src="/img/ads-img/ad-728x90-02.jpg"
                 alt=""
                 class="center-block"
               />
@@ -320,7 +307,7 @@
 
                   <div class="comment--info">
                     <div class="comment--header clearfix">
-                      <p class="name">{{HoTen}}</p>
+                      <p class="name">{{tenNguoiDung}}</p>
                       <p class="date">{{dateFormat ThoiGianBinhLuan "DD/MM/YYYY"}}</p>
 
                       <a href="#" class="reply"><i
@@ -354,7 +341,7 @@
             <!-- Post Items Title End -->
 
             <div class="comment-respond">
-              <form action="#" data-form="validate">
+              <form action="/news/newscontent/{{this.details.idBaiBao}}" data-form="validate" method="POST">
                 <p>Don’t worry ! Your email address will not be published.
                   Required fields are marked (*).</p>
 
@@ -363,7 +350,7 @@
                     <label>
                       <span>Comment *</span>
                       <textarea
-                        name="comment"
+                        name="NoiDung" id="NoiDung"
                         class="form-control"
                         required
                       ></textarea>
@@ -375,7 +362,7 @@
                       <span>Name *</span>
                       <input
                         type="text"
-                        name="name"
+                        name="tenNguoiDung" 
                         class="form-control"
                         required
                       />
@@ -391,10 +378,6 @@
                       />
                     </label>
 
-                    <label>
-                      <span>Website</span>
-                      <input type="text" name="website" class="form-control" />
-                    </label>
                   </div>
 
                   <div class="col-md-12">

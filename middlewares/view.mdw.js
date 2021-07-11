@@ -10,14 +10,6 @@ module.exports = function (app) {
       section: hbs_sections(),
       format_number(val) {
         return numeral(val).format('0,0');
-      },
-
-      ifEqual: function(fieldval, string, option) {
-        if (fieldval === string) { 
-          return option.fn(this) 
-        } else { 
-          return option.inverse(this) 
-        } 
       }
     }
   }));
