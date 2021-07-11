@@ -1,0 +1,61 @@
+<div class="container-fluid">
+  <div class="card" style="min-width: 44rem;">
+    <div class="card-body">
+      <div class="row my-2">
+        <div class="col-12">
+            <h4>{{title}}</h4>
+        </div>      
+      </div>
+      {{# if hasError }}
+          <div class="alert alert-danger" role="alert">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              {{# each errors }}
+                  {{ this }}</br>
+              {{/ each }}
+          </div>
+      {{ else }}
+          {{# if hasSuccess }}
+              <div class="alert alert-success" role="alert">
+                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                  {{# each success }}
+                      {{ this }}</br>
+                  {{/ each }}
+              </div>
+          {{/ if }}
+      {{/ if }}
+      <!-- list posts -->
+      <div class="row">
+        <div class="col-md-12">
+          <table class="table table-hover ">
+            <thead class="bg-light ">
+              <tr>  
+                <th>Tiêu đề</th>
+                <th>Tác giả</th>
+                <th>Chuyên mục</th>
+                <th>Ngày viết</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each listNews}}
+              {{!-- Aritcle --}}
+              <tr> 
+                <td><a href="#"><small>{{TieuDe}}</small></a></td>
+                <td><small>{{ButDanh}}</small></td>
+                <td><small>{{TenChuyenMucPhu}}</small></td>
+                <td><small>{{dateFormat NgayCuoiChinhSua "DD/MM/YYYY"}}</small></td>
+                <td><a href="/editor/view/{{idBaiBao}}"><i class="fas fa-pencil-alt" title="Xem bài viết"></i></a></td>
+              </tr>
+              {{!-- Aritcle End --}}
+              {{else}}
+              <div class="alert alert-danger" role="alert">
+                <strong> Không có bài viết nào </strong>
+              </div>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

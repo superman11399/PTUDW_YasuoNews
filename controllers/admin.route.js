@@ -3,7 +3,7 @@ const userModel = require("../models/user.model");
 const newsModel = require("../models/news.model");
 const cateModel = require("../models/category.model");
 const tagModel = require("../models/tag.model");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 const router = express.Router();
 
@@ -56,14 +56,13 @@ router.get("/manage/post/:id", async function (req, res) {
     comments: comment,
     listSubCate: subCateList,
     listTagOfArticle: tagsOfArticle,
-    listTag: tags
+    listTag: tags,
   });
 });
 
 router.post("/manage/post/del", async function (req, res) {
-  const id = req.body.id; 
-  if (typeof(id) !== "undefined") 
-    await newsModel.del(id);
+  const id = req.body.id;
+  if (typeof id !== "undefined") await newsModel.del(id);
   res.redirect("/admin/manage/post/");
 });
 
@@ -96,12 +95,12 @@ router.get("/manage/tag", async function (req, res) {
 });
 
 router.post("/manage/tag/delTag", async function (req, res) {
-  if (typeof(req.body.id) !== "undefined") await tagModel.delTag(req.body.id);
+  if (typeof req.body.id !== "undefined") await tagModel.delTag(req.body.id);
   res.redirect("/admin/manage/tag");
 });
 
 router.post("/manage/tag/rename", async function (req, res) {
-  if (typeof(req.body.id) !== "undefined")
+  if (typeof req.body.id !== "undefined")
     await tagModel.patch(
       "idTag",
       req.body.id,
@@ -113,7 +112,7 @@ router.post("/manage/tag/rename", async function (req, res) {
 });
 
 router.post("/manage/tag/add", async function (req, res) {
-  if (typeof(req.body.newTag) !== "undefined")
+  if (typeof req.body.newTag !== "undefined")
     tag = {
       TenTag: req.body.newTag,
     };
@@ -137,13 +136,13 @@ router.get("/manage/user/add", async function (req, res) {
   res.render("adminView/user-add", {
     layout: "admin.hbs",
     title: "Admin | Thêm người dùng",
-    cateList: catelist
+    cateList: catelist,
   });
 });
 
 router.post("/manage/user/add", async function (req, res) {
   const hash = bcrypt.hashSync(req.body.password, 10);
-  const dob = req.body.dob + ' 00:00:00';
+  const dob = req.body.dob + " 00:00:00";
   const cateID = req.body.idcate;
   const user = {
     HoTen: req.body.fullname,
@@ -153,11 +152,11 @@ router.post("/manage/user/add", async function (req, res) {
     TenDangNhap: req.body.username,
     MatKhau: hash,
     LoaiNguoiDung: req.body.role,
-    avatar: '/img/default-avatar.png',
-    TinhTrang: 1
-  }
+    avatar: "/img/default-avatar.png",
+    TinhTrang: 1,
+  };
 
-  const url = req.session.retUrl || '/admin/manage/user';
+  const url = req.session.retUrl || "/admin/manage/user";
   await userModel.addUserWithDetail(user, cateID);
   res.redirect(url);
 });
@@ -205,19 +204,19 @@ router.get("/manage/user/editor", async function (req, res) {
 });
 
 router.post("/manage/category/delMain", async function (req, res) {
-  if (typeof(req.body.id) !== "undefined")
+  if (typeof req.body.id !== "undefined")
     await cateModel.delMainCate(+req.body.id);
   res.redirect("/admin/manage/category");
 });
 
 router.post("/manage/category/delSub", async function (req, res) {
-  if (typeof(req.body.id) !== "undefined")
+  if (typeof req.body.id !== "undefined")
     await cateModel.delSubCate(+req.body.id);
   res.redirect("/admin/manage/category");
 });
 
 router.post("/manage/category/renameMain", async function (req, res) {
-  if (typeof(req.body.id) !== "undefined") {
+  if (typeof req.body.id !== "undefined") {
     const row = {
       id: req.body.id,
       TenChuyenMuc: req.body.name,
@@ -228,7 +227,7 @@ router.post("/manage/category/renameMain", async function (req, res) {
 });
 
 router.post("/manage/category/patchSub", async function (req, res) {
-  if (typeof(req.body.id) !== "undefined") {
+  if (typeof req.body.id !== "undefined") {
     const row = {
       id: req.body.id,
       TenChuyenMucPhu: req.body.name,
@@ -257,20 +256,20 @@ router.post("/manage/category/addSub", async function (req, res) {
 });
 
 router.post("/manage/user/delUser", async function (req, res) {
-  if (typeof(req.body.id) !== "undefined")
+  if (typeof req.body.id !== "undefined")
     await userModel.delUser(+req.body.id, req.body.type);
   res.redirect("/admin/manage/user");
 });
 
 router.post("/manage/user/patchRole", async function (req, res) {
-  if (typeof(req.body.id) !== "undefined")
+  if (typeof req.body.id !== "undefined")
     await userModel.patchRole(req.body.id, req.body.role, req.body.oldrole);
 
   res.redirect("/admin/manage/user");
 });
 
 router.post("/manage/user/renewal", async function (req, res) {
-  if (typeof(req.body.id) !== "undefined")
+  if (typeof req.body.id !== "undefined")
     await userModel.renewSubs(req.body.id);
 
   res.redirect("/admin/manage/user/subscriber");
@@ -289,13 +288,13 @@ router.post("/manage/user/assignCate", async function (req, res) {
 router.get("/manage/user/profile/:id", async function (req, res) {
   const userId = +req.params.id || 0;
   result = await userModel.findUserWithDetail(userId);
-  const url = req.headers.referer || '/';
+  const url = req.headers.referer || "/";
 
   res.render("adminView/user-profile", {
     layout: "admin.hbs",
     title: "Admin | Thông tin người dùng",
     user: result,
-    backurl: url
+    backurl: url,
   });
 });
 

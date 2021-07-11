@@ -1,0 +1,83 @@
+<div class="container-fluid">
+  <div class="card" style="min-width: 44rem;">
+    <div class="card-body">
+      <div class="row my-2">
+        <div class="col-md-6">
+          <h5>{{topic}}</h5>
+        </div>
+        <div class="col">
+          <a <button href="/writer/post" type="button" class="btn btn-sm btn-primary float-right">Thêm bài viết</button></a>
+        </div>
+      </div>
+      <div class="row">
+        
+        <div class="col-md-12">
+
+          <table class="table table-hover ">
+
+            <thead class="bg-light ">
+              <tr>
+                <th>Tiêu đề</th>
+                <th>Chuyên mục</th>
+                <th>Tags</th>
+                <th>Bình luận</th>
+                <th>Ngày viết</th>
+                {{#unless notEdit}}
+                <th>Edit</th>
+                {{/unless}}
+              </tr>
+            </thead>
+                        {{# if hasError }}
+          <div class="alert alert-danger" role="alert">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{# each errors }}
+            {{ this }}</br>
+            {{/ each }}
+          </div>
+          {{ else }}
+          {{# if hasSuccess }}
+          <div class="alert alert-success" role="alert">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{# each success }}
+            {{ this }}</br>
+            {{/ each }}
+          </div>
+          {{/ if }}
+          {{/ if }}
+            <tbody>
+              {{#each listNews}}
+              {{!-- Aritcle --}}
+              <tr>
+                <td><a href="#"><small>{{TieuDe}}</small></a></td>
+                <td><small>{{TenChuyenMuc}} / {{TenChuyenMucPhu}}</small></td>
+                <td><small>{{this.arrayOfTags.length}}</small></td>
+                <td><a href="#"><small>{{this.comments.length}}</small></a></td>
+                <td><small>{{dateFormat NgayCuoiChinhSua "DD/MM/YYYY"}}</small></td>
+                {{#unless ../notEdit}}
+                <td>
+                  <a href="/writer/post/{{idBaiBao}}"><i class="fa fa-edit" title="Chỉnh sửa bài viết"></i></a>
+                  {{!-- <a href="#"><i class="fa fa-eye"></i></a> --}}
+                  {{!-- <a href="#"><i class="fa fa-trash"></i></a> --}}
+                  <button type="submit" class="btn btn-link" id="{{idBaiBao}}" onclick="deleteArticleByWriter({{idBaiBao}})"><i
+                  class="fa fa-trash" title="Xóa bài viết"></i></button>
+                </td>
+                {{/unless}}
+              </tr>
+              {{!-- <input type="text" id="articleID" name="_csrf" value="{{idBaiBao}}" hidden> --}}
+              {{!-- Aritcle End --}}
+              {{else}}
+              <div class="alert alert-danger" role="alert">
+                <strong> Không có bài viết nào </strong>
+              </div>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden>
+</div>
+
+<script src="../../public/handlebars-intl/dist/handlebars-intl.min.js"></script>
+<script src="/js/writer.js"></script>

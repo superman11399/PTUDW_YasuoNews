@@ -6,32 +6,29 @@ module.exports = {
   },
 
   addUserWithDetail(user, detail) {
-    if(user.LoaiNguoiDung === 'writer'){
+    if (user.LoaiNguoiDung === "writer") {
       return this.addWriter(user);
-    }
-    else if(user.LoaiNguoiDung === 'subscriber'){
+    } else if (user.LoaiNguoiDung === "subscriber") {
       return this.addSubscriber(user);
-    }
-    else if(user.LoaiNguoiDung === 'editor'){
+    } else if (user.LoaiNguoiDung === "editor") {
       return this.addEditor(user, detail);
-    }
-    else return db("nguoidung").insert(user);
+    } else return db("nguoidung").insert(user);
   },
 
-  async addWriter(user){
-    const id = await this.add(user,"nguoidung");
+  async addWriter(user) {
+    const id = await this.add(user, "nguoidung");
     const query = `INSERT INTO PhongVien value(${id[0]},'Ẩn danh')`;
     return db.raw(query);
   },
 
-  async addSubscriber(user){
-    const id = await this.add(user,"nguoidung");
+  async addSubscriber(user) {
+    const id = await this.add(user, "nguoidung");
     const query = `INSERT INTO subscriber value(${id[0]},NOW() + INTERVAL 7 DAY)`;
     return db.raw(query);
   },
 
-  async addEditor(user, cateID){
-    const id = await this.add(user,"nguoidung");
+  async addEditor(user, cateID) {
+    const id = await this.add(user, "nguoidung");
     const query = `INSERT INTO editor value(${id[0]},${cateID})`;
     return db.raw(query);
   },
@@ -45,7 +42,7 @@ module.exports = {
   },
 
   async delUser(id, type) {
-    if (type === 'editor'){
+    if (type === "editor") {
       const query = `UPDATE editor SET idChuyenMucChinh = NULL WHERE idBTV = ${id}`;
       await db.raw(query);
     }
@@ -57,30 +54,30 @@ module.exports = {
   },
 
   async patchRole(id, newrole, oldrole) {
-    console.log("This is id: "+id);
-    if (oldrole === "editor"){
-      await this.del('idBTV',id,"editor");
+    console.log("This is id: " + id);
+    if (oldrole === "editor") {
+      await this.del("idBTV", id, "editor");
     }
-    if (oldrole === "subscriber"){
-      await this.del('idDocGia',id,"subscriber");
+    if (oldrole === "subscriber") {
+      await this.del("idDocGia", id, "subscriber");
     }
 
     await this.addRowWhenPatchRole(id, newrole);
     return this.patch("idNguoiDung", id, "NguoiDung", "LoaiNguoiDung", newrole);
   },
 
-  addRowWhenPatchRole(id, role){
-    if (role === "editor"){
+  addRowWhenPatchRole(id, role) {
+    if (role === "editor") {
       const query = `INSERT INTO editor value(${id},NULL)`;
       return db.raw(query);
     }
-    if (role === "subscriber"){
+    if (role === "subscriber") {
       now = db.fn.now();
-      const query  = `INSERT INTO subscriber value(${id}, NOW())`;
+      const query = `INSERT INTO subscriber value(${id}, NOW())`;
       return db.raw(query);
     }
-    if (role === "writer"){
-      const query  = `INSERT INTO PhongVien value(${id},'Ẩn danh')`;
+    if (role === "writer") {
+      const query = `INSERT INTO PhongVien value(${id},'Ẩn danh')`;
       return db.raw(query);
     }
   },
@@ -176,18 +173,17 @@ WHERE nd.TinhTrang != 0`;
     return db.raw(query);
   },
 
-  async findUserWithDetail(id){
+  async findUserWithDetail(id) {
     row = await this.findByID(id);
     type = String(row.LoaiNguoiDung);
-    if (type === 'editor'){
+    if (type === "editor") {
       const query = `SELECT nd.*, c.*
       FROM (nguoidung nd JOIN editor e on nd.idNguoiDung = e.idBTV) LEFT JOIN chuyenmucchinh c on e.idChuyenMucChinh = c.idChuyenMucChinh
       WHERE nd.TinhTrang != 0 AND nd.idNguoiDung = ${id}`;
       user = await db.raw(query);
       if (user.length === 0) return null;
       return user[0][0];
-    }
-    else if (type === 'writer'){
+    } else if (type === "writer") {
       const query = `SELECT *
       FROM (SELECT nd.*, w.ButDanh, COUNT(b.idBaiBao) as tongBaiBao 
             FROM (nguoidung nd JOIN PhongVien w on nd.idNguoiDung = w.idPV) LEFT JOIN baibao b on w.idPV = b.idTacGia
@@ -203,8 +199,7 @@ WHERE nd.TinhTrang != 0`;
       console.log(user);
       if (user.length === 0) return null;
       return user[0][0];
-    }
-    else if (type === 'subscriber'){
+    } else if (type === "subscriber") {
       const query = `select nd.*,
       CASE WHEN TIMESTAMPDIFF(MINUTE,NOW(),s.NgayHetHan) > 0 THEN TIMESTAMPDIFF(MINUTE,NOW(),s.NgayHetHan)
       ELSE 0
@@ -217,8 +212,7 @@ WHERE nd.TinhTrang != 0`;
       user = await db.raw(query);
       if (user.length === 0) return null;
       return user[0][0];
-    }
-    else{
+    } else {
       return row;
     }
   },

@@ -26,17 +26,27 @@
       <div class="col-md-6 float-right">
         <div class="form-group">
           <div class="input-group">
-            <input id="Search" type="text" class="form-control search-menu" placeholder="Tìm kiếm..." />
+            <input
+              id="Search"
+              type="text"
+              class="form-control search-menu"
+              placeholder="Tìm kiếm..."
+            />
             <div class="input-group-append">
-              <button type="button" class="btn btn-primary btn-block"><i class="fa fa-search"
-                  aria-hidden="true"></i></button>
+              <button type="button" class="btn btn-primary btn-block"><i
+                  class="fa fa-search"
+                  aria-hidden="true"
+                ></i></button>
             </div>
           </div>
         </div>
       </div>
       <div class="col">
-        <button type="button" class="btn btn-md btn-success float-right" onclick="window.location='/admin/post'">Thêm
-          bài viết</button>
+        <button
+          type="button"
+          class="btn btn-md btn-success float-right"
+          onclick="window.location='/admin/post'"
+        >Thêm bài viết</button>
       </div>
     </div>
     <!-- filter -->
@@ -61,7 +71,7 @@
           <datalist id="taglist">
             <option selected>Tất cả thẻ tag</option>
             {{#each listTag}}
-            <option>{{this.TenTag}}</option>
+              <option>{{this.TenTag}}</option>
             {{/each}}
           </datalist>
         </div>
@@ -78,14 +88,17 @@
         </div>
       </div>
       <div class="col-md-3">
-        <button type="button" id="btn-post-filter" class="btn btn-primary btn-block"><i class="fa fa-filter"></i>
+        <button type="button" class="btn btn-primary btn-block"><i
+            class="fa fa-filter"
+          ></i>
           Lọc</button>
       </div>
-    </div> <!-- end filter-->
+    </div>
+    <!-- end filter-->
     <div class="row">
       <div class="col-md-12">
-        <table class="table table-hover ">
-          <thead class="bg-light ">
+        <table class="table table-hover">
+          <thead class="bg-light">
             <tr>
               <th class="w-25">Tiêu đề</th>
               <th>Tác giả</th>
@@ -131,9 +144,9 @@
               </td>
             </tr>
             {{else}}
-            <div class="alert alert-danger" role="alert">
-              <strong> Không có bài viết nào </strong>
-            </div>
+              <div class="alert alert-danger" role="alert">
+                <strong> Không có bài viết nào </strong>
+              </div>
             {{/each}}
           </tbody>
         </table>
