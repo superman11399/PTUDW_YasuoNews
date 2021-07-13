@@ -78,11 +78,11 @@
             <ul class="nav">
               <li><span><i class="fa fa-tags"></i></span></li>
               {{#each this.listTag}}
-                {{#ifEquals idBaiBao ../this.details.idBaiBao}}
+                {{#IfEquals idBaiBao ../this.details.idBaiBao}}
                   <li><a
                       href="/news/newslist/idTag/{{idTag}}"
                     >#{{TenTag}}</a></li>
-                {{/ifEquals}}
+                {{/IfEquals}}
               {{/each}}
             </ul>
           </div>

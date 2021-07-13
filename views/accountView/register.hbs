@@ -59,25 +59,29 @@
         return ;
     }
     $.getJSON(`/account/is-available?user=${username}`,function (data1) {
-      if (data1 === false) {
+      if (data1 === true) {
         alert('Tên đăng nhập không có sẵn!');
         return;
       } else {
-        $.getJSON(`/account/send-OTP?email=${email}`, function (data2) {
-            if (data2 === false) {
-                alert('Hệ thống lỗi. Vui lòng đăng ký lại trong ít phút!');
+            $.getJSON(`/account/is-available?email=${email}`,function (data) {
+            if (data === true) {
+                alert('Email không có sẵn!');
+                return;
             } else {
-                $('.form-group').hide();
-                $('#OTPbox').show();
-                alert('Đã gửi OTP đến Email của bạn. Vui lòng kiểm tra để hoàn tất đăng ký!');
-                }
+                $.getJSON(`/account/send-OTP?email=${email}`, function (data2) {
+                    if (data2 === false) {
+                        alert('Hệ thống lỗi. Vui lòng đăng ký lại trong ít phút!');
+                    } else {
+                        $('.form-group').hide();
+                        $('#OTPbox').show();
+                        alert('Đã gửi OTP đến Email của bạn. Vui lòng kiểm tra để hoàn tất đăng ký!');
+                    }
+            });
+            }
             });
       }
     });
-
-    
-
-    });
+});
 
 </script>
 {{/section}}

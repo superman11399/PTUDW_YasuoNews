@@ -117,9 +117,9 @@ router.get('/is-available', async function (req, res) {
     const username = req.query.user;
     const user = await authen.checkUsername(username);
     if (user === null) {
-      return res.json(true);
+      return res.json(false);
     }
-    res.json(false);
+    res.json(true);
   }
   else if (req.query.email) {
     const email = req.query.email;
