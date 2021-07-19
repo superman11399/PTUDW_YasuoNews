@@ -109,13 +109,15 @@ $(document).on("click", ".updateSubConfirm", function () {
 $("#btn-post-filter").on("click", function (e) {
   var cate = $("#post-filter #cate").val();
   var tag = $("#post-filter #tag").val();
+  var writer = $("#post-filter #writer").val();
   var status = $("#post-filter #status option:selected").text ();
   console.log(status);
   if (cate === "Tất cả chuyên mục") cate = "";
   if (tag === "Tất cả thẻ tag") tag = "";
   if (status === "Tất cả trạng thái") status = "";
+  if (writer === "Tất cả tác giả") writer = "";
   $("tbody tr").filter(function () {
-    $(this).toggle($(this).text().indexOf(cate) > -1 && $(this).text().indexOf(tag) > -1 && $(this).text().indexOf(status) > -1);
+    $(this).toggle($(this).text().indexOf(cate) > -1 && $(this).text().indexOf(tag) > -1 && $(this).text().indexOf(writer) > -1 && $(this).text().indexOf(status) > -1);
   });
 });
 

@@ -514,21 +514,28 @@ module.exports = {
 
   async del(id) {
     await db("baibao_tag").where("idBaiBao", id).del();
+    await db("binhluan").where("idBaiBao", id).del();
+    await db("baibaoduocduyet").where("idBaiBao", id).del();
     return db("baibao").where("idBaiBao", id).del();
   },
 
   async getCommentOfArticle(idBaiBao) {
-    const query = `select * from binhluan join baibao on baibao.idBaiBao=binhluan.idBaiBao join nguoidung on nguoidung.idNguoiDung=binhluan.idNguoiDung where baibao.idBaiBao=${idBaiBao}`;
-    row = await db.raw(query);
-    if (row.length === 0) return null;
-    return row[0];
+    return db('binhluan').where("idBaiBao",idBaiBao);
   },
 
   delCom(id) {
     return db("binhluan").where("idBL", id).del();
   },
 
-  updatePost(id, subID, status) {
+  themVaoBaiXuatBan(id){
+    const query = `insert into baibaoduocduyet value(${id},NOW(),0)`;
+    return db.raw(query);
+  },
+
+  async updatePost(id, subID, status) {
+    if(status==="Đã xuất bản"){
+      await this.themVaoBaiXuatBan(id);
+    } 
     return db("baibao")
       .where("idBaiBao", id)
       .update("idChuyenMucPhu", subID)
@@ -536,7 +543,7 @@ module.exports = {
   },
 
   async getDetailOfPostForAdmin(id) {
-    row = await db("baibao").where("idBaiBao",id).leftJoin("chuyenmucphu","baibao.idChuyenMucPhu","=","chuyenmucphu.idChuyenMucPhu");
+    row = await db("baibao").where("idBaiBao",id).leftJoin("chuyenmucphu","baibao.idChuyenMucPhu","=","chuyenmucphu.idChuyenMucPhu").leftJoin("phongvien","idTacGia","=","idPV");
     if(row.length===0)
       return null;
     return row[0];

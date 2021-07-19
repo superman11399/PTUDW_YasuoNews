@@ -55,11 +55,22 @@
         <div class="col-md-1"></div>
         <div class="col">
           <input type="hidden" value="{{article.idBaiBao}}" name="postID">
-          <button type="submit" id="btn-update-post" class="btn btn-primary btn-block">Xác nhận thay đổi</button>
+          <button type="submit" id="btn-update-post" class="btn btn-warning btn-block">Xác nhận thay đổi</button>
         </div>
       </div>
     </form>
     <hr>
+    {{#if flag}}
+    <div class="row pt-4 mx-auto">
+      <div class="col text-right">
+        <a class="btn btn-success btn-md px-3" href="/admin/manage/post/update-content/{{article.idBaiBao}}"><i
+            class="fa fa-pencil" title="Chỉnh sửa bài báo"></i> Chỉnh sửa bài báo</a>
+      </div>
+    </div>
+    {{/if}}
+    <div class="row pt-4 mx-auto w-75">
+      <img class="mx-auto" src="/img/BaiBao/{{article.AnhDaiDien}}" style="height: 200px;" alt="Ảnh minh họa">
+    </div>
     <div class="row pt-4 mx-auto w-75">
       <i>{{article.TomTat}}</i>
     </div>
@@ -67,24 +78,29 @@
     <div class="row pt-4 w-75 mx-auto">
       {{{article.NoiDungChiTiet}}}
     </div>
+    <div class="row pt-2 w-75 mx-auto ">
+      <div class="col text-right">
+        <b class="mr-1">- {{article.ButDanh}} -</b>
+      </div>
+    </div>
     <div class="row">
       <div class="col-md-2">
-        <span><i class="fa fa-tags"></i></span> Danh sách tags:
+        <span class="align-self-center"><i class="fa fa-tags"></i> Danh sách tags:</span>
       </div>
-      <div class="col-md-7">
+      <div class="col-md-7 d-flex">
         <ul class="nav">
           {{#each this.listTagOfArticle}}
-          {{#ifEquals idBaiBao ../article.idBaiBao}}
-          <li class="badge badge-danger mx-1 mb-1">{{TenTag}}</li>
-          {{/ifEquals}}
+          {{#IfEquals idBaiBao ../article.idBaiBao}}
+          <li class="badge badge-danger mx-1 my-1 align-self-center">{{TenTag}}</li>
+          {{/IfEquals}}
           {{/each}}
         </ul>
       </div>
-      <div class="col text-right">
+      {{!-- <div class="col text-right">
         <button href="#delPostConfirmModal" class="btn btn-primary btn-sm p-1 mb-1 delPostConfirm" data-toggle="modal"
           data-title="{{this.TieuDe}}" data-id="{{this.idBaiBao}}" data-content="{{this.ButDanh}}" data-type="delUser"
           style="width: 25px;"><i class="fa fa-pencil" title="Xóa bài báo"></i></button>
-      </div>
+      </div> --}}
 
     </div>
     <hr>
@@ -96,10 +112,10 @@
         <table class="table table-hover">
           <thead class="bg-light">
             <tr>
-              <th>Người dùng</th>
-              <th>Ngày bình luận</th>
+              <th style="width:15%;">Người dùng</th>
+              <th style="width:15%;">Ngày bình luận</th>
               <th>Nội dung</th>
-              <th>
+              <th style="width:15%;">
                 <center>Thao tác</center>
               </th>
             </tr>
@@ -107,12 +123,12 @@
           <tbody>
             {{#each comments}}
             <tr>
-              <td>{{HoTen}}</td>
+              <td>{{tenNguoiDung}}</td>
               <td>{{dateFormat comments.ThoiGianBinhLuan "DD/MM/YYYY HH:mm"}}</td>
               <td>{{NoiDung}}</td>
               <td class="text-center btn-groups btn-group-justified">
                 <button href="#delCommentModal" class="btn btn-primary btn-sm p-1 mb-1 delComConfirm"
-                  data-toggle="modal" data-id="{{this.idBL}}" data-content="{{this.HoTen}}" data-type="delUser"
+                  data-toggle="modal" data-id="{{this.idBL}}" data-content="{{this.tenNguoiDung}}" data-type="delUser"
                   style="width: 25px;"><i class="fa fa-trash" title="Xóa người dùng"></i></button>
               </td>
             </tr>

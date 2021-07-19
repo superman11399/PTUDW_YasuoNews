@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -29,6 +30,7 @@
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="/admin/">Trang quản lý</a></li>
                 <li><a class="dropdown-item" href="/account/profile">Thông tin cá nhân</a></li>
+                <li><a class="dropdown-item" href="/account/profile_password">Đổi mật khẩu</a></li>
                 <li>
                     <hr class="dropdown-divider" />
                 </li>
@@ -78,6 +80,23 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid p-3">
+                    {{# if hasError }}
+                    <div class="alert alert-danger" style="font-weight: bolder;" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{# each errors }}
+                        {{ this }}
+                        {{/ each }}
+                    </div>
+                    {{ else }}
+                    {{# if hasSuccess }}
+                    <div class="alert alert-success" style="font-weight: bolder;" role="alert">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {{# each success }}
+                        {{ this }}
+                        {{/ each }}
+                    </div>
+                    {{/ if }}
+                    {{/ if }}
                     {{{body}}}
                 </div>
             </main>
@@ -104,7 +123,7 @@
             $("#Search").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
                 $("tbody tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
             });
 
@@ -121,6 +140,8 @@
             }
         });
     </script>
+
     {{{_sections.js}}}
 </body>
+
 </html>

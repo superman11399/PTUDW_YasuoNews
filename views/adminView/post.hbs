@@ -26,27 +26,16 @@
       <div class="col-md-6 float-right">
         <div class="form-group">
           <div class="input-group">
-            <input
-              id="Search"
-              type="text"
-              class="form-control search-menu"
-              placeholder="Tìm kiếm..."
-            />
+            <input id="Search" type="text" class="form-control search-menu" placeholder="Tìm kiếm..." />
             <div class="input-group-append">
-              <button type="button" class="btn btn-primary btn-block"><i
-                  class="fa fa-search"
-                  aria-hidden="true"
-                ></i></button>
+              <button type="button" class="btn btn-primary btn-block"><i class="fa fa-search"
+                  aria-hidden="true"></i></button>
             </div>
           </div>
         </div>
       </div>
       <div class="col">
-        <button
-          type="button"
-          class="btn btn-md btn-success float-right"
-          onclick="window.location='/admin/post'"
-        >Thêm bài viết</button>
+        <a type="button" class="btn btn-md btn-success float-right" href="/admin/manage/post/add">Thêm bài viết</a>
       </div>
     </div>
     <!-- filter -->
@@ -67,11 +56,11 @@
       </div>
       <div class="col pt-3">
         <div class="form-group">
-          <input type="text" id="tag" list="taglist" class="form-control pl-3 pb-2" placeholder="Lọc thẻ tag">
+          <input type="text" id="tag" multiple list="taglist" class="form-control pl-3 pb-2" placeholder="Lọc thẻ tag">
           <datalist id="taglist">
             <option selected>Tất cả thẻ tag</option>
             {{#each listTag}}
-              <option>{{this.TenTag}}</option>
+            <option>{{this.TenTag}}</option>
             {{/each}}
           </datalist>
         </div>
@@ -87,10 +76,19 @@
           </select>
         </div>
       </div>
-      <div class="col-md-3">
-        <button type="button" class="btn btn-primary btn-block"><i
-            class="fa fa-filter"
-          ></i>
+      <div class="col pt-3">
+        <div class="form-group">
+          <input type="text" id="writer" list="writerlist" class="form-control pl-3 pb-2" placeholder="Lọc tác giả">
+          <datalist id="writerlist">
+            <option selected>Tất cả tác giả</option>
+            {{#each listWriter}}
+            <option>{{this.ButDanh}}</option>
+            {{/each}}
+          </datalist>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button id="btn-post-filter" type="button" class="btn btn-primary btn-block"><i class="fa fa-filter"></i>
           Lọc</button>
       </div>
     </div>
@@ -119,9 +117,9 @@
               <td><small>
                   <ul class="nav">
                     {{#each ../listTagOfArticle}}
-                    {{#ifEquals this.idBaiBao ../this.idBaiBao}}
+                    {{#IfEquals this.idBaiBao ../this.idBaiBao}}
                     <li class="badge badge-warning mx-1 mb-1">{{this.TenTag}}</li>
-                    {{/ifEquals}}
+                    {{/IfEquals}}
                     {{/each}}
                   </ul>
                 </small></td>
@@ -135,7 +133,7 @@
               {{/if}}
               <td><small>{{this.LuotXem}}</small></td>
               <td>
-                <a class="btn btn-primary btn-sm p-1 mb-1" href="/admin/manage/post/{{this.idBaiBao}}"
+                <a class="btn btn-primary btn-sm p-1 mb-1" href="/admin/manage/post/content/{{this.idBaiBao}}"
                   style="width: 25px;"><i class="fa fa-pencil" title="Chỉnh sửa bài báo"></i></a>
                 <button href="#delPostConfirmModal" class="btn btn-primary btn-sm p-1 mb-1 delPostConfirm"
                   data-toggle="modal" data-title="{{this.TieuDe}}" data-id="{{this.idBaiBao}}"
@@ -144,9 +142,9 @@
               </td>
             </tr>
             {{else}}
-              <div class="alert alert-danger" role="alert">
-                <strong> Không có bài viết nào </strong>
-              </div>
+            <div class="alert alert-danger" role="alert">
+              <strong> Không có bài viết nào </strong>
+            </div>
             {{/each}}
           </tbody>
         </table>
