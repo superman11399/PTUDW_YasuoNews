@@ -119,8 +119,8 @@
                   <select id="categorySub" name="idChuyenMucPhu" class="custom-select" required="required">
                    {{#each listSub}}
                     <option value="{{idChuyenMucPhu}}" 
-                    {{#ifEquals idChuyenMucPhu ../article.idChuyenMucPhu}}
-                    selected {{/ifEquals}}>{{TenChuyenMucPhu}}</option>
+                    {{#IfEquals idChuyenMucPhu ../article.idChuyenMucPhu}}
+                    selected {{/IfEquals}}>{{TenChuyenMucPhu}}</option>
                     {{/each}}
                   </select>
                 </div>
@@ -132,8 +132,8 @@
                 <div class="col-8">
                   <select id="isPremiumArticle" name="Premium" class="custom-select" required="required">
     
-                    <option value="1" {{#ifEquals article.Premium 1 }}selected{{/ifEquals}}> Yes </option>
-                    <option value="0" {{#ifEquals article.Premium 0 }}selected{{/ifEquals}}> No </option>
+                    <option value="1" {{#IfEquals article.Premium 1 }}selected{{/IfEquals}}> Yes </option>
+                    <option value="0" {{#IfEquals article.Premium 0 }}selected{{/IfEquals}}> No </option>
                     
                   </select>
                 </div>

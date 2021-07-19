@@ -106,6 +106,15 @@
                                 <ul class="dropdown-menu">
                                     <li ><a class="fa fa-user" href="/account/profile">Thông tin cá nhân</a></li>
                                     <li ><a class="fa fa-lock" href="/account/profile_password">Đổi mật khẩu</a></li>
+                                    {{#IfEquals authUser.LoaiNguoiDung 'writer'}}
+                                    <li ><a class="fa fa-pencil" href="/writer/">Gửi bài viết</a></li>
+                                    {{/IfEquals}}
+                                    {{#IfEquals authUser.LoaiNguoiDung 'editor'}}
+                                    <li ><a class="fa fa-edit" href="/editor/">Duyệt bài viết</a></li>
+                                    {{/IfEquals}}
+                                    {{#IfEquals authUser.LoaiNguoiDung 'admin'}}
+                                    <li ><a class="fa fa-cogs" href="/admin/">Quản lý hệ thống</a></li>
+                                    {{/IfEquals}}
                                     <li ><a class="fa fa-sign-out" href="javascript: $('#formLogout').submit();">Đăng xuất</a></li>
                                 </ul>
                                 </li>

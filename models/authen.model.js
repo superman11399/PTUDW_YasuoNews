@@ -58,7 +58,7 @@ module.exports = {
         if (res.locals.auth && res.locals.authUser.LoaiNguoiDung == 'admin') {
             next();
         } else {
-            const url = req.headers.referer || '/news/home';
+            const url = '/forbidden';
             res.redirect(url);
         }
     },
@@ -66,7 +66,7 @@ module.exports = {
         if (res.locals.auth && res.locals.authUser.LoaiNguoiDung == 'writer') {
             next();
         } else {
-            const url = req.headers.referer || '/news/home';
+            const url = '/forbidden';
             res.redirect(url);
         }
     },
@@ -74,7 +74,7 @@ module.exports = {
         if (res.locals.auth && res.locals.authUser.LoaiNguoiDung == 'editor') {
             next();
         } else {
-            const url = req.headers.referer || '/news/home';
+            const url = '/forbidden';
             res.redirect(url);
         }
     },
@@ -82,7 +82,7 @@ module.exports = {
         if (res.locals.auth && res.locals.authUser.LoaiNguoiDung == 'subcriber') {
             next();
         } else {
-            const url = req.headers.referer || '/news/home';
+            const url = '/forbidden';
             res.redirect(url);
         }
     },

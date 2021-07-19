@@ -100,14 +100,14 @@
                                                 <input style="color: black; font-style: italic;" id="txtDOB" type="date" readonly="readonly" name="dob" value="{{dateFormat authUser.NgaySinh "YYYY-MM-DD"}}" class="form-control">
                                             </label>
                                         </div>
-                                        {{#ifEqual authUser.LoaiNguoiDung 'writer'}}
+                                        {{#IfEquals authUser.LoaiNguoiDung 'writer'}}
                                             <div class="form-group" >
                                             <label>
                                                 <span>Bút danh</span>
                                                 <input style="color: black; font-style: italic;" id="txtButDanh" type="text" readonly="readonly" name="ButDanh" class="form-control">
                                             </label>
                                         </div>
-                                        {{/ifEqual}}
+                                        {{/IfEquals}}
                                         
                                         <button style="display: none;" id="submitBtn" type="submit" class="btn btn-lg btn-block btn-primary">Xác nhận</button>
                                     </form>
