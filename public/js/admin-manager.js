@@ -85,6 +85,14 @@ $(document).on("click", ".renameMainCateConfirm", function () {
   $("#renameMainCategory #newMainCateName").val(tenCate);
 });
 
+$(document).on("click", ".delComConfirm", function () {
+  const id = $(this).data("id");
+  const user = $(this).data("content");
+
+  $("#delCommentModal #content").text("Bạn có chắc muốn xóa bình luận của " + user +"?");
+  $("#formDelCom #comID").attr("value", id);
+});
+
 $(document).on("click", ".updateSubConfirm", function () {
   const id = $(this).data("id");
   const tenCate = $(this).data("title");
@@ -99,13 +107,26 @@ $(document).on("click", ".updateSubConfirm", function () {
 });
 
 $("#btn-post-filter").on("click", function (e) {
-  var cate = $("#post-filter #cate option:selected").text();
-  var tag = $("#post-filter #tag option:selected").text();
-  var status = $("#post-filter #status option:selected").text();
+  var cate = $("#post-filter #cate").val();
+  var tag = $("#post-filter #tag").val();
+  var writer = $("#post-filter #writer").val();
+  var status = $("#post-filter #status option:selected").text ();
+  console.log(status);
   if (cate === "Tất cả chuyên mục") cate = "";
   if (tag === "Tất cả thẻ tag") tag = "";
   if (status === "Tất cả trạng thái") status = "";
+  if (writer === "Tất cả tác giả") writer = "";
   $("tbody tr").filter(function () {
-    $(this).toggle($(this).text().indexOf(cate) > -1 && $(this).text().indexOf(tag) > -1 && $(this).text().indexOf(status) > -1);
+    $(this).toggle($(this).text().indexOf(cate) > -1 && $(this).text().indexOf(tag) > -1 && $(this).text().indexOf(writer) > -1 && $(this).text().indexOf(status) > -1);
   });
+});
+
+$("#frmUpdatePost").on("change", function () {
+  $(this).data("changed", true);
+});
+
+$('#frmUpdatePost').on('submit', function (e) {
+  if (!$(this).data("changed")) {
+    e.preventDefault();
+  }
 });

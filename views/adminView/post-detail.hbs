@@ -1,0 +1,165 @@
+{{#section 'css'}}
+
+{{/section}}
+
+{{#section 'js'}}
+<script src="/js/admin-manager.js"></script>
+
+<script>
+  $(document).ready(function () {
+    $(`#type-cate option:contains({{article.TenChuyenMucPhu}})`).attr('selected', true);
+    $(`#status option:contains({{article.TinhTrangDuyet}})`).attr('selected', true);
+    if ($('#status').val() === "Đã xuất bản") {
+      $('#status').attr('disabled', 'disabled');
+    }
+    $("#frmUpdatePost").data("changed", false);
+  });
+</script>
+{{/section}}
+
+<div class="card" style="min-width: 44rem;">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-2 text-left">
+        <a href="/admin/manage/post" class="btn btn-primary"><i class="fa fa-arrow-left"></i>
+          Quay lại</i></a>
+      </div>
+      <div class="col text-right border-left">
+        <h4><i class="fa fa-newspaper-o"></i> Chi tiết bài báo</h4>
+      </div>
+    </div>
+    <div class="row">
+      <h4 class="mx-auto">{{article.TieuDe}}</h4>
+    </div>
+    <form id="frmUpdatePost" action="/admin/manage/post/update" method="post">
+      <div class="row align-items-center justify-content-center">
+        <div class="col-md-4">
+          <div class="form-group pt-3">
+            <select id="type-cate" name="subID" class="form-control">
+              {{#each listSubCate}}
+              <option value="{{this.idChuyenMucPhu}}">{{this.TenChuyenMucPhu}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4 pt-3">
+          <div class="form-group">
+            <select id="status" name="newStatus" class="form-control">
+              <option value="Đã xuất bản">Đã xuất bản</option>
+              <option value="Đã duyệt - Chờ xuất bản">Đã duyệt - Chờ xuất bản</option>
+              <option value="Chưa được duyệt">Chưa được duyệt</option>
+              <option value="Bị từ chối">Bị từ chối</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col">
+          <input type="hidden" value="{{article.idBaiBao}}" name="postID">
+          <button type="submit" id="btn-update-post" class="btn btn-warning btn-block">Xác nhận thay đổi</button>
+        </div>
+      </div>
+    </form>
+    <hr>
+    {{#if flag}}
+    <div class="row pt-4 mx-auto">
+      <div class="col text-right">
+        <a class="btn btn-success btn-md px-3" href="/admin/manage/post/update-content/{{article.idBaiBao}}"><i
+            class="fa fa-pencil" title="Chỉnh sửa bài báo"></i> Chỉnh sửa bài báo</a>
+      </div>
+    </div>
+    {{/if}}
+    <div class="row pt-4 mx-auto w-75">
+      <img class="mx-auto" src="/img/BaiBao/{{article.AnhDaiDien}}" style="height: 200px;" alt="Ảnh minh họa">
+    </div>
+    <div class="row pt-4 mx-auto w-75">
+      <i>{{article.TomTat}}</i>
+    </div>
+    <hr>
+    <div class="row pt-4 w-75 mx-auto">
+      {{{article.NoiDungChiTiet}}}
+    </div>
+    <div class="row pt-2 w-75 mx-auto ">
+      <div class="col text-right">
+        <b class="mr-1">- {{article.ButDanh}} -</b>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-2">
+        <span class="align-self-center"><i class="fa fa-tags"></i> Danh sách tags:</span>
+      </div>
+      <div class="col-md-7 d-flex">
+        <ul class="nav">
+          {{#each this.listTagOfArticle}}
+          {{#IfEquals idBaiBao ../article.idBaiBao}}
+          <li class="badge badge-danger mx-1 my-1 align-self-center">{{TenTag}}</li>
+          {{/IfEquals}}
+          {{/each}}
+        </ul>
+      </div>
+      {{!-- <div class="col text-right">
+        <button href="#delPostConfirmModal" class="btn btn-primary btn-sm p-1 mb-1 delPostConfirm" data-toggle="modal"
+          data-title="{{this.TieuDe}}" data-id="{{this.idBaiBao}}" data-content="{{this.ButDanh}}" data-type="delUser"
+          style="width: 25px;"><i class="fa fa-pencil" title="Xóa bài báo"></i></button>
+      </div> --}}
+
+    </div>
+    <hr>
+    <div class="cate_tables">
+      <div class="row">
+        <h5 class="mx-3">Bình luận</h5>
+      </div>
+      <div class="row">
+        <table class="table table-hover">
+          <thead class="bg-light">
+            <tr>
+              <th style="width:15%;">Người dùng</th>
+              <th style="width:15%;">Ngày bình luận</th>
+              <th>Nội dung</th>
+              <th style="width:15%;">
+                <center>Thao tác</center>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each comments}}
+            <tr>
+              <td>{{tenNguoiDung}}</td>
+              <td>{{dateFormat comments.ThoiGianBinhLuan "DD/MM/YYYY HH:mm"}}</td>
+              <td>{{NoiDung}}</td>
+              <td class="text-center btn-groups btn-group-justified">
+                <button href="#delCommentModal" class="btn btn-primary btn-sm p-1 mb-1 delComConfirm"
+                  data-toggle="modal" data-id="{{this.idBL}}" data-content="{{this.tenNguoiDung}}" data-type="delUser"
+                  style="width: 25px;"><i class="fa fa-trash" title="Xóa người dùng"></i></button>
+              </td>
+            </tr>
+            {{else}}
+            <div class="alert alert-danger w-100" role="alert">
+              <strong> Không có bình luận nào </strong>
+            </div>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="delCommentModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Xác nhận</h3>
+      </div>
+      <div class="modal-body">
+        <p id="content"></p>
+      </div>
+      <div class="modal-footer">
+        <form action="/admin/manage/post/delCom" method="POST" id="formDelCom">
+          <input type="hidden" id="comID" name="id" value="">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+          <button class="btn btn-primary" type="submit">Xác nhận</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

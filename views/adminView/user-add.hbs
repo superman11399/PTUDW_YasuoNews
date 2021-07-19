@@ -2,6 +2,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"
     integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
 <script>
+    function validateEmail(email) {
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    }
+</script>
+
+<script>
     $("#role_select").on('blur', function () {
         const cate = $(this).val();
         if (cate === 'editor') {
@@ -13,6 +20,7 @@
     });
 
     $('#username').on('blur', function () {
+        const username = $(this).val();
         $.getJSON(`/account/is-available?user=${username}`, function (data) {
             if (data === false) {
                 $('#username_alert').attr('hidden', false);
@@ -33,6 +41,24 @@
             $('#password_alert').attr('hidden', 'hidden');
         }
     });
+
+    $('#email').on('blur', function () {
+        const ok = validateEmail($(this).val());
+        if (!ok) {
+            $('#email_alert').attr('hidden', false);
+        }
+        else {
+            $('#email_alert').attr('hidden', 'hidden');
+        }
+    });
+
+    $("#frmAddUser").on('submit', function(e){
+        if($('#email_alert').is(":hidden")&&$('#password_alert').is(":hidden")&&$('#username_alert').is(":hidden"))
+            $(this).off('submit').submit();
+        else
+            e.preventDefault();
+    });
+
 </script>
 {{/section}}
 
@@ -105,7 +131,14 @@
                             <div class="col-sm-4 col-md-3 my-auto">
                                 <h6 class="">Email</h6>
                             </div>
-                            <input class="col-sm-8 col-md-9 text-dark form-control" name="email" required type="text">
+                            <input id="email" class="col-sm-8 col-md-9 text-dark form-control" name="email" required
+                                type="text">
+                        </div>
+                        <div class="row m-2" id="email_alert" hidden>
+                            <div class="col-sm-4 col-md-3 my-auto"></div>
+                            <div class="col-sm-8 col-md-9 alert alert-danger text-danger" role="alert">Email không phù
+                                hợp
+                            </div>
                         </div>
                         <div class="row m-2">
                             <label class="col-sm-4 col-md-3 col-form-label my-auto" for="role">
