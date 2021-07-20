@@ -14,23 +14,6 @@
             <hr>
             <div class="row">
                 <div class="col" style="flex-basis : auto;">
-                    {{# if hasError }}
-                    <div class="alert alert-danger" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        {{# each messages }}
-                        {{ this }}</br>
-                        {{/ each }}
-                    </div>
-                    {{ else }}
-                    {{# if hasSuccess }}
-                    <div class="alert alert-success" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        {{# each success }}
-                        {{ this }}</br>
-                        {{/ each }}
-                    </div>
-                    {{/ if }}
-                    {{/ if }}
                     <form style="min-width: 20rem;" id="articleContent" action="/editor/waiting" method="POST">
                         <div class="form-group row">
                             {{#if deny}}
@@ -67,10 +50,9 @@
                         <input type="text" id="writerMain" value="{{article.writer}}" hidden>-->
                 </div>
                 <div class="col-md-auto">
-                    <img id="avatar" alt="User Pic" src="/img/BaiBao/{{article.AnhDaiDien}}" class="img-thumbnail img-fluid">
-                    <div class="card mb-3" style="max-width: 18rem;">
-                        <div class="card-header bg-light ">Đăng bài viêt</div>
-                        <div class="card-body">
+                    <label for="text" class="col-12 col-form-label">Ảnh cover cho bài viết</label>
+
+                    <img id="avatar" alt="User Pic" src="/img/BaiBao/{{article.idBaiBao}}/{{article.AnhDaiDien}}" class="img-thumbnail img-fluid">
                             <div class="form-group row">
                                 <label for="categorySub" class="col-12 col-form-label">Chọn chuyên mục</label>
                                 <div class="col-12">
@@ -78,8 +60,8 @@
                                         style="width: 250px">
                                         {{#each listSub}}
                                         <option value="{{idChuyenMucPhu}}" 
-                                        {{#ifEquals idChuyenMucPhu ../article.idChuyenMucPhu}}
-                                        selected {{/ifEquals}}>{{TenChuyenMucPhu}}</option>
+                                        {{#IfEquals idChuyenMucPhu ../article.idChuyenMucPhu}}
+                                        selected {{/IfEquals}}>{{TenChuyenMucPhu}}</option>
                                         {{/each}}
                                     </select>
                                 </div>
@@ -98,8 +80,6 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card-footer bg-light text-center">
                             {{#if approve}}
                             <button type="button" class="btn btn-info btn-sm" onclick="openDenyModal()">Từ chối</button>
                             <button type="button" class="btn btn-primary btn-sm"
@@ -109,9 +89,7 @@
                             <button type="button" form="articleContent" class="btn btn-primary btn-sm"
                                 disabled>Duyệt</button>
                             {{/if }}
-                        </div>
                     </div>
-                </div>
                 </form>
             </div>
         </div>

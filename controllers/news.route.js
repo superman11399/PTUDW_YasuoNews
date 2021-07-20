@@ -164,6 +164,19 @@ router.get("/newscontent/:id", async function (req, res) {
   if (details === null) {
     return res.redirect("/news/home");
   }
+  let allowRead = false;
+  if (details.Premium === 1) {
+    if (
+      req.session.auth &&
+      (req.session.authUser.LoaiNguoiDung === "subscriber" ||
+        req.session.authUser.LoaiNguoiDung === "admin")
+    ) {
+      allowRead = true;
+    }
+  } else {
+    allowRead = true;
+  }
+
   res.render("newsView/newscontent", {
     details: details,
     listTag: listTag,
@@ -171,14 +184,17 @@ router.get("/newscontent/:id", async function (req, res) {
     cmt_count: cmts.length,
     related5: related5,
     emptyList: details === 0,
+    allowRead,
   });
 });
 
 router.post("/newscontent/:id", async function (req, res) {
   const newsID = +req.params.id;
   const now = new Date();
+  if (req.session.auth) tenNguoiDung = req.session.authUser.HoTen;
+  else tenNguoiDung = req.body.tenNguoiDung;
   const cmt = {
-    tenNguoiDung: req.body.tenNguoiDung,
+    tenNguoiDung,
     idBaiBao: newsID,
     ThoiGianBinhLuan: date.format(now, "YYYY-MM-DD HH:mm:ss"),
     NoiDung: req.body.NoiDung,

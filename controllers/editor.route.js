@@ -13,7 +13,7 @@ router.get("/waiting", async function (req, res) {
   const success = req.flash("success");
   console.log("er", errors);
   console.log("suc", success);
-  const idBTV = 1;
+  const idBTV = req.session.authUser.idNguoiDung;
   const listNews = await news.LayDanhSachBaiVietTheoTinhTrangVaBTV(
     "Chưa được duyệt",
     idBTV
@@ -31,7 +31,7 @@ router.get("/waiting", async function (req, res) {
 router.get("/approved", async function (req, res) {
   const errors = req.flash("errors");
   const success = req.flash("success");
-  const idBTV = 1;
+  const idBTV = req.session.authUser.idNguoiDung;
   const listNews = await news.LayDanhSachBaiVietTheoTinhTrangVaBTV(
     "Đã duyệt - Chờ xuất bản",
     idBTV
@@ -47,7 +47,7 @@ router.get("/approved", async function (req, res) {
   });
 });
 router.get("/rejected", async function (req, res) {
-  const idBTV = 1;
+  const idBTV = req.session.authUser.idNguoiDung;
   const listNews = await news.LayDanhSachBaiVietTheoTinhTrangVaBTV(
     "Bị từ chối",
     idBTV
@@ -59,7 +59,7 @@ router.get("/rejected", async function (req, res) {
   });
 });
 router.get("/view/:id", async function (req, res) {
-  const idBTV = 1;
+  const idBTV = req.session.authUser.idNguoiDung;
   const idBaiBao = req.params.id;
   const tags = await news.LayDanhSachTag();
   const listSub = await news.LayDanhSachChuyenMucPhu();

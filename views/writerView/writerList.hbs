@@ -19,8 +19,6 @@
               <tr>
                 <th>Tiêu đề</th>
                 <th>Chuyên mục</th>
-                <th>Tags</th>
-                <th>Bình luận</th>
                 <th>Ngày viết</th>
                 {{#unless notEdit}}
                 <th>Edit</th>
@@ -50,8 +48,6 @@
               <tr>
                 <td><a href="#"><small>{{TieuDe}}</small></a></td>
                 <td><small>{{TenChuyenMuc}} / {{TenChuyenMucPhu}}</small></td>
-                <td><small>{{this.arrayOfTags.length}}</small></td>
-                <td><a href="#"><small>{{this.comments.length}}</small></a></td>
                 <td><small>{{dateFormat NgayCuoiChinhSua "DD/MM/YYYY"}}</small></td>
                 {{#unless ../notEdit}}
                 <td>

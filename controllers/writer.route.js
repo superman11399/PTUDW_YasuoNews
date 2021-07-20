@@ -3,9 +3,7 @@ const multer = require("multer");
 const router = express.Router();
 const date = require("date-and-time");
 const news = require("../models/news.model");
-const {
-  LayDanhSachBaiVietTheoTinhTrangVaTacGia,
-} = require("../models/news.model");
+const fs = require("fs-extra");
 
 router.get("/", (req, res) => {
   res.redirect("/writer/post");
@@ -27,7 +25,7 @@ router.get("/post", async function (req, res) {
 
 router.post("/post", function (req, res) {
   let AnhDaiDien = "";
-  const idTacGia = 3;
+  const idTacGia = req.session.authUser.idNguoiDung;
   const storage = multer.diskStorage({
     destination(req, file, cb) {
       cb(null, "./public/img/BaiBao");
@@ -62,7 +60,17 @@ router.post("/post", function (req, res) {
       // baibao.append(idTacGia);
       console.log("baibao", baibao);
       const result = await news.ThemBaiViet(baibao);
-      // console.log(result);
+      console.log("idbaibao", result);
+
+      var oldPath = "public\\img\\BaiBao\\" + AnhDaiDien;
+      var newPath = "public\\img\\BaiBao\\" + result + "\\" + AnhDaiDien;
+      console.log("path", oldPath, newPath);
+
+      fs.move(oldPath, newPath, function (err) {
+        if (err) return console.error(err);
+        console.log("success move file!");
+      });
+
       // console.log(result[0]);
       if (result === null) {
         req.flash("errorDelete", "Thêm bài viết thất bại");
@@ -79,7 +87,7 @@ router.post("/post", function (req, res) {
 });
 
 router.get("/post/:id", async function (req, res) {
-  const idTacGia = 3;
+  const idTacGia = req.session.authUser.idNguoiDung;
   const idBaiBao = req.params.id;
   const tags = await news.LayDanhSachTag();
   const listSub = await news.LayDanhSachChuyenMucPhu();
@@ -108,26 +116,34 @@ router.get("/post/:id", async function (req, res) {
   // console.log(tags);
   else {
     let deny = false;
-    console.log("khac", article.LyDoTuChoi !== "");
-    if (article.LyDoTuChoi !== "") deny = true;
+    let edit = false;
+    console.log("khac: ", !article.LyDoTuChoi);
+    if (article.LyDoTuChoi !== "" && article.LyDoTuChoi !== null) deny = true;
+    if (
+      article.TinhTrangDuyet === "Chưa được duyệt" ||
+      article.TinhTrangDuyet === "Bị từ chối"
+    )
+      edit = true;
+    const topic = edit ? "Chỉnh sửa bài viết" : "Xem bài viết";
     res.render("writerView/post", {
       actionpost: "/writer/post",
       action: "/writer/edit",
       layout: "writer.hbs",
       title: "Writer",
-      topic: "Chỉnh sửa bài viết",
+      topic,
       article,
       tags: tags,
       listSub: listSub,
       tagsOfNews: list,
       deny,
+      edit,
     });
   }
 });
 
 router.post("/edit", async function (req, res) {
   let AnhDaiDien = "";
-  const idTacGia = 3;
+  const idTacGia = req.session.authUser.idNguoiDung;
   const storage = multer.diskStorage({
     destination(req, file, cb) {
       cb(null, "./public/img/BaiBao");
@@ -156,6 +172,15 @@ router.post("/edit", async function (req, res) {
       let baibao = req.body;
       if (AnhDaiDien === "") {
         AnhDaiDien = oldAvatar;
+      } else {
+        var oldPath = "public\\img\\BaiBao\\" + AnhDaiDien;
+        var newPath = "public\\img\\BaiBao\\" + id + "\\" + AnhDaiDien;
+        console.log("path", oldPath, newPath);
+
+        fs.move(oldPath, newPath, function (err) {
+          if (err) return console.error(err);
+          console.log("success move file!");
+        });
       }
       baibao = Object.assign(
         {
@@ -196,8 +221,8 @@ router.post("/edit", async function (req, res) {
 router.get("/waiting", async function (req, res) {
   const errors = req.flash("errorDelete");
   const success = req.flash("successPost");
-  const idTacGia = 3;
-  const listNews = await LayDanhSachBaiVietTheoTinhTrangVaTacGia(
+  const idTacGia = req.session.authUser.idNguoiDung;
+  const listNews = await news.LayDanhSachBaiVietTheoTinhTrangVaTacGia(
     "Chưa được duyệt",
     idTacGia
   );
@@ -215,8 +240,8 @@ router.get("/waiting", async function (req, res) {
 });
 
 router.get("/published", async function (req, res) {
-  const idTacGia = 3;
-  const listNews = await LayDanhSachBaiVietTheoTinhTrangVaTacGia(
+  const idTacGia = req.session.authUser.idNguoiDung;
+  const listNews = await news.LayDanhSachBaiVietTheoTinhTrangVaTacGia(
     "Đã xuất bản",
     idTacGia
   );
@@ -230,8 +255,8 @@ router.get("/published", async function (req, res) {
   });
 });
 router.get("/rejected", async function (req, res) {
-  const idTacGia = 3;
-  const listNews = await LayDanhSachBaiVietTheoTinhTrangVaTacGia(
+  const idTacGia = req.session.authUser.idNguoiDung;
+  const listNews = await news.LayDanhSachBaiVietTheoTinhTrangVaTacGia(
     "Bị từ chối",
     idTacGia
   );
@@ -244,8 +269,8 @@ router.get("/rejected", async function (req, res) {
   });
 });
 router.get("/approved", async function (req, res) {
-  const idTacGia = 3;
-  const listNews = await LayDanhSachBaiVietTheoTinhTrangVaTacGia(
+  const idTacGia = req.session.authUser.idNguoiDung;
+  const listNews = await news.LayDanhSachBaiVietTheoTinhTrangVaTacGia(
     "Đã duyệt - Chờ xuất bản",
     idTacGia
   );
