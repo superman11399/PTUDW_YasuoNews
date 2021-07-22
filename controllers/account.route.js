@@ -166,7 +166,6 @@ router.get('/facebook-login/callback',authen.isNotAuth, passport.authenticate('f
   failureRedirect : '/account/login', // redirect back to the signup page if there is an error
   failureFlash : true // allow flash messages
 }), (req, res) => {
-  
   console.log(req.user);
   req.session.auth=true;
   req.session.authUser = req.user;
@@ -191,12 +190,16 @@ router.get('/get-ButDanh',authen.isAuth, async function (req, res) {
 });
 
 router.get('/profile',authen.isAuth, function (req, res) {
-  res.render('accountView/profile');
+  const profile_message = req.flash('profile_message');
+  res.render('accountView/profile', {
+    profile_message: profile_message,
+  });
 });
 
 router.post('/change_profile',authen.isAuth, async function (req, res) {
+  if (await authen.checkUniqueEmail(req.body.email) === true)
+  {
   const dob = req.body.dob + ' 00:00:00';
-
   await authen.CapNhat(req.session.authUser.idNguoiDung,req.body.fullname,req.body.email,dob);
   if (req.body.ButDanh)
   {
@@ -205,24 +208,36 @@ router.post('/change_profile',authen.isAuth, async function (req, res) {
   req.session.authUser.HoTen=req.body.fullname;
   req.session.authUser.Email=req.body.email;
   req.session.authUser.NgaySinh=dob;
-  const url = '/news/home';
-  res.redirect(url);
+  req.flash('profile_message','Thông tin đã được thay đổi!')
+  }
+  else
+  {
+    req.flash('profile_message','Email của bạn đã bị trùng, vui lòng sử dụng email khác!')
+  }
+  res.redirect('profile');
 })
 
 router.get('/profile_password',authen.isAuth, function (req, res) {
-  res.render('accountView/passwordChange');
+  const password_message = req.flash('password_message');
+  res.render('accountView/passwordChange', {
+    password_message: password_message
+  });
 });
 
 router.post('/profile_password',authen.isAuth, async function (req, res) {
   console.log(req.body);
   const checkPassword = await authen.checkPasswordMatch(req.session.authUser.idNguoiDung,req.body.oldpassword);
   console.log(checkPassword);
-  if (checkPassword)
+  if (checkPassword === true)
   {
     await authen.changePasswordWithId(req.session.authUser.idNguoiDung,req.body.newpassword);
+    req.flash('password_message','Mật khẩu đã được cập nhật!');
   }
-  const url = '/news/home';
-  res.redirect(url);
+  else
+  {
+    req.flash('password_message','Mật khẩu cũ không chính xác!')
+  }
+  res.redirect('profile_password');
 })
 
 router.get('/reset_password',authen.isNotAuth, function (req, res) {

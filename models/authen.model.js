@@ -35,6 +35,7 @@ module.exports = {
     },
     async checkUniqueEmail(email){
         const rows = await db("nguoidung").whereNot("TinhTrang", 0).where("Email", email);
+        console.log(rows);
         if (rows.length === 0) return true;
         return false;
     },
@@ -122,10 +123,16 @@ module.exports = {
     },
     findByFacebookID(FacebookID)
     {
-        return db('nguoidung').whereNot("TinhTrang", 0).where('FacebookID',FacebookID);
+        return db('nguoidung').whereNot("TinhTrang", 0)
+        .join('facebook','nguoidung.idNguoiDung','=','facebook.idNguoiDung')
+        .where('facebook.FacebookID',FacebookID);
     },
     addNewFacebookUser(newUser)
     {
         return db('nguoidung').insert(newUser);
+    },
+    addNewFacebookEntry(entry)
+    {
+        return db('facebook').insert(entry);
     }
 }

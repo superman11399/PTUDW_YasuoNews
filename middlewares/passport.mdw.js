@@ -63,14 +63,19 @@ module.exports = function (app) {
                 const hash = bcrypt.hashSync(profile.id, 10);
                 const newUser = {
                     TenDangNhap: profile.id,
-                    FacebookID: profile.id,
-                    HoTen: profile.displayName,
+                    HoTen: 'fbUser'+profile.displayName,
                     Email: profile.id,
                     LoaiNguoiDung: 'guest',
                     MatKhau: hash,
                     TinhTrang: 1
                 };
                 await authen.addNewFacebookUser(newUser);
+                const userFacebook = await authen.findByUsername(profile.id);
+                const newFacebookUserEntry = {
+                    idNguoiDung: userFacebook[0].idNguoiDung,
+                    FacebookID: profile.id
+                }
+                await authen.addNewFacebookEntry(newFacebookUserEntry);
                 const newrows = await authen.findByFacebookID(profile.id);
                 delete newrows[0].MatKhau;
                 const user = newrows[0];

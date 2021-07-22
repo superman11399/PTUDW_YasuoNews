@@ -7,6 +7,7 @@
 </script>
 <script>
     $(document).ready(function () {
+        $('.modal').modal('show');
         var color = "aliceblue";
         const role = $('#userRole').text();
         if (role === 'subscriber'){
@@ -18,6 +19,11 @@
             $("#card_content #userRole").text("BIÊN TẬP VIÊN");
         }
         if (role === 'writer'){
+            var idNguoiDung = $('#idNguoiDung').text();
+            $.getJSON(`/account/get-ButDanh?id=${idNguoiDung}`,function (data2) {
+            console.log(data2);
+            $("#txtButDanh").val(data2);
+            });
             color = "lightcoral";
             $("#card_content #userRole").text("PHÓNG VIÊN");
         }
@@ -29,11 +35,6 @@
             $("#card_content #userRole").text("ĐỘC GIẢ THƯỜNG");
         }
         $("#card_content").css("background-color", color);
-        var idNguoiDung = $('#idNguoiDung').text();
-        $.getJSON(`/account/get-ButDanh?id=${idNguoiDung}`,function (data2) {
-            console.log(data2);
-            $("#txtButDanh").val(data2);
-        });
     });
 
     $('#editProfile').on('click', async function (e) {
@@ -83,21 +84,21 @@
                                         <div class="form-group">
                                             <label>
                                                 <span>Họ và tên</span>
-                                                <input style="color: black; font-style: italic;" id="txtName" type="text" name="fullname" readonly="readonly" value="{{authUser.HoTen}}" class="form-control">
+                                                <input style="color: black; font-style: italic;" id="txtName" type="text" name="fullname" readonly="readonly" value="{{authUser.HoTen}}" class="form-control" required>
                                             </label>
                                         </div>
 
                                         <div class="form-group">
                                             <label>
                                                 <span>Email liên lạc</span>
-                                                <input style="color: black; font-style: italic;" id="txtEmail" type="email" name="email" readonly="readonly" value="{{authUser.Email}}" class="form-control" >
+                                                <input style="color: black; font-style: italic;" id="txtEmail" type="email" name="email" readonly="readonly" value="{{authUser.Email}}" class="form-control" required>
                                             </label>
                                         </div>
 
                                         <div class="form-group" >
                                             <label>
                                                 <span>Ngày sinh</span>
-                                                <input style="color: black; font-style: italic;" id="txtDOB" type="date" readonly="readonly" name="dob" value="{{dateFormat authUser.NgaySinh "YYYY-MM-DD"}}" class="form-control">
+                                                <input style="color: black; font-style: italic;" id="txtDOB" type="date" readonly="readonly" name="dob" value="{{dateFormat authUser.NgaySinh "YYYY-MM-DD"}}" class="form-control" required>
                                             </label>
                                         </div>
                                         {{#IfEquals authUser.LoaiNguoiDung 'writer'}}
@@ -108,7 +109,6 @@
                                             </label>
                                         </div>
                                         {{/IfEquals}}
-                                        
                                         <button style="display: none;" id="submitBtn" type="submit" class="btn btn-lg btn-block btn-primary">Xác nhận</button>
                                     </form>
                                     </div>
@@ -160,5 +160,24 @@
         </div>
         <!-- Main Content Section End -->
 
-
+{{#if this.profile_message}}
+<!-- The modal -->
+<div class="modal fade" id="flipFlop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+<h4 class="modal-title" style="font-weight: bolder;" id="modalLabel">Thông báo</h4>
+</div>
+<div class="modal-body">
+{{this.profile_message}}</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+</div>
+</div>
+</div>
+</div>
+{{/if}}
 

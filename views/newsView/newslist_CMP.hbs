@@ -1,12 +1,25 @@
         <!-- Main Breadcrumb Start -->
-        <div class="main--breadcrumb">
-            <div class="container">
-                <ul class="breadcrumb">
-                    <li><a href="home-1.html" class="btn-link"><i class="fa fm fa-home"></i>Home</a></li>
-                    <li class="active"><span>Search</span></li>
-                </ul>
-            </div>
-        </div>
+<div class="main--breadcrumb">
+  <div class="container">
+    <ul class="breadcrumb">
+      <li><a href="home-1.html" class="btn-link"><i
+            class="fa fm fa-home"
+          ></i>Home</a></li>
+        {{#each this.listCMC}}
+        {{#IfEquals idChuyenMucChinh ../this.listBaiBao.1.idChuyenMucChinh}}
+        <li><a
+          href="/news/newslist/idChuyenMucChinh/{{../this.listBaiBao.1.idChuyenMucChinh}}"
+          class="btn-link"
+        >{{TenChuyenMuc}}</a></li>
+        {{/IfEquals}}
+        {{/each}}
+      <li class="active"><a
+          href="#"
+          class="btn-link"
+        >{{this.listBaiBao.1.TenChuyenMucPhu}}</a></li>
+    </ul>
+  </div>
+</div>
         <!-- Main Breadcrumb End -->
 
         <!-- Main Content Section Start -->
@@ -26,7 +39,7 @@
                                             <div class="row">
                                                 <div class="col-md-4 col-sm-12 col-xs-4 col-xxs-12">
                                                     <div class="post--img">
-                                                        <a href="/news/newscontent/{{idBaiBao}}" class="thumb"><img src="img/blog-img/post-01.jpg" alt=""></a>
+                                                        <a href="/news/newscontent/{{idBaiBao}}" class="thumb"><img src="img/{{AnhDaiDien}}" alt=""></a>
                                                         <a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}" class="cat">{{TenChuyenMucPhu}}</a>
                                                     </div>
                                                 </div>
@@ -81,7 +94,7 @@
                                     </li>
                                     {{else}}
                                     <li>
-                                    <a href="?search={{search}}&page={{value}}">{{value}}</a>
+                                    <a href="?page={{value}}">{{value}}</a>
                                     </li>
                                     {{/if}}
                                     {{/each}}
@@ -93,7 +106,7 @@
                     </div>
                     <!-- Main Content End -->
 
-                     <!-- Main Sidebar Start -->
+                    <!-- Main Sidebar Start -->
                     <div class="main--sidebar col-md-4 col-sm-5 ptop--30 pbottom--30" data-sticky-content="true">
                         <div class="sticky-content-inner">
 
