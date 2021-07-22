@@ -10,7 +10,7 @@ module.exports = function (app) {
       section: hbs_sections(),
       format_number(val) {
         return numeral(val).format('0,0');
-      }
+      },
     }
   }));
   app.set('view engine', 'hbs');

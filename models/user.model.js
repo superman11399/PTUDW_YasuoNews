@@ -50,9 +50,15 @@ module.exports = {
   },
 
   async delUser(id, type) {
+    // if (type === "editor") {
+    //   const query = `UPDATE editor SET idChuyenMucChinh = NULL WHERE idBTV = ${id}`;
+    //   await db.raw(query);
+    // }
     if (type === "editor") {
-      const query = `UPDATE editor SET idChuyenMucChinh = NULL WHERE idBTV = ${id}`;
-      await db.raw(query);
+      await this.del("idBTV", id, "editor");
+    }
+    if (type === "subscriber") {
+      await this.del("idDocGia", id, "subscriber");
     }
     return this.patch("idNguoiDung", id, "NguoiDung", "TinhTrang", 0);
   },
