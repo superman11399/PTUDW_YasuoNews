@@ -5,18 +5,18 @@
     return re.test(email); }
   </script>
   <script>
-    $(document).ready(function () { var color = "aliceblue"; const role =
-    $('#userRole').text(); if (role === 'subscriber'){ color = "khaki";
-    $("#card_content #userRole").text("ĐỘC GIẢ VIP"); } if (role === 'editor'){
-    color = "greenyellow"; $("#card_content #userRole").text("BIÊN TẬP VIÊN"); }
-    if (role === 'writer'){ color = "lightcoral"; $("#card_content
-    #userRole").text("PHÓNG VIÊN"); } if (role === 'admin'){ color = "violet";
-    $("#card_content #userRole").text("QUẢN TRỊ VIÊN"); } if (role === 'guest'){
-    $("#card_content #userRole").text("ĐỘC GIẢ THƯỜNG"); }
-    $("#card_content").css("background-color", color); var idNguoiDung =
-    $('#idNguoiDung').text();
+    $(document).ready(function () { $('.modal').modal('show'); var color =
+    "aliceblue"; const role = $('#userRole').text(); if (role === 'subscriber'){
+    color = "khaki"; $("#card_content #userRole").text("ĐỘC GIẢ VIP"); } if
+    (role === 'editor'){ color = "greenyellow"; $("#card_content
+    #userRole").text("BIÊN TẬP VIÊN"); } if (role === 'writer'){ var idNguoiDung
+    = $('#idNguoiDung').text();
     $.getJSON(`/account/get-ButDanh?id=${idNguoiDung}`,function (data2) {
-    console.log(data2); $("#txtButDanh").val(data2); }); });
+    console.log(data2); $("#txtButDanh").val(data2); }); color = "lightcoral";
+    $("#card_content #userRole").text("PHÓNG VIÊN"); } if (role === 'admin'){
+    color = "violet"; $("#card_content #userRole").text("QUẢN TRỊ VIÊN"); } if
+    (role === 'guest'){ $("#card_content #userRole").text("ĐỘC GIẢ THƯỜNG"); }
+    $("#card_content").css("background-color", color); });
     $('#editProfile').on('click', async function (e) {
     if($("#submitBtn").is(":visible")){ $("#submitBtn").hide();
     $('#txtName').prop('readonly', true); $('#txtEmail').prop('readonly', true);
@@ -74,6 +74,7 @@
                         readonly="readonly"
                         value="{{authUser.HoTen}}"
                         class="form-control"
+                        required
                       />
                     </label>
                   </div>
@@ -89,6 +90,7 @@
                         readonly="readonly"
                         value="{{authUser.Email}}"
                         class="form-control"
+                        required
                       />
                     </label>
                   </div>
@@ -104,6 +106,7 @@
                         name="dob"
                         value="{{dateFormat authUser.NgaySinh "YYYY-MM-DD"}}"
                         class="form-control"
+                        required
                       />
                     </label>
                   </div>
@@ -122,7 +125,6 @@
                       </label>
                     </div>
                   {{/IfEquals}}
-
                   <button
                     style="display: none;"
                     id="submitBtn"
@@ -195,3 +197,44 @@
   </div>
 </div>
 <!-- Main Content Section End -->
+
+{{#if this.profile_message}}
+  <!-- The modal -->
+  <div
+    class="modal fade"
+    id="flipFlop"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4
+            class="modal-title"
+            style="font-weight: bolder;"
+            id="modalLabel"
+          >Thông báo</h4>
+        </div>
+        <div class="modal-body">
+          {{this.profile_message}}</div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/if}}

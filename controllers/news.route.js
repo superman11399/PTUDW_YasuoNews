@@ -12,6 +12,8 @@ router.get("/home", async function (req, res) {
   const listMoiNhat = await news.Top10MoiNhat();
   const listXemNhieu = await news.Top10XemNhieuNhat();
   const listChuyenMuc = await news.Top10ChuyenMuc();
+  const listCMC = await news.LayDanhSachChuyenMucChinh();
+  const listCMP = await news.LayDanhSachChuyenMucPhu();
   res.render("home", {
     BaiVietNoiBat: listNoiBat,
     Top10MoiNhat: listMoiNhat,
@@ -21,6 +23,8 @@ router.get("/home", async function (req, res) {
     emptyXemNhieu: listXemNhieu.length === 0,
     emptyMoiNhat: listMoiNhat.length === 0,
     emptyChuyenMuc: listChuyenMuc.length === 0,
+    listCMC: listCMC,
+    listCMP: listCMP,
   });
 });
 
@@ -43,15 +47,25 @@ router.get("/newslist/idChuyenMucPhu/:id", async function (req, res) {
   const offset = (page - 1) * limit;
 
   const listTag = await news.LayTagBaiBao();
+  const listUniqueTag = await news.LayDanhSachTag();
+  const listCMC = await news.LayDanhSachChuyenMucChinh();
+  const listCMP = await news.LayDanhSachChuyenMucPhu();
+  const listMoiNhat = await news.Top10MoiNhat();
+  const listXemNhieu = await news.Top10XemNhieuNhat();
   const listBaiBao = await news.LayDanhSachBaiVietTheoChuyenMucPhu(
     idChuyenMucPhu,
     offset
   );
-  res.render("newsView/newslist", {
+  res.render("newsView/newslist_CMP", {
     listBaiBao: listBaiBao,
     listTag: listTag,
     emptyList: listBaiBao === 0,
     page_numbers,
+    listUniqueTag: listUniqueTag,
+    listCMC: listCMC,
+    listCMP: listCMP,
+    Top10MoiNhat: listMoiNhat,
+    Top10XemNhieuNhat: listXemNhieu,
   });
 });
 
@@ -74,12 +88,22 @@ router.get("/newslist/idTag/:id", async function (req, res) {
   const offset = (page - 1) * limit;
 
   const listTag = await news.LayTagBaiBao();
+  const listUniqueTag = await news.LayDanhSachTag();
+  const listCMC = await news.LayDanhSachChuyenMucChinh();
+  const listCMP = await news.LayDanhSachChuyenMucPhu();
+  const listMoiNhat = await news.Top10MoiNhat();
+  const listXemNhieu = await news.Top10XemNhieuNhat();
   const listBaiBao = await news.LayDanhSachBaiVietTheoTag(idTag, offset);
-  res.render("newsView/newslist", {
+  res.render("newsView/newslist_Tag", {
     listBaiBao: listBaiBao,
     listTag: listTag,
     emptyList: listBaiBao === 0,
+    listUniqueTag: listUniqueTag,
     page_numbers,
+    listCMC: listCMC,
+    listCMP: listCMP,
+    Top10MoiNhat: listMoiNhat,
+    Top10XemNhieuNhat: listXemNhieu,
   });
 });
 
@@ -102,15 +126,25 @@ router.get("/newslist/idChuyenMucChinh/:id", async function (req, res) {
   const offset = (page - 1) * limit;
 
   const listTag = await news.LayTagBaiBao();
+  const listUniqueTag = await news.LayDanhSachTag();
+  const listCMC = await news.LayDanhSachChuyenMucChinh();
+  const listCMP = await news.LayDanhSachChuyenMucPhu();
+  const listMoiNhat = await news.Top10MoiNhat();
+  const listXemNhieu = await news.Top10XemNhieuNhat();
   const listBaiBao = await news.LayDanhSachBaiVietTheoChuyenMucChinh(
     idChuyenMucChinh,
     offset
   );
-  res.render("newsView/newslist", {
+  res.render("newsView/newslist_CMC", {
     listBaiBao: listBaiBao,
     listTag: listTag,
     emptyList: listBaiBao === 0,
     page_numbers,
+    listUniqueTag: listUniqueTag,
+    listCMC: listCMC,
+    listCMP: listCMP,
+    Top10MoiNhat: listMoiNhat,
+    Top10XemNhieuNhat: listXemNhieu,
   });
 });
 
@@ -134,11 +168,21 @@ router.get("/newslist", async function (req, res) {
   const offset = (page - 1) * limit;
   const listBaiBao = await news.search(textSearch, offset);
   const listTag = await news.LayTagBaiBao();
+  const listUniqueTag = await news.LayDanhSachTag();
+  const listCMC = await news.LayDanhSachChuyenMucChinh();
+  const listCMP = await news.LayDanhSachChuyenMucPhu();
+  const listMoiNhat = await news.Top10MoiNhat();
+  const listXemNhieu = await news.Top10XemNhieuNhat();
   res.render("newsView/newslist_search", {
     listBaiBao: listBaiBao[0],
     listTag: listTag,
     emptyList: listBaiBao === 0,
     page_numbers,
+    listUniqueTag: listUniqueTag,
+    listCMC: listCMC,
+    listCMP: listCMP,
+    Top10MoiNhat: listMoiNhat,
+    Top10XemNhieuNhat: listXemNhieu,
   });
 });
 
@@ -156,6 +200,10 @@ router.get("/newscontent/:id", async function (req, res) {
   const comments = await news.LayBinhLuanCuaBaiViet(newsID);
   const cmts = comments[0];
   const result = await news.TangView(newsID);
+  const listMoiNhat = await news.Top10MoiNhat();
+  const listXemNhieu = await news.Top10XemNhieuNhat();
+  const listCMC = await news.LayDanhSachChuyenMucChinh();
+  const listCMP = await news.LayDanhSachChuyenMucPhu();
   // console.log("res", result);
   if (result === null) {
     console.log("ID k ton tai");
@@ -185,6 +233,10 @@ router.get("/newscontent/:id", async function (req, res) {
     related5: related5,
     emptyList: details === 0,
     allowRead,
+    Top10MoiNhat: listMoiNhat,
+    Top10XemNhieuNhat: listXemNhieu,
+    listCMC: listCMC,
+    listCMP: listCMP,
   });
 });
 

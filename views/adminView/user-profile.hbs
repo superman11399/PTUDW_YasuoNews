@@ -86,7 +86,7 @@
                     </div>
                 </div>
                 <hr>
-                {{#ifEqual user.LoaiNguoiDung 'editor'}}
+                {{#IfEquals user.LoaiNguoiDung 'editor'}}
                 <div class="row">
                     <div class="col-sm-4 col-md-3">
                         <h6 class="mb-0">Chuyên mục</h6>
@@ -96,8 +96,8 @@
                     </div>
                 </div>
                 <hr>
-                {{/ifEqual}}
-                {{#ifEqual user.LoaiNguoiDung 'subscriber'}}
+                {{/IfEquals}}
+                {{#IfEquals user.LoaiNguoiDung 'subscriber'}}
                 <div class="row">
                     <div class="col-sm-4 col-md-3">
                         <h6 class="mb-0">Số phút còn</h6>
@@ -113,8 +113,8 @@
                     </div>
                 </div>
                 <hr>
-                {{/ifEqual}}
-                {{#ifEqual user.LoaiNguoiDung 'writer'}}
+                {{/IfEquals}}
+                {{#IfEquals user.LoaiNguoiDung 'writer'}}
                 <div class="row">
                     <div class="col-sm-4 col-md-3">
                         <h6 class="mb-0">Bút danh</h6>
@@ -139,7 +139,7 @@
                     </div>
                 </div>
                 <hr>
-                {{/ifEqual}}
+                {{/IfEquals}}
                 {{!-- <div class="row" id="groupButton">
                     <button class="btn btn-info mx-3 mb-4">Edit</button>
                 </div> --}}

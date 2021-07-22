@@ -1,0 +1,379 @@
+        <!-- Main Breadcrumb Start -->
+<div class="main--breadcrumb">
+  <div class="container">
+    <ul class="breadcrumb">
+      <li><a href="home-1.html" class="btn-link"><i
+            class="fa fm fa-home"
+          ></i>Home</a></li>
+      <li class="active"><a
+          href=""
+          class="btn-link"
+        >Tags</a></li>
+    </ul>
+  </div>
+</div>
+        <!-- Main Breadcrumb End -->
+
+        <!-- Main Content Section Start -->
+        <div class="main-content--section pbottom--30">
+            <div class="container">
+                <div class="row">
+                    <!-- Main Content Start -->
+                    <div class="main--content col-md-8 col-sm-7" data-sticky-content="true">
+                        <div class="sticky-content-inner">
+                            <!-- Post Items Start -->
+                            <div class="post--items post--items-5 pd--30-0">
+                                <ul class="nav">
+                                    {{#each this.listBaiBao}}
+                                    <li>
+                                        <!-- Post Item Start -->
+                                        <div class="post--item post--title-larger">
+                                            <div class="row">
+                                                <div class="col-md-4 col-sm-12 col-xs-4 col-xxs-12">
+                                                    <div class="post--img">
+                                                        <a href="/news/newscontent/{{idBaiBao}}" class="thumb"><img src="img/BaiBao/{{AnhDaiDien}}" alt=""></a>
+                                                        <a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}" class="cat">{{TenChuyenMucPhu}}</a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-8 col-sm-12 col-xs-8 col-xxs-12">
+                                                    <div class="post--info">
+                                                        <ul class="nav meta">
+                                                            <li><a href="#">{{ButDanh}}</a></li>
+                                                            <li class="pull-right"><a href="#"><span>{{LuotXem}}</span><i class="fa fa-eye"></i></a></li>
+                                                        </ul>
+
+                                                        <div class="title">
+                                                            <h3 class="h4"><a href="/news/newscontent/{{idBaiBao}}" class="btn-link">{{TieuDe}}</a></h3>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="post--content">
+                                                        <p>{{TomTat}}</p>
+                                                    </div>
+                                                    <div class="post--action">
+                                                        {{#each ../this.listTag}}
+                                                            {{#IfEquals idBaiBao ../idBaiBao}}
+                                                                <a href="/news/newslist/idTag/{{idTag}}">#{{TenTag}}</a>
+                                                            {{/IfEquals}}
+                                                        {{/each}}
+                                                    </div>
+
+                                                    <div class="post--action">
+                                                        <a href="#">Continue Reading...</a>
+                                                        <a class="pull-right">{{dateFormat NgayDang "DD/MM/YYYY"}}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Post Item End -->
+                                    </li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                            <!-- Post Items End -->
+
+                            <!-- Pagination Start -->
+                            <div class="pagination--wrapper clearfix bdtop--1 bd--color-2 ptop--60 pbottom--30">
+                                <p class="pagination-hint float--left">Page</p>
+
+                                <ul class="pagination float--right">
+                                    <li><a href="#"><i class="fa fa-long-arrow-left"></i></a></li>
+                                    {{#each this.page_numbers}}
+                                    {{#if isCurrent}}
+                                    <li class=" active">
+                                    <a href="javascript:;">{{value}}</a>
+                                    </li>
+                                    {{else}}
+                                    <li>
+                                    <a href="?page={{value}}">{{value}}</a>
+                                    </li>
+                                    {{/if}}
+                                    {{/each}}
+                                    <li><a href="#"><i class="fa fa-long-arrow-right"></i></a></li>
+                                </ul>
+                            </div>
+                            <!-- Pagination End -->
+                        </div>
+                    </div>
+                    <!-- Main Content End -->
+
+                    <!-- Main Sidebar Start -->
+                    <div class="main--sidebar col-md-4 col-sm-5 ptop--30 pbottom--30" data-sticky-content="true">
+                        <div class="sticky-content-inner">
+
+                            <!-- Widget Start -->
+                            <div class="widget">
+                                <div class="widget--title">
+                                    <h2 class="h4">Chuyên Mục</h2>
+                                    <i class="icon fa fa-folder-open-o"></i>
+                                </div>
+
+                                <!-- Nav Widget Start -->
+                                <div class="nav--widget">
+                                    <ul class="nav">
+                                        {{#each this.listCMC}}
+                                           <li><a href="/news/newslist/idChuyenMucChinh/{{idChuyenMucChinh}}"><span>{{TenChuyenMuc}}</span><span></span></a>
+                                                <ul class="nav">
+                                                {{#each ../this.listCMP}}
+                                                {{#IfEquals idChuyenMucChinh ../idChuyenMucChinh}}
+                                                <li><a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}"><span></span><span class="pull-right">{{TenChuyenMucPhu}}</span></a></li>
+                                                {{/IfEquals}}
+                                                {{/each}}
+                                                </ul>
+                                           </li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                                <!-- Nav Widget End -->
+                            </div>
+                            <!-- Widget End -->
+
+                            <!-- Widget Start -->
+                            <div class="widget">
+                                <div class="widget--title">
+                                    <h2 class="h4">Tags</h2>
+                                    <i class="icon fa fa-tags"></i>
+                                </div>
+
+                                <!-- Tags Widget Start -->
+                                <div class="tags--widget style--1">
+                                    <ul class="nav">
+                                        {{#each this.listUniqueTag}}
+                                            <li><a href="/news/newslist/idTag/{{idTag}}">{{TenTag}}</a></li>
+                                        {{/each}}
+                                    </ul>
+                                </div>
+                                <!-- Tags Widget End -->
+                            </div>
+                            <!-- Widget End -->
+
+                            <!-- Widget Start -->
+                            <div class="widget">
+                                <div class="widget--title">
+                                    <h2 class="h4">Stay Connected</h2>
+                                    <i class="icon fa fa-share-alt"></i>
+                                </div>
+
+                                <!-- Social Widget Start -->
+                                <div class="social--widget style--1">
+                                    <ul class="nav">
+                                        <li class="facebook">
+                                            <a href="#">
+                                                <span class="icon"><i class="fa fa-facebook-f"></i></span>
+                                                <span class="count">521</span>
+                                                <span class="title">Likes</span>
+                                            </a>
+                                        </li>
+                                        <li class="twitter">
+                                            <a href="#">
+                                                <span class="icon"><i class="fa fa-twitter"></i></span>
+                                                <span class="count">3297</span>
+                                                <span class="title">Followers</span>
+                                            </a>
+                                        </li>
+                                        <li class="google-plus">
+                                            <a href="#">
+                                                <span class="icon"><i class="fa fa-google-plus"></i></span>
+                                                <span class="count">596282</span>
+                                                <span class="title">Followers</span>
+                                            </a>
+                                        </li>
+                                        <li class="rss">
+                                            <a href="#">
+                                                <span class="icon"><i class="fa fa-rss"></i></span>
+                                                <span class="count">521</span>
+                                                <span class="title">Subscriber</span>
+                                            </a>
+                                        </li>
+                                        <li class="vimeo">
+                                            <a href="#">
+                                                <span class="icon"><i class="fa fa-vimeo"></i></span>
+                                                <span class="count">3297</span>
+                                                <span class="title">Followers</span>
+                                            </a>
+                                        </li>
+                                        <li class="youtube">
+                                            <a href="#">
+                                                <span class="icon"><i class="fa fa-youtube-square"></i></span>
+                                                <span class="count">596282</span>
+                                                <span class="title">Subscriber</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- Social Widget End -->
+                            </div>
+                            <!-- Widget End -->
+
+                            <!-- Widget Start -->
+                            <div class="widget">
+                                <div class="widget--title">
+                                    <h2 class="h4">Đăng ký nhận tin</h2>
+                                    <i class="icon fa fa-envelope-open-o"></i>
+                                </div>
+
+                                <!-- Subscribe Widget Start -->
+                                <div class="subscribe--widget">
+                                    <div class="content">
+                                        <p>Đăng ký để nhận được thông báo về tin tức mới nhất thông qua email của bạn.</p>
+                                    </div>
+
+                                    <form action="https://themelooks.us13.list-manage.com/subscribe/post?u=79f0b132ec25ee223bb41835f&id=f4e0e93d1d" method="post" name="mc-embedded-subscribe-form" target="_blank" data-form="mailchimpAjax">
+                                        <div class="input-group">
+                                            <input type="email" name="EMAIL" placeholder="E-mail address" class="form-control" autocomplete="off" required>
+
+                                            <div class="input-group-btn">
+                                                <button type="submit" class="btn btn-lg btn-default active"><i class="fa fa-paper-plane-o"></i></button>
+                                            </div>
+                                        </div>
+
+                                        <div class="status"></div>
+                                    </form>
+                                </div>
+                                <!-- Subscribe Widget End -->
+                            </div>
+                            <!-- Widget End -->
+                            
+                            <!-- Top 10 Xem Nhiều Start -->
+                            <div id="mostwatched" class="widget">
+            <div class="widget--title">
+              <h2 class="h4">Top 10 Tin Tức Xem Nhiều Nhất</h2>
+              <i class="icon fa fa-newspaper-o"></i>
+            </div>
+            <!-- Content Start -->
+            <div class="list--widget list--widget-1">
+              <!-- Post Items Start -->
+              <div class="post--items post--items-3" data-ajax-content="outer">
+                <ul class="nav" data-ajax-content="inner">
+                  {{#each this.Top10XemNhieuNhat}}
+                    <li>
+                      <!-- Post Item Start -->
+                      <div class="post--item post--layout-3">
+                        <div class="post--img">
+                          <a
+                            href="/news/newscontent/{{idBaiBao}}"
+                            class="thumb"
+                          ><img
+                              src="img/BaiBao/{{AnhDaiDien}}"
+                              alt="cover"
+                            /></a>
+                          <div class="post--info">
+                            <ul class="nav meta">
+                              <li><a href="#">{{ButDanh}}</a></li>
+                              <li class="pull-right"><a href="#"><span
+                                  >{{LuotXem}}</span><i
+                                    class="fa fa-eye"
+                                  ></i></a></li>
+                            </ul>
+
+                            <div class="title">
+                              <h3 class="h4"><a
+                                  href="/news/newscontent/{{idBaiBao}}"
+                                  class="btn-link"
+                                >{{TieuDe}}</a></h3>
+                              <p>{{dateFormat NgayDang "DD/MM/YYYY"}}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Post Item End -->
+                    </li>
+                  {{/each}}
+                </ul>
+
+                <!-- Preloader Start -->
+                <div class="preloader bg--color-0--b" data-preloader="1">
+                  <div class="preloader--inner"></div>
+                </div>
+                <!-- Preloader End -->
+              </div>
+              <!-- Post Items End -->
+            </div>
+            <!-- Content End -->
+                            </div>
+                            <!-- Top 10 Xem Nhiều End -->
+
+                            <!-- Top 10 Mới Nhất Start -->
+                            <div id="trendingnews" class="widget">
+                                <div class="widget--title">
+                                <h2 class="h4">Top 10 Tin Tức Mới Nhất</h2>
+                                <i class="icon fa fa-newspaper-o"></i>
+                                </div>
+                                <!-- Content Start -->
+                                <div class="list--widget list--widget-1">
+                                <!-- Post Items Start -->
+                                <div class="post--items post--items-3" data-ajax-content="outer">
+                                    <ul class="nav" data-ajax-content="inner">
+                                    {{#each this.Top10MoiNhat}}
+                                        <li>
+                                        <!-- Post Item Start -->
+                                        <div class="post--item post--layout-3">
+                                            <div class="post--img">
+                                            <a
+                                                href="/news/newscontent/{{idBaiBao}}"
+                                                class="thumb"
+                                            ><img
+                                                src="img/BaiBao/{{AnhDaiDien}}"
+                                                alt=""
+                                                /></a>
+
+                                            <div class="post--info">
+                                                <ul class="nav meta">
+                                                <li><a href="#">{{ButDanh}}</a></li>
+                                                <li class="pull-right"><a href="#"><span
+                                                    >{{LuotXem}}</span><i
+                                                        class="fa fa-eye"
+                                                    ></i></a></li>
+                                                </ul>
+
+                                                <div class="title">
+                                                <h3 class="h4"><a
+                                                    href="/news/newscontent/{{idBaiBao}}"
+                                                    class="btn-link"
+                                                    >{{TieuDe}}</a></h3>
+                                                <p>{{dateFormat NgayDang "DD/MM/YYYY"}}</p>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <!-- Post Item End -->
+                                        </li>
+                                    {{/each}}
+                                    </ul>
+
+                                    <!-- Preloader Start -->
+                                    <div class="preloader bg--color-0--b" data-preloader="1">
+                                    <div class="preloader--inner"></div>
+                                    </div>
+                                    <!-- Preloader End -->
+                                </div>
+                                <!-- Post Items End -->
+                                </div>
+                                <!-- Content End -->
+                            </div>
+                            <!-- Top 10 Mới Nhất End -->
+
+                            <!-- Widget Start -->
+                            <div class="widget">
+                                <div class="widget--title">
+                                    <h2 class="h4">Quảng Cáo</h2>
+                                    <i class="icon fa fa-bullhorn"></i>
+                                </div>
+
+                                <!-- Ad Widget Start -->
+                                <div class="ad--widget">
+                                    <a href="#">
+                                        <img src="img/ads-img/ad-300x250-2.jpg" alt="">
+                                    </a>
+                                </div>
+                                <!-- Ad Widget End -->
+                            </div>
+                            <!-- Widget End -->
+                        </div>
+                    </div>
+                    <!-- Main Sidebar End -->
+                </div>
+            </div>
+        </div>
+        <!-- Main Content Section End -->

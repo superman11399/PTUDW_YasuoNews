@@ -1,3 +1,22 @@
+{{#section 'css'}}
+
+{{/section}}
+
+{{#section 'js'}}
+<script>
+  $(".delPostConfirm").on("click", function () {
+    const title = $(this).data("title");
+    const id = $(this).data("id");
+    const author = $(this).data("content");
+
+    $("#delPostConfirmModal #content").text("Xác nhận xóa bài viết: \"" + title + "\" của tác giả " + author + "?");
+    $("#delPostConfirmModal #delID").attr("value", id);
+  });
+</script>
+
+<script src="/js/admin-manager.js"></script>
+{{/section}}
+
 <div class="card" style="min-width: 44rem;">
   <div class="card-body">
     <div class="row">
@@ -7,54 +26,48 @@
       <div class="col-md-6 float-right">
         <div class="form-group">
           <div class="input-group">
-            <input
-              id="Search"
-              type="text"
-              class="form-control search-menu"
-              placeholder="Tìm kiếm..."
-            />
+            <input id="Search" type="text" class="form-control search-menu" placeholder="Tìm kiếm..." />
             <div class="input-group-append">
-              <button type="button" class="btn btn-primary btn-block"><i
-                  class="fa fa-search"
-                  aria-hidden="true"
-                ></i></button>
+              <button type="button" class="btn btn-primary btn-block"><i class="fa fa-search"
+                  aria-hidden="true"></i></button>
             </div>
           </div>
         </div>
       </div>
       <div class="col">
-        <button
-          type="button"
-          class="btn btn-md btn-success float-right"
-          onclick="window.location='/admin/post'"
-        >Thêm bài viết</button>
+        <a type="button" class="btn btn-md btn-success float-right" href="/admin/manage/post/add">Thêm bài viết</a>
       </div>
     </div>
     <!-- filter -->
     <div id="post-filter" class="row align-items-center justify-content-center">
       <div class="col pt-3">
         <div class="form-group">
-          <select id="cate" class="form-control">
+          <input type="text" id="cate" list="catelist" class="form-control pl-3" placeholder="Lọc chuyên mục">
+          <datalist id="catelist">
             <option selected>Tất cả chuyên mục</option>
-            {{#each listCategory}}
-              <option>{{this.TenChuyenMuc}}</option>
+            {{#each listCate}}
+            <option>{{this.TenChuyenMuc}}</option>
             {{/each}}
-          </select>
+            {{#each listSubCate}}
+            <option>{{this.TenChuyenMuc}} / {{this.TenChuyenMucPhu}}</option>
+            {{/each}}
+          </datalist>
         </div>
       </div>
       <div class="col pt-3">
         <div class="form-group">
-          <select id="tag" class="form-control">
+          <input type="text" id="tag" multiple list="taglist" class="form-control pl-3 pb-2" placeholder="Lọc thẻ tag">
+          <datalist id="taglist">
             <option selected>Tất cả thẻ tag</option>
             {{#each listTag}}
-              <option>{{this.TenTag}}</option>
+            <option>{{this.TenTag}}</option>
             {{/each}}
-          </select>
+          </datalist>
         </div>
       </div>
       <div class="col pt-3">
         <div class="form-group">
-          <select id="tasg" class="form-control">
+          <select id="status" class="form-control">
             <option selected>Tất cả trạng thái</option>
             <option>Đã duyệt - Chờ xuất bản</option>
             <option>Đã xuất bản</option>
@@ -63,10 +76,19 @@
           </select>
         </div>
       </div>
-      <div class="col-md-3">
-        <button type="button" class="btn btn-primary btn-block"><i
-            class="fa fa-filter"
-          ></i>
+      <div class="col pt-3">
+        <div class="form-group">
+          <input type="text" id="writer" list="writerlist" class="form-control pl-3 pb-2" placeholder="Lọc tác giả">
+          <datalist id="writerlist">
+            <option selected>Tất cả tác giả</option>
+            {{#each listWriter}}
+            <option>{{this.ButDanh}}</option>
+            {{/each}}
+          </datalist>
+        </div>
+      </div>
+      <div class="col-md-2">
+        <button id="btn-post-filter" type="button" class="btn btn-primary btn-block"><i class="fa fa-filter"></i>
           Lọc</button>
       </div>
     </div>
@@ -76,55 +98,53 @@
         <table class="table table-hover">
           <thead class="bg-light">
             <tr>
-              <th>Tiêu đề</th>
+              <th class="w-25">Tiêu đề</th>
               <th>Tác giả</th>
               <th>Chuyên mục</th>
-              <th>Tags</th>
-              <th>Ngày sửa</th>
+              <th style="width: 10%;">Tags</th>
               <th>Trạng thái</th>
               <th>Ngày đăng</th>
-              <th>Thao tác</th>
+              <th>Lượt xem</th>
+              <th style="width: 10%;">Thao tác</th>
             </tr>
           </thead>
           <tbody>
             {{#each listArticle}}
-              {{! Aritcle }}
-              <tr>
-                <td><a href="#"><small>{{this.TieuDe}}</small></a></td>
-                <td><small>{{this.ButDanh}}</small></td>
-                <td><small>{{this.TenChuyenMuc}}
-                    /
-                    {{this.TenChuyenMucPhu}}</small></td>
-                <td><small>tags</small></td>
-                <td><small>{{this.NgayCuoiChinhSua}}</small></td>
-                <td><small>{{this.TinhTrangDuyet}}</small></td>
-                {{#if this.NgayDang}}
-                  <td><small>{{this.NgayDang}}</small></td>
-                {{else}}
-                  <td><small>Chưa xuất bản</small></td>
-                {{/if}}
-                <td>
-                  <a
-                    class="btn btn-primary btn-sm p-1"
-                    href="/admin/manage/post/{{this.idBaiBao}}"
-                    style="width: 25px;"
-                  ><i class="fa fa-eye" title="Xem thông tin chi tiết"></i></a>
-                  <button
-                    href="#delPostConfirmModal"
-                    class="btn btn-primary btn-sm p-1 delPostConfirm"
-                    data-toggle="modal"
-                    data-title="{{this.TieuDe}}"
-                    data-id="{{this.idBaiBao}}"
-                    data-content="{{this.ButDanh}}"
-                    data-type="delUser"
-                    style="width: 25px;"
-                  ><i class="fa fa-trash" title="Xóa bài báo"></i></button>
-                </td>
-              </tr>
+            <tr>
+              <td><a href="/news/newscontent/{{this.idBaiBao}}"><small>{{this.TieuDe}}</small></a></td>
+              <td><small>{{this.ButDanh}}</small></td>
+              <td><small>{{this.TenChuyenMuc}} / {{this.TenChuyenMucPhu}}</small></td>
+              <td><small>
+                  <ul class="nav">
+                    {{#each ../listTagOfArticle}}
+                    {{#IfEquals this.idBaiBao ../this.idBaiBao}}
+                    <li class="badge badge-warning mx-1 mb-1">{{this.TenTag}}</li>
+                    {{/IfEquals}}
+                    {{/each}}
+                  </ul>
+                </small></td>
+              <td><small>{{this.TinhTrangDuyet}}</small></td>
+              {{#if this.NgayDang}}
+              <td><small>{{dateFormat
+                  this.details.NgayDang
+                  "DD/MM/YYYY"}}</small></td>
+              {{else}}
+              <td><small>Chưa xuất bản</small></td>
+              {{/if}}
+              <td><small>{{this.LuotXem}}</small></td>
+              <td>
+                <a class="btn btn-primary btn-sm p-1 mb-1" href="/admin/manage/post/content/{{this.idBaiBao}}"
+                  style="width: 25px;"><i class="fa fa-pencil" title="Chỉnh sửa bài báo"></i></a>
+                <button href="#delPostConfirmModal" class="btn btn-primary btn-sm p-1 mb-1 delPostConfirm"
+                  data-toggle="modal" data-title="{{this.TieuDe}}" data-id="{{this.idBaiBao}}"
+                  data-content="{{this.ButDanh}}" data-type="delUser" style="width: 25px;"><i class="fa fa-trash"
+                    title="Xóa bài báo"></i></button>
+              </td>
+            </tr>
             {{else}}
-              <div class="alert alert-danger" role="alert">
-                <strong> Không có bài viết nào </strong>
-              </div>
+            <div class="alert alert-danger" role="alert">
+              <strong> Không có bài viết nào </strong>
+            </div>
             {{/each}}
           </tbody>
         </table>
@@ -132,4 +152,24 @@
     </div>
   </div>
 </div>
-<input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden />
+
+{{!-- Modal xac nhan xoa bai biet--}}
+<div class="modal fade" id="delPostConfirmModal">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Xác nhận</h3>
+      </div>
+      <div class="modal-body">
+        <p id="content"></p>
+      </div>
+      <div class="modal-footer">
+        <form action="/admin/manage/post/del" method="POST" id="form">
+          <input type="hidden" id="delID" name="id" value="">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+          <button class="btn btn-primary" type="submit">Xác nhận</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

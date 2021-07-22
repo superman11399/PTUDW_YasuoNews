@@ -161,13 +161,85 @@ module.exports = {
         "BaiBaoDuocDuyet.idBaiBao"
       )
       .limit(1);
+      const id7 = db("BaiBao")
+      .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
+      .where("BaiBao.idChuyenMucPhu", "7")
+      .join(
+        "ChuyenMucPhu",
+        "BaiBao.idChuyenMucPhu",
+        "=",
+        "ChuyenMucPhu.idChuyenMucPhu"
+      )
+      .join("PhongVien", "BaiBao.idTacGia", "=", "PhongVien.idPV")
+      .join(
+        "BaiBaoDuocDuyet",
+        "BaiBao.idBaiBao",
+        "=",
+        "BaiBaoDuocDuyet.idBaiBao"
+      )
+      .limit(1);
+      const id8 = db("BaiBao")
+      .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
+      .where("BaiBao.idChuyenMucPhu", "8")
+      .join(
+        "ChuyenMucPhu",
+        "BaiBao.idChuyenMucPhu",
+        "=",
+        "ChuyenMucPhu.idChuyenMucPhu"
+      )
+      .join("PhongVien", "BaiBao.idTacGia", "=", "PhongVien.idPV")
+      .join(
+        "BaiBaoDuocDuyet",
+        "BaiBao.idBaiBao",
+        "=",
+        "BaiBaoDuocDuyet.idBaiBao"
+      )
+      .limit(1);
+      const id9 = db("BaiBao")
+      .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
+      .where("BaiBao.idChuyenMucPhu", "9")
+      .join(
+        "ChuyenMucPhu",
+        "BaiBao.idChuyenMucPhu",
+        "=",
+        "ChuyenMucPhu.idChuyenMucPhu"
+      )
+      .join("PhongVien", "BaiBao.idTacGia", "=", "PhongVien.idPV")
+      .join(
+        "BaiBaoDuocDuyet",
+        "BaiBao.idBaiBao",
+        "=",
+        "BaiBaoDuocDuyet.idBaiBao"
+      )
+      .limit(1);
+      const id10 = db("BaiBao")
+      .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
+      .where("BaiBao.idChuyenMucPhu", "10")
+      .join(
+        "ChuyenMucPhu",
+        "BaiBao.idChuyenMucPhu",
+        "=",
+        "ChuyenMucPhu.idChuyenMucPhu"
+      )
+      .join("PhongVien", "BaiBao.idTacGia", "=", "PhongVien.idPV")
+      .join(
+        "BaiBaoDuocDuyet",
+        "BaiBao.idBaiBao",
+        "=",
+        "BaiBaoDuocDuyet.idBaiBao"
+      )
+      .limit(1);
     return db
       .union(id1, true)
       .union(id2, true)
       .union(id3, true)
       .union(id4, true)
       .union(id5, true)
-      .union(id6, true);
+      .union(id6, true)
+      .union(id7, true)
+      .union(id8, true)
+      .union(id9, true)
+      .union(id10, true);
   },
   LayDanhSachBaiVietTheoChuyenMucPhu(idChuyenMucPhu, offset) {
     return db("BaiBao")
@@ -227,6 +299,9 @@ module.exports = {
   },
   LayDanhSachChuyenMucPhu() {
     return db("chuyenmucphu");
+  },
+  LayDanhSachChuyenMucChinh() {
+    return db("chuyenmucchinh");
   },
   LayDanhSachBaiVietTheoTag(idTag, offset) {
     return db("BaiBao_Tag")
@@ -412,7 +487,7 @@ module.exports = {
 
   search(text, offset) {
     const query =
-      "SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4 ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('" +
+      "SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4 ON t1.idBaiBao = t4.idBaiBao WHERE t1.TinhTrangDuyet='Đã xuất bản' AND MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('" +
       text +
       "' IN NATURAL LANGUAGE MODE) LIMIT " +
       offset +
@@ -514,6 +589,38 @@ module.exports = {
 
   async del(id) {
     await db("baibao_tag").where("idBaiBao", id).del();
+    await db("binhluan").where("idBaiBao", id).del();
+    await db("baibaoduocduyet").where("idBaiBao", id).del();
     return db("baibao").where("idBaiBao", id).del();
+  },
+
+  async getCommentOfArticle(idBaiBao) {
+    return db('binhluan').where("idBaiBao",idBaiBao);
+  },
+
+  delCom(id) {
+    return db("binhluan").where("idBL", id).del();
+  },
+
+  themVaoBaiXuatBan(id){
+    const query = `insert into baibaoduocduyet value(${id},NOW(),0)`;
+    return db.raw(query);
+  },
+
+  async updatePost(id, subID, status) {
+    if(status==="Đã xuất bản"){
+      await this.themVaoBaiXuatBan(id);
+    } 
+    return db("baibao")
+      .where("idBaiBao", id)
+      .update("idChuyenMucPhu", subID)
+      .update("TinhTrangDuyet", status);
+  },
+
+  async getDetailOfPostForAdmin(id) {
+    row = await db("baibao").where("idBaiBao",id).leftJoin("chuyenmucphu","baibao.idChuyenMucPhu","=","chuyenmucphu.idChuyenMucPhu").leftJoin("phongvien","idTacGia","=","idPV");
+    if(row.length===0)
+      return null;
+    return row[0];
   },
 };

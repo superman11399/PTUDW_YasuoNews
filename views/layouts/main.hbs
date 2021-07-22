@@ -106,13 +106,22 @@
                                 <ul class="dropdown-menu">
                                     <li ><a class="fa fa-user" href="/account/profile">Thông tin cá nhân</a></li>
                                     <li ><a class="fa fa-lock" href="/account/profile_password">Đổi mật khẩu</a></li>
+                                    {{#IfEquals authUser.LoaiNguoiDung 'writer'}}
+                                    <li ><a class="fa fa-pencil" href="/writer/">Gửi bài viết</a></li>
+                                    {{/IfEquals}}
+                                    {{#IfEquals authUser.LoaiNguoiDung 'editor'}}
+                                    <li ><a class="fa fa-edit" href="/editor/">Duyệt bài viết</a></li>
+                                    {{/IfEquals}}
+                                    {{#IfEquals authUser.LoaiNguoiDung 'admin'}}
+                                    <li ><a class="fa fa-cogs" href="/admin/">Quản lý hệ thống</a></li>
+                                    {{/IfEquals}}
                                     <li ><a class="fa fa-sign-out" href="javascript: $('#formLogout').submit();">Đăng xuất</a></li>
                                 </ul>
                                 </li>
                             </ul>
                         {{else}}
                             <ul class="header--topbar-action nav">
-                            <li><a href="/account/login"><i class="fa fm fa-user-o"></i>Login/Register</a></li>
+                            <li><a href="/account/login"><i class="fa fm fa-user-o"></i>Đăng nhập/Đăng ký</a></li>
                             </ul>
                         {{/if}}
                     </div>
@@ -155,9 +164,9 @@
                             <li>
                                 <a href="/news/home">Trang Chủ</a>
                             </li>
+                            {{#each this.listCMC}}
                             <li class="dropdown megamenu filter">
-                                <a href="/news/newslist/idChuyenMucChinh/1" class="dropdown-toggle" >Công Nghệ<i class="fa flm fa-angle-down"></i></a>
-
+                                <a href="/news/newslist/idChuyenMucChinh/{{idChuyenMucChinh}}" data-toggle="dropdown" class="dropdown-toggle" >{{TenChuyenMuc}}<i class="fa flm fa-angle-down"></i></a>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <div class="row">
@@ -165,12 +174,13 @@
                                                 <!-- Megamenu Filter Start -->
                                                 <div class="megamenu--filter">
                                                     <ul class="nav">
+                                                        {{#each ../this.listCMP}}
+                                                        {{#IfEquals idChuyenMucChinh ../idChuyenMucChinh}}
                                                         <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/1" data-cat="latin-america">Ứng Dụng<i class="fa fa-angle-right"></i></a>
+                                                            <a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}" data-cat="latin-america">{{TenChuyenMucPhu}}<i class="fa fa-angle-right"></i></a>
                                                         </li>
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/2" data-cat="africa">Bảo Mật<i class="fa fa-angle-right"></i></a>
-                                                        </li>
+                                                        {{/IfEquals}}
+                                                        {{/each}}
                                                     </ul>
                                                 </div>
                                                 <!-- Megamenu Filter End -->
@@ -180,97 +190,24 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="dropdown megamenu filter">
-                                <a href="/news/newslist/idChuyenMucChinh/2" class="dropdown-toggle" >Thể Thao<i class="fa flm fa-angle-down"></i></a>
-
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <!-- Megamenu Filter Start -->
-                                                <div class="megamenu--filter">
-                                                    <ul class="nav">
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/3" data-cat="latin-america">Trong Nước<i class="fa fa-angle-right"></i></a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/4" data-cat="africa">Ngoài Nước<i class="fa fa-angle-right"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <!-- Megamenu Filter End -->
-                                            </div>
-
-                                            
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown megamenu filter">
-                                <a href="/news/newslist/idChuyenMucChinh/3" class="dropdown-toggle">Giải Trí<i class="fa flm fa-angle-down"></i></a>
-
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <!-- Megamenu Filter Start -->
-                                                <div class="megamenu--filter">
-                                                    <ul class="nav">
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/5" data-cat="latin-america">Phim Ảnh<i class="fa fa-angle-right"></i></a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/6" data-cat="africa">Âm Nhạc<i class="fa fa-angle-right"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <!-- Megamenu Filter End -->
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-
+                            {{/each}}
                             <li class="dropdown megamenu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Danh sách chuyên mục<i class="fa flm fa-angle-down"></i></a>
 
                                 <ul class="dropdown-menu">
+                                    {{#each this.listCMC}}
                                     <li class="dropdown">
-                                        <a href="#">Công Nghệ</a>
+                                        <a href="/news/newslist/idChuyenMucChinh/{{idChuyenMucChinh}}">{{TenChuyenMuc}}</a>
 
                                         <ul class="dropdown-menu">
-                                            <li><a href="/news/newslist/idChuyenMucPhu/1">Ứng Dụng</a></li>
-                                            <li><a href="/news/newslist/idChuyenMucPhu/2">Bảo Mật</a></li>
+                                            {{#each ../this.listCMP}}
+                                            {{#IfEquals idChuyenMucChinh ../idChuyenMucChinh}}
+                                            <li><a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}">{{TenChuyenMucPhu}}</a></li>
+                                            {{/IfEquals}}
+                                            {{/each}}
                                         </ul>
                                     </li>
-
-                                    <li class="dropdown">
-                                        <a href="#">Thể Thao</a>
-
-                                        <ul class="dropdown-menu">
-                                            <li><a href="/news/newslist/idChuyenMucPhu/3">Thể Thao Trong Nước</a></li>
-                                            <li><a href="/news/newslist/idChuyenMucPhu/4">Thể Thao Ngoài Nước</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li class="dropdown">
-                                        <a href="#">Giải Trí</a>
-
-                                        <ul class="dropdown-menu">
-                                            <li><a href="/news/newslist/idChuyenMucPhu/5">Phim Ảnh</a></li>
-                                            <li><a href="/news/newslist/idChuyenMucPhu/6">Âm Nhạc</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li class="dropdown">
-                                        <a href="#">Kinh Doanh</a>
-
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">US Business</a></li>
-                                            <li><a href="#">Middle East Business</a></li>
-                                            <li><a href="#">Europe Business</a></li>
-                                        </ul>
-                                    </li>
+                                    {{/each}}
                                 </ul>
                             </li>
                         </ul>
@@ -295,19 +232,19 @@
             <div class="container">
                 <ul class="nav">
                     <li>
-                        <a href="#">
+                        <a href="#hotnews">
                             <i class="fa fa-fire"></i>
                             <span>Hot News</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#trendingnews">
                             <i class="fa fa-flash"></i>
                             <span>Trending News</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#mostwatched">
                             <i class="fa fa-eye"></i>
                             <span>Most Watched</span>
                         </a>
@@ -332,7 +269,7 @@
                             <!-- Widget Start -->
                             <div class="widget">
                                 <div class="widget--title">
-                                    <h2 class="h4">About Us</h2>
+                                    <h2 class="h4">Về chúng tôi</h2>
 
                                     <i class="icon fa fa-exclamation"></i>
                                 </div>
@@ -340,17 +277,17 @@
                                 <!-- About Widget Start -->
                                 <div class="about--widget">
                                     <div class="content">
-                                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium laborum et dolorum fuga.</p>
+                                        <p>Yasuo News là sản phẩm của đồ án cuối kỳ môn Phát Triển Ứng Dụng Web, do ông Hứa Huy Cường, Đỗ Hoàng Thế và Trần Quang Tiến đồng tác giả. </p>
                                     </div>
 
                                     <div class="action">
-                                        <a href="#" class="btn-link">Read More<i class="fa flm fa-angle-double-right"></i></a>
+                                        <a href="#" class="btn-link">Đọc thêm<i class="fa flm fa-angle-double-right"></i></a>
                                     </div>
 
                                     <ul class="nav">
                                         <li>
                                             <i class="fa fa-map"></i>
-                                            <span>143/C, Fake Street, Melborne, Australia</span>
+                                            <span>18TN - HCMUS</span>
                                         </li>
                                         <li>
                                             <i class="fa fa-envelope-o"></i>
@@ -371,7 +308,7 @@
                             <!-- Widget Start -->
                             <div class="widget">
                                 <div class="widget--title">
-                                    <h2 class="h4">Usefull Info Links</h2>
+                                    <h2 class="h4">Một số đường dẫn hữu ích</h2>
 
                                     <i class="icon fa fa-expand"></i>
                                 </div>
@@ -379,13 +316,8 @@
                                 <!-- Links Widget Start -->
                                 <div class="links--widget">
                                     <ul class="nav">
-                                        <li><a href="#" class="fa-angle-right">Gadgets</a></li>
-                                        <li><a href="#" class="fa-angle-right">Shop</a></li>
-                                        <li><a href="#" class="fa-angle-right">Term and Conditions</a></li>
-                                        <li><a href="#" class="fa-angle-right">Forums</a></li>
-                                        <li><a href="#" class="fa-angle-right">Top News of This Week</a></li>
-                                        <li><a href="#" class="fa-angle-right">Special Recipes</a></li>
-                                        <li><a href="#" class="fa-angle-right">Sign Up</a></li>
+                                        <li><a href="#" class="fa-angle-right">Top 10 Tin Tức</a></li>
+                                        <li><a href="#" class="fa-angle-right">Đăng ký</a></li>
                                     </ul>
                                 </div>
                                 <!-- Links Widget End -->
@@ -397,7 +329,7 @@
                             <!-- Widget Start -->
                             <div class="widget">
                                 <div class="widget--title">
-                                    <h2 class="h4">Advertisements</h2>
+                                    <h2 class="h4">Quảng cáo</h2>
 
                                     <i class="icon fa fa-bullhorn"></i>
                                 </div>
@@ -405,13 +337,9 @@
                                 <!-- Links Widget Start -->
                                 <div class="links--widget">
                                     <ul class="nav">
-                                        <li><a href="#" class="fa-angle-right">Post an Add</a></li>
-                                        <li><a href="#" class="fa-angle-right">Adds Renew</a></li>
-                                        <li><a href="#" class="fa-angle-right">Price of Advertisements</a></li>
-                                        <li><a href="#" class="fa-angle-right">Adds Closed</a></li>
-                                        <li><a href="#" class="fa-angle-right">Monthly or Yearly</a></li>
-                                        <li><a href="#" class="fa-angle-right">Trial Adds</a></li>
-                                        <li><a href="#" class="fa-angle-right">Add Making</a></li>
+                                        <li><a href="#" class="fa-angle-right">Liên hệ quảng cáo</a></li>
+                                        <li><a href="#" class="fa-angle-right">Gia hạn quảng cáo</a></li>
+                                        <li><a href="#" class="fa-angle-right">Giá cả</a></li>
                                     </ul>
                                 </div>
                                 <!-- Links Widget End -->
@@ -423,7 +351,7 @@
                             <!-- Widget Start -->
                             <div class="widget">
                                 <div class="widget--title">
-                                    <h2 class="h4">Career</h2>
+                                    <h2 class="h4">Việc làm</h2>
 
                                     <i class="icon fa fa-user-o"></i>
                                 </div>
@@ -431,14 +359,12 @@
                                 <!-- Links Widget Start -->
                                 <div class="links--widget">
                                     <ul class="nav">
-                                        <li><a href="#" class="fa-angle-right">Available Post</a></li>
-                                        <li><a href="#" class="fa-angle-right">Career Details</a></li>
-                                        <li><a href="#" class="fa-angle-right">How to Apply?</a></li>
-                                        <li><a href="#" class="fa-angle-right">Freelence Job</a></li>
-                                        <li><a href="#" class="fa-angle-right">Be a Member</a></li>
-                                        <li><a href="#" class="fa-angle-right">Apply Now</a></li>
-                                        <li><a href="#" class="fa-angle-right">Send Your Resume</a></li>
-                                    </ul>
+                                        <li><a href="#" class="fa-angle-right">Trở thành thành viên của chúng tôi</a></li>
+                                        <li><a href="#" class="fa-angle-right">Chi tiết tuyển dụng</a></li>
+                                        <li><a href="#" class="fa-angle-right">Cách thức ứng tuyển?</a></li>
+                                        <li><a href="#" class="fa-angle-right">Công việc Freelance</a></li>
+                                        <li><a href="#" class="fa-angle-right">Đăng ký ngay</a></li>
+=                                    </ul>
                                 </div>
                                 <!-- Links Widget End -->
                             </div>
@@ -454,7 +380,7 @@
                 <div class="social--bg bg--color-1"></div>
 
                 <div class="container">
-                    <p class="text float--left">&copy; 2017 <a href="#">USNEWS</a>. All Rights Reserved.</p>
+                    <p class="text float--left">&copy; 2017 <a href="#">USNEWS - template</a>. All Rights Reserved.</p>
 
                     <ul class="nav social float--right">
                         <li><a href="#"><i class="fa fa-facebook"></i></a></li>
@@ -465,9 +391,9 @@
                     </ul>
 
                     <ul class="nav links float--right">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Trang Chủ</a></li>
+                        <li><a href="#">Hỏi đáp</a></li>
+                        <li><a href="#">Hỗ Trợ</a></li>
                     </ul>
                 </div>
             </div>
@@ -568,12 +494,6 @@
     <!-- ==== Countdown Plugin ==== -->
     <script src="js/jquery.countdown.min.js"></script>
 
-    <!-- ==== RetinaJS Plugin ==== -->
-    <script src="js/retina.min.js"></script>
-
-    <!-- ==== Google Map API ==== -->
-    {{!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK9f7sXWmqQ1E-ufRXV3VpXOn_ifKsDuc"></script> --}}
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
     <script>
     $.ajax({
     url: "https://geolocation-db.com/jsonp",

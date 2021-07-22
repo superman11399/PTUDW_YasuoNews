@@ -51,7 +51,7 @@
                 <center>
                   <button href="#renameTagModal" class="btn btn-primary btn-sm p-1 patchTagName" data-toggle="modal"
                     data-id="{{this.idTag}}" data-content="{{this.TenTag}}" style="width: 25px;"><i
-                      class="fa fa-pencil-square" title="Chỉnh sửa tag"></i></button>
+                      class="fa fa-pencil" title="Chỉnh sửa tag"></i></button>
                   <button href="#deleteTagModal" class="btn btn-primary btn-sm p-1 delTagConfirm" data-toggle="modal"
                     data-id="{{this.idTag}}" data-content="{{this.TenTag}}" style="width: 25px;"><i class="fa fa-trash"
                       title="Xóa Tag"></i></button>
@@ -90,7 +90,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Phân công chuyên mục</h3>
+        <h3>Đổi tên TAG</h3>
       </div>
       <div class="modal-body">
         <form action="/admin/manage/tag/rename" method="POST" id="formTagRenaming">

@@ -12,12 +12,20 @@ module.exports = {
       return this.addSubscriber(user);
     } else if (user.LoaiNguoiDung === "editor") {
       return this.addEditor(user, detail);
+    } else if (user.LoaiNguoiDung === "admin") {
+      return this.addAdmin(user, detail);
     } else return db("nguoidung").insert(user);
   },
 
   async addWriter(user) {
     const id = await this.add(user, "nguoidung");
     const query = `INSERT INTO PhongVien value(${id[0]},'Ẩn danh')`;
+    return db.raw(query);
+  },
+
+  async addAdmin(user) {
+    const id = await this.add(user, "nguoidung");
+    const query = `INSERT INTO PhongVien value(${id[0]},'admin')`;
     return db.raw(query);
   },
 
@@ -42,9 +50,15 @@ module.exports = {
   },
 
   async delUser(id, type) {
+    // if (type === "editor") {
+    //   const query = `UPDATE editor SET idChuyenMucChinh = NULL WHERE idBTV = ${id}`;
+    //   await db.raw(query);
+    // }
     if (type === "editor") {
-      const query = `UPDATE editor SET idChuyenMucChinh = NULL WHERE idBTV = ${id}`;
-      await db.raw(query);
+      await this.del("idBTV", id, "editor");
+    }
+    if (type === "subscriber") {
+      await this.del("idDocGia", id, "subscriber");
     }
     return this.patch("idNguoiDung", id, "NguoiDung", "TinhTrang", 0);
   },
@@ -78,6 +92,10 @@ module.exports = {
     }
     if (role === "writer") {
       const query = `INSERT INTO PhongVien value(${id},'Ẩn danh')`;
+      return db.raw(query);
+    }
+    if (role === "admin") {
+      const query = `INSERT INTO PhongVien value(${id},'admin')`;
       return db.raw(query);
     }
   },
@@ -149,6 +167,10 @@ WHERE nd.TinhTrang != 0`;
     row = await db.schema.raw(query);
     if (row.length === 0) return null;
     return row[0];
+  },
+
+  findWriter(){
+    return db('phongvien');
   },
 
   async findWriterWithDetail() {

@@ -43,6 +43,7 @@ module.exports = {
     const rows = await db("nguoidung")
       .whereNot("TinhTrang", 0)
       .where("Email", email);
+    console.log(rows);
     if (rows.length === 0) return true;
     return false;
   },
@@ -66,7 +67,7 @@ module.exports = {
     if (res.locals.auth && res.locals.authUser.LoaiNguoiDung == "admin") {
       next();
     } else {
-      const url = req.headers.referer || "/news/home";
+      const url = "/forbidden";
       res.redirect(url);
     }
   },
@@ -74,7 +75,7 @@ module.exports = {
     if (res.locals.auth && res.locals.authUser.LoaiNguoiDung == "writer") {
       next();
     } else {
-      const url = req.headers.referer || "/news/home";
+      const url = "/forbidden";
       res.redirect(url);
     }
   },
@@ -82,13 +83,66 @@ module.exports = {
     if (res.locals.auth && res.locals.authUser.LoaiNguoiDung == "editor") {
       next();
     } else {
-      const url = req.headers.referer || "/news/home";
-      // res.redirect(url, function (err) {
-      //   if (err) console.error(err);
-      //   res.send("/news/home");
-      // });
+      const url = "/forbidden";
       res.redirect(url);
     }
+  },
+  isSubcriber(req, res, next) {
+    if (res.locals.auth && res.locals.authUser.LoaiNguoiDung == "subcriber") {
+      next();
+    } else {
+      const url = "/forbidden";
+      res.redirect(url);
+    }
+  },
+  layButDanh(idNguoiDung) {
+    return db("phongvien").where("idPV", idNguoiDung);
+  },
+  CapNhat(idNguoiDung, HoTen, Email, NgaySinh) {
+    return db("nguoidung")
+      .whereNot("TinhTrang", 0)
+      .where("idNguoiDung", idNguoiDung)
+      .update({ HoTen: HoTen, Email: Email, NgaySinh: NgaySinh });
+  },
+  CapNhatButDanh(idNguoiDung, ButDanh) {
+    return db("phongvien")
+      .where("idPV", idNguoiDung)
+      .update({ ButDanh: ButDanh });
+  },
+  changePasswordWithEmail(email, password) {
+    const hash = bcrypt.hashSync(password, 10);
+    return db("nguoidung")
+      .whereNot("TinhTrang", 0)
+      .where("Email", email)
+      .update({ MatKhau: hash });
+  },
+  async checkPasswordMatch(id, password) {
+    const rows = await db("nguoidung")
+      .whereNot("TinhTrang", 0)
+      .where("idNguoiDung", id);
+    if (rows.length === 0) return false;
+    const checkPass = await bcrypt.compareSync(password, rows[0].MatKhau);
+    if (!checkPass) return false;
+    return true;
+  },
+  changePasswordWithId(id, password) {
+    const hash = bcrypt.hashSync(password, 10);
+    return db("nguoidung")
+      .whereNot("TinhTrang", 0)
+      .where("idNguoiDung", id)
+      .update({ MatKhau: hash });
+  },
+  findByFacebookID(FacebookID) {
+    return db("nguoidung")
+      .whereNot("TinhTrang", 0)
+      .join("facebook", "nguoidung.idNguoiDung", "=", "facebook.idNguoiDung")
+      .where("facebook.FacebookID", FacebookID);
+  },
+  addNewFacebookUser(newUser) {
+    return db("nguoidung").insert(newUser);
+  },
+  addNewFacebookEntry(entry) {
+    return db("facebook").insert(entry);
   },
   isSubcriber(req, res, next) {
     if (res.locals.auth && res.locals.authUser.LoaiNguoiDung == "subcriber") {
