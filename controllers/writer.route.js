@@ -20,6 +20,7 @@ router.get("/post", async function (req, res) {
     topic: "Thêm bài viết",
     tags: tags,
     listSub: listSub,
+    edit: true,
   });
 });
 
@@ -126,7 +127,6 @@ router.get("/post/:id", async function (req, res) {
       edit = true;
     const topic = edit ? "Chỉnh sửa bài viết" : "Xem bài viết";
     res.render("writerView/post", {
-      actionpost: "/writer/post",
       action: "/writer/edit",
       layout: "writer.hbs",
       title: "Writer",

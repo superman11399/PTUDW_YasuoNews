@@ -167,7 +167,7 @@
           {{/ if }}
 
           {{/ if }}
-          <form style="min-width: 20rem;" id="articleContent" action="{{actionpost}}" method="POST" enctype="multipart/form-data">
+          <form style="min-width: 20rem;" id="articleContent" action="/writer/post" method="POST" enctype="multipart/form-data">
             <div class="form-group row">
               <label for="text" class="col-12 col-form-label">Tiêu đề bài viết</label>
               <div class="col-12">
@@ -246,10 +246,10 @@
 
               {{#if admin}}
               <button id="submit" type="submit" class="btn btn-primary btn-sm"
-                onclick="handleSubmitPost2('{{actionpost}}')">Save Draft</button>
+                onclick="handleSubmitPost2('/writer/post')">Save Draft</button>
               {{else}}
               <button id="submit" type="submit" class="btn btn-primary btn-sm"
-                onclick="checkSubmit('{{actionpost}}')">Save Draft</button>
+                onclick="return checkSubmit('/writer/post')">Save Draft</button>
               {{/if}}
 
       </div>

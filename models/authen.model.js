@@ -83,10 +83,11 @@ module.exports = {
       next();
     } else {
       const url = req.headers.referer || "/news/home";
-      res.redirect(url, function (err) {
-        if (err) console.error(err);
-        res.send("/news/home");
-      });
+      // res.redirect(url, function (err) {
+      //   if (err) console.error(err);
+      //   res.send("/news/home");
+      // });
+      res.redirect(url);
     }
   },
   isSubcriber(req, res, next) {
