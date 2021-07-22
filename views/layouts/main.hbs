@@ -164,9 +164,9 @@
                             <li>
                                 <a href="/news/home">Trang Chủ</a>
                             </li>
+                            {{#each this.listCMC}}
                             <li class="dropdown megamenu filter">
-                                <a href="/news/newslist/idChuyenMucChinh/1" class="dropdown-toggle" >Công Nghệ<i class="fa flm fa-angle-down"></i></a>
-
+                                <a href="/news/newslist/idChuyenMucChinh/{{idChuyenMucChinh}}" data-toggle="dropdown" class="dropdown-toggle" >{{TenChuyenMuc}}<i class="fa flm fa-angle-down"></i></a>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <div class="row">
@@ -174,12 +174,13 @@
                                                 <!-- Megamenu Filter Start -->
                                                 <div class="megamenu--filter">
                                                     <ul class="nav">
+                                                        {{#each ../this.listCMP}}
+                                                        {{#IfEquals idChuyenMucChinh ../idChuyenMucChinh}}
                                                         <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/1" data-cat="latin-america">Ứng Dụng<i class="fa fa-angle-right"></i></a>
+                                                            <a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}" data-cat="latin-america">{{TenChuyenMucPhu}}<i class="fa fa-angle-right"></i></a>
                                                         </li>
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/2" data-cat="africa">Bảo Mật<i class="fa fa-angle-right"></i></a>
-                                                        </li>
+                                                        {{/IfEquals}}
+                                                        {{/each}}
                                                     </ul>
                                                 </div>
                                                 <!-- Megamenu Filter End -->
@@ -189,97 +190,24 @@
                                     </li>
                                 </ul>
                             </li>
-                            <li class="dropdown megamenu filter">
-                                <a href="/news/newslist/idChuyenMucChinh/2" class="dropdown-toggle" >Thể Thao<i class="fa flm fa-angle-down"></i></a>
-
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <!-- Megamenu Filter Start -->
-                                                <div class="megamenu--filter">
-                                                    <ul class="nav">
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/3" data-cat="latin-america">Trong Nước<i class="fa fa-angle-right"></i></a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/4" data-cat="africa">Ngoài Nước<i class="fa fa-angle-right"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <!-- Megamenu Filter End -->
-                                            </div>
-
-                                            
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown megamenu filter">
-                                <a href="/news/newslist/idChuyenMucChinh/3" class="dropdown-toggle">Giải Trí<i class="fa flm fa-angle-down"></i></a>
-
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <!-- Megamenu Filter Start -->
-                                                <div class="megamenu--filter">
-                                                    <ul class="nav">
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/5" data-cat="latin-america">Phim Ảnh<i class="fa fa-angle-right"></i></a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="/news/newslist/idChuyenMucPhu/6" data-cat="africa">Âm Nhạc<i class="fa fa-angle-right"></i></a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <!-- Megamenu Filter End -->
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-
+                            {{/each}}
                             <li class="dropdown megamenu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Danh sách chuyên mục<i class="fa flm fa-angle-down"></i></a>
 
                                 <ul class="dropdown-menu">
+                                    {{#each this.listCMC}}
                                     <li class="dropdown">
-                                        <a href="#">Công Nghệ</a>
+                                        <a href="/news/newslist/idChuyenMucChinh/{{idChuyenMucChinh}}">{{TenChuyenMuc}}</a>
 
                                         <ul class="dropdown-menu">
-                                            <li><a href="/news/newslist/idChuyenMucPhu/1">Ứng Dụng</a></li>
-                                            <li><a href="/news/newslist/idChuyenMucPhu/2">Bảo Mật</a></li>
+                                            {{#each ../this.listCMP}}
+                                            {{#IfEquals idChuyenMucChinh ../idChuyenMucChinh}}
+                                            <li><a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}">{{TenChuyenMucPhu}}</a></li>
+                                            {{/IfEquals}}
+                                            {{/each}}
                                         </ul>
                                     </li>
-
-                                    <li class="dropdown">
-                                        <a href="#">Thể Thao</a>
-
-                                        <ul class="dropdown-menu">
-                                            <li><a href="/news/newslist/idChuyenMucPhu/3">Thể Thao Trong Nước</a></li>
-                                            <li><a href="/news/newslist/idChuyenMucPhu/4">Thể Thao Ngoài Nước</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li class="dropdown">
-                                        <a href="#">Giải Trí</a>
-
-                                        <ul class="dropdown-menu">
-                                            <li><a href="/news/newslist/idChuyenMucPhu/5">Phim Ảnh</a></li>
-                                            <li><a href="/news/newslist/idChuyenMucPhu/6">Âm Nhạc</a></li>
-                                        </ul>
-                                    </li>
-
-                                    <li class="dropdown">
-                                        <a href="#">Kinh Doanh</a>
-
-                                        <ul class="dropdown-menu">
-                                            <li><a href="#">US Business</a></li>
-                                            <li><a href="#">Middle East Business</a></li>
-                                            <li><a href="#">Europe Business</a></li>
-                                        </ul>
-                                    </li>
+                                    {{/each}}
                                 </ul>
                             </li>
                         </ul>

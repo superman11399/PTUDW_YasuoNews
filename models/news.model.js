@@ -161,13 +161,85 @@ module.exports = {
         "BaiBaoDuocDuyet.idBaiBao"
       )
       .limit(1);
+      const id7 = db("BaiBao")
+      .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
+      .where("BaiBao.idChuyenMucPhu", "7")
+      .join(
+        "ChuyenMucPhu",
+        "BaiBao.idChuyenMucPhu",
+        "=",
+        "ChuyenMucPhu.idChuyenMucPhu"
+      )
+      .join("PhongVien", "BaiBao.idTacGia", "=", "PhongVien.idPV")
+      .join(
+        "BaiBaoDuocDuyet",
+        "BaiBao.idBaiBao",
+        "=",
+        "BaiBaoDuocDuyet.idBaiBao"
+      )
+      .limit(1);
+      const id8 = db("BaiBao")
+      .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
+      .where("BaiBao.idChuyenMucPhu", "8")
+      .join(
+        "ChuyenMucPhu",
+        "BaiBao.idChuyenMucPhu",
+        "=",
+        "ChuyenMucPhu.idChuyenMucPhu"
+      )
+      .join("PhongVien", "BaiBao.idTacGia", "=", "PhongVien.idPV")
+      .join(
+        "BaiBaoDuocDuyet",
+        "BaiBao.idBaiBao",
+        "=",
+        "BaiBaoDuocDuyet.idBaiBao"
+      )
+      .limit(1);
+      const id9 = db("BaiBao")
+      .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
+      .where("BaiBao.idChuyenMucPhu", "9")
+      .join(
+        "ChuyenMucPhu",
+        "BaiBao.idChuyenMucPhu",
+        "=",
+        "ChuyenMucPhu.idChuyenMucPhu"
+      )
+      .join("PhongVien", "BaiBao.idTacGia", "=", "PhongVien.idPV")
+      .join(
+        "BaiBaoDuocDuyet",
+        "BaiBao.idBaiBao",
+        "=",
+        "BaiBaoDuocDuyet.idBaiBao"
+      )
+      .limit(1);
+      const id10 = db("BaiBao")
+      .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
+      .where("BaiBao.idChuyenMucPhu", "10")
+      .join(
+        "ChuyenMucPhu",
+        "BaiBao.idChuyenMucPhu",
+        "=",
+        "ChuyenMucPhu.idChuyenMucPhu"
+      )
+      .join("PhongVien", "BaiBao.idTacGia", "=", "PhongVien.idPV")
+      .join(
+        "BaiBaoDuocDuyet",
+        "BaiBao.idBaiBao",
+        "=",
+        "BaiBaoDuocDuyet.idBaiBao"
+      )
+      .limit(1);
     return db
       .union(id1, true)
       .union(id2, true)
       .union(id3, true)
       .union(id4, true)
       .union(id5, true)
-      .union(id6, true);
+      .union(id6, true)
+      .union(id7, true)
+      .union(id8, true)
+      .union(id9, true)
+      .union(id10, true);
   },
   LayDanhSachBaiVietTheoChuyenMucPhu(idChuyenMucPhu, offset) {
     return db("BaiBao")

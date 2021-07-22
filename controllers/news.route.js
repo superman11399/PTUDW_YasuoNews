@@ -12,6 +12,8 @@ router.get("/home", async function (req, res) {
   const listMoiNhat = await news.Top10MoiNhat();
   const listXemNhieu = await news.Top10XemNhieuNhat();
   const listChuyenMuc = await news.Top10ChuyenMuc();
+  const listCMC = await news.LayDanhSachChuyenMucChinh();
+  const listCMP = await news.LayDanhSachChuyenMucPhu();
   res.render("home", {
     BaiVietNoiBat: listNoiBat,
     Top10MoiNhat: listMoiNhat,
@@ -21,6 +23,8 @@ router.get("/home", async function (req, res) {
     emptyXemNhieu: listXemNhieu.length === 0,
     emptyMoiNhat: listMoiNhat.length === 0,
     emptyChuyenMuc: listChuyenMuc.length === 0,
+    listCMC: listCMC,
+    listCMP: listCMP,
   });
 });
 
@@ -198,6 +202,8 @@ router.get("/newscontent/:id", async function (req, res) {
   const result = await news.TangView(newsID);
   const listMoiNhat = await news.Top10MoiNhat();
   const listXemNhieu = await news.Top10XemNhieuNhat();
+  const listCMC = await news.LayDanhSachChuyenMucChinh();
+  const listCMP = await news.LayDanhSachChuyenMucPhu();
   // console.log("res", result);
   if (result === null) {
     console.log("ID k ton tai");
@@ -215,6 +221,8 @@ router.get("/newscontent/:id", async function (req, res) {
     emptyList: details === 0,
     Top10MoiNhat: listMoiNhat,
     Top10XemNhieuNhat: listXemNhieu,
+    listCMC: listCMC,
+    listCMP: listCMP,
   });
 });
 
