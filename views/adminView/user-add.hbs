@@ -22,7 +22,7 @@
     $('#username').on('blur', function () {
         const username = $(this).val();
         $.getJSON(`/account/is-available?user=${username}`, function (data) {
-            if (data === false) {
+            if (data === true) {
                 $('#username_alert').attr('hidden', false);
             }
             else {

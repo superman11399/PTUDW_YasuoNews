@@ -81,7 +81,6 @@ router.get("/manage/post/update-content/:id", async function (req, res) {
   let list = [];
 
   if (tagsOfNews[0].length !== 0) {
-    //console.log("list", tagsOfNews[0][0].idTag);
     for (let i = 0; i < tagsOfNews[0].length; i++) {
       list.push(tagsOfNews[0][i].idTag);
     }
@@ -120,6 +119,9 @@ router.post("/manage/post/add", async function (req, res) {
     filename(req, file, cb) {
       console.log("log2", file);
       AnhDaiDien = file.originalname;
+      if (AnhDaiDien==""){
+        AnhDaiDien="no-image.png";
+      }
       cb(null, file.originalname);
     },
   });
@@ -155,8 +157,16 @@ router.post("/manage/post/add", async function (req, res) {
         req.flash("error","Thêm bài viết thất bại");
         res.redirect('/admin/manage/post');
       }
-      for (let index = 0; index < tagList.length; ++index) {
-        const result2 = await newsModel.ThemTagBaiViet(result[0], tagList[index]);
+
+      const id = +result[0];
+      if(typeof(tagList)==='string'){
+        await newsModel.ThemTagBaiViet(id, +tagList);
+      }
+      else{
+        for (let index = 0; index < tagList.length; ++index) {
+          const result2 = await newsModel.ThemTagBaiViet(id, tagList[index]);
+          //console.log("res2", result2);
+        }
       }
       req.flash("success","Thêm bài viết thành công");
       res.redirect('/admin/manage/post');
@@ -172,8 +182,10 @@ router.post("/manage/post/edit", async function (req, res) {
       cb(null, "./public/img/BaiBao");
     },
     filename(req, file, cb) {
-      console.log("log2", file);
       AnhDaiDien = file.originalname;
+      if (AnhDaiDien==""){
+        AnhDaiDien="no-image.png";
+      }
       cb(null, file.originalname);
     },
   });
@@ -189,6 +201,7 @@ router.post("/manage/post/edit", async function (req, res) {
       const now = new Date();
       const NgayCuoiChinhSua = date.format(now, "YYYY-MM-DD HH:mm:ss");
       const tagList = req.body.arrayOfTags;
+      console.log(typeof(tagList));
       const TinhTrangDuyet = req.body.TinhTrangDuyet;
       delete req.body.arrayOfTags;
       const id = req.body.idBaiBao;
@@ -206,7 +219,7 @@ router.post("/manage/post/edit", async function (req, res) {
         },
         baibao
       );
-      console.log("baibao", baibao);
+      console.log("baibao-edit", baibao);
 
       const result = await newsModel.UpdateBaiViet(id, baibao);
       const delres = await newsModel.XoaTagBaiViet(id);
@@ -218,10 +231,16 @@ router.post("/manage/post/edit", async function (req, res) {
         req.flash("error","Chỉnh sửa bài viết thất bại");
         res.redirect('/admin/manage/post');
       }
-      for (let index = 0; index < tagList.length; ++index) {
-        const result2 = await newsModel.ThemTagBaiViet(id, tagList[index]);
-        console.log("res2", result2);
+      if(typeof(tagList)==='string'){
+        await newsModel.ThemTagBaiViet(id, +tagList);
       }
+      else{
+        for (let index = 0; index < tagList.length; ++index) {
+          const result2 = await newsModel.ThemTagBaiViet(id, tagList[index]);
+          //console.log("res2", result2);
+        }
+      }
+
       req.flash("success","Chỉnh sửa bài viết thành công");
       res.redirect('/admin/manage/post');
     }
