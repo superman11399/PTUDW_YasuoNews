@@ -77,10 +77,15 @@ router.post("/post", function (req, res) {
         req.flash("errorDelete", "Thêm bài viết thất bại");
         res.redirect("/writer/waiting");
       }
-      for (let index = 0; index < tagList.length; ++index) {
-        const result2 = await news.ThemTagBaiViet(result[0], tagList[index]);
-        // console.log("res2", result2);
+      if (typeof tagList === "string") {
+        await news.ThemTagBaiViet(result[0], +tagList);
+      } else {
+        for (let index = 0; index < tagList.length; ++index) {
+          const result2 = await news.ThemTagBaiViet(result[0], tagList[index]);
+          // console.log("res2", result2);
+        }
       }
+
       req.flash("successPost", "Thêm bài viết thành công");
       res.redirect("/writer/waiting");
     }
@@ -207,11 +212,15 @@ router.post("/edit", async function (req, res) {
         req.flash("errorDelete", "Chỉnh sửa bài viết thất bại");
         res.redirect("/writer/waiting");
       }
-
-      for (let index = 0; index < tagList.length; ++index) {
-        const result2 = await news.ThemTagBaiViet(id, tagList[index]);
-        console.log("res2", result2);
+      if (typeof tagList === "string") {
+        await news.ThemTagBaiViet(id, +tagList);
+      } else {
+        for (let index = 0; index < tagList.length; ++index) {
+          const result2 = await news.ThemTagBaiViet(id, tagList[index]);
+          console.log("res2", result2);
+        }
       }
+
       req.flash("successPost", "Chỉnh sửa bài viết thành công");
       res.redirect("/writer/waiting");
     }
