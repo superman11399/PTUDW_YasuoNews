@@ -6,6 +6,7 @@ const newsModel = require("../models/news.model");
 const cateModel = require("../models/category.model");
 const tagModel = require("../models/tag.model");
 const bcrypt = require("bcryptjs");
+const fs = require("fs-extra");
 
 const router = express.Router();
 
@@ -93,8 +94,7 @@ router.get("/manage/post/update-content/:id", async function (req, res) {
   } else if (+article.idTacGia != +idUser) {
     req.flash("error", "Chỉnh sửa bài viết thất bại");
     res.redirect("/admin/manage/post");
-  }
-  else {
+  } else {
     res.render("adminView/post-add", {
       actionpost: "/admin/manage/post/edit",
       layout: "admin.hbs",
@@ -104,7 +104,7 @@ router.get("/manage/post/update-content/:id", async function (req, res) {
       tags: tags,
       listSub: listSub,
       tagsOfNews: list,
-      flag: true
+      flag: true,
     });
   }
 });
@@ -119,9 +119,6 @@ router.post("/manage/post/add", async function (req, res) {
     filename(req, file, cb) {
       console.log("log2", file);
       AnhDaiDien = file.originalname;
-      if (AnhDaiDien==""){
-        AnhDaiDien="no-image.png";
-      }
       cb(null, file.originalname);
     },
   });
@@ -140,6 +137,7 @@ router.post("/manage/post/add", async function (req, res) {
       delete req.body.arrayOfTags;
       let baibao = req.body;
       delete baibao.idBaiBao;
+      console.log("avatar", typeof AnhDaiDien);
       baibao = Object.assign(
         {
           idTacGia,
@@ -151,25 +149,33 @@ router.post("/manage/post/add", async function (req, res) {
       );
       console.log("baibao", baibao);
       const result = await newsModel.ThemBaiViet(baibao);
-      if(TinhTrangDuyet === "Đã xuất bản")
+      if (TinhTrangDuyet === "Đã xuất bản") {
         await newsModel.themVaoBaiXuatBan(result);
+      }
+
+      var oldPath = "public\\img\\BaiBao\\" + AnhDaiDien;
+      var newPath = "public\\img\\BaiBao\\" + result + "\\" + AnhDaiDien;
+
+      fs.move(oldPath, newPath, function (err) {
+        if (err) return console.error(err);
+        console.log("success move file!");
+      });
+
       if (result === null) {
-        req.flash("error","Thêm bài viết thất bại");
-        res.redirect('/admin/manage/post');
+        req.flash("error", "Thêm bài viết thất bại");
+        res.redirect("/admin/manage/post");
       }
 
       const id = +result[0];
-      if(typeof(tagList)==='string'){
+      if (typeof tagList === "string") {
         await newsModel.ThemTagBaiViet(id, +tagList);
-      }
-      else{
+      } else {
         for (let index = 0; index < tagList.length; ++index) {
           const result2 = await newsModel.ThemTagBaiViet(id, tagList[index]);
-          //console.log("res2", result2);
         }
       }
-      req.flash("success","Thêm bài viết thành công");
-      res.redirect('/admin/manage/post');
+      req.flash("success", "Thêm bài viết thành công");
+      res.redirect("/admin/manage/post");
     }
   });
 });
@@ -183,8 +189,8 @@ router.post("/manage/post/edit", async function (req, res) {
     },
     filename(req, file, cb) {
       AnhDaiDien = file.originalname;
-      if (AnhDaiDien==""){
-        AnhDaiDien="no-image.png";
+      if (AnhDaiDien == "") {
+        AnhDaiDien = "no-image.png";
       }
       cb(null, file.originalname);
     },
@@ -201,13 +207,20 @@ router.post("/manage/post/edit", async function (req, res) {
       const now = new Date();
       const NgayCuoiChinhSua = date.format(now, "YYYY-MM-DD HH:mm:ss");
       const tagList = req.body.arrayOfTags;
-      console.log(typeof(tagList));
       const TinhTrangDuyet = req.body.TinhTrangDuyet;
       delete req.body.arrayOfTags;
       const id = req.body.idBaiBao;
       let baibao = req.body;
       if (AnhDaiDien === "") {
         AnhDaiDien = oldAvatar;
+      } else {
+        var oldPath = "public\\img\\BaiBao\\" + AnhDaiDien;
+        var newPath = "public\\img\\BaiBao\\" + id + "\\" + AnhDaiDien;
+        console.log("path", oldPath, newPath);
+
+        fs.move(oldPath, newPath, function (err) {
+          if (err) return console.error(err);
+        });
       }
       baibao = Object.assign(
         {
@@ -223,26 +236,24 @@ router.post("/manage/post/edit", async function (req, res) {
 
       const result = await newsModel.UpdateBaiViet(id, baibao);
       const delres = await newsModel.XoaTagBaiViet(id);
-      if(TinhTrangDuyet === "Đã xuất bản")
+      if (TinhTrangDuyet === "Đã xuất bản")
         await newsModel.themVaoBaiXuatBan(id);
 
       if (result === null) {
         console.log("K the update bai");
-        req.flash("error","Chỉnh sửa bài viết thất bại");
-        res.redirect('/admin/manage/post');
+        req.flash("error", "Chỉnh sửa bài viết thất bại");
+        res.redirect("/admin/manage/post");
       }
-      if(typeof(tagList)==='string'){
+      if (typeof tagList === "string") {
         await newsModel.ThemTagBaiViet(id, +tagList);
-      }
-      else{
+      } else {
         for (let index = 0; index < tagList.length; ++index) {
           const result2 = await newsModel.ThemTagBaiViet(id, tagList[index]);
-          //console.log("res2", result2);
         }
       }
 
-      req.flash("success","Chỉnh sửa bài viết thành công");
-      res.redirect('/admin/manage/post');
+      req.flash("success", "Chỉnh sửa bài viết thành công");
+      res.redirect("/admin/manage/post");
     }
   });
 });
@@ -256,7 +267,10 @@ router.get("/manage/post/content/:id", async function (req, res) {
   const tagsOfArticle = await newsModel.getAllTagWithDetail();
   var canUpdate = false;
 
-  if((+req.session.authUser.idNguoiDung === +details.idTacGia)&&(details.TinhTrangDuyet != "Đã xuất bản"))
+  if (
+    +req.session.authUser.idNguoiDung === +details.idTacGia &&
+    details.TinhTrangDuyet != "Đã xuất bản"
+  )
     canUpdate = true;
 
   res.render("adminView/post-detail", {
@@ -267,34 +281,34 @@ router.get("/manage/post/content/:id", async function (req, res) {
     listSubCate: subCateList,
     listTagOfArticle: tagsOfArticle,
     listTag: tags,
-    flag: canUpdate
+    flag: canUpdate,
   });
 });
 
 router.post("/manage/post/del", async function (req, res) {
   const id = req.body.id;
-  if (typeof id !== "undefined"){
+  if (typeof id !== "undefined") {
     const result = await newsModel.del(id);
-    if(result){
-      req.flash("success","Xóa bài viết thành công");
-    }else{
-      req.flash("error","Xóa bài viết thất bại");
+    if (result) {
+      req.flash("success", "Xóa bài viết thành công");
+    } else {
+      req.flash("error", "Xóa bài viết thất bại");
     }
-  } 
+  }
   res.redirect("/admin/manage/post/");
 });
 
 router.post("/manage/post/delCom", async function (req, res) {
   const id = req.body.id;
   const url = req.headers.referer || "/admin/manage/post/";
-  if (typeof id !== "undefined"){
+  if (typeof id !== "undefined") {
     const result = await newsModel.delCom(id);
-    if(result){
-      req.flash("success","Xóa bình luận thành công");
-    }else{
-      req.flash("error","Xóa bình luận thất bại");
+    if (result) {
+      req.flash("success", "Xóa bình luận thành công");
+    } else {
+      req.flash("error", "Xóa bình luận thất bại");
     }
-  } 
+  }
   res.redirect(url);
 });
 
@@ -303,14 +317,14 @@ router.post("/manage/post/update", async function (req, res) {
   const subID = req.body.subID;
   const status = req.body.newStatus;
   const url = req.headers.referer || "/admin/manage/post/";
-  if (typeof id !== "undefined"){
+  if (typeof id !== "undefined") {
     const result = await newsModel.updatePost(id, subID, status);
-    if(result){
-      req.flash("success","Cập nhật bài viết thành công");
-    }else{
-      req.flash("error","Cập nhật bài viết thất bại");
+    if (result) {
+      req.flash("success", "Cập nhật bài viết thành công");
+    } else {
+      req.flash("error", "Cập nhật bài viết thất bại");
     }
-  } 
+  }
   res.redirect(url);
 });
 
@@ -331,19 +345,19 @@ router.get("/manage/tag", async function (req, res) {
 });
 
 router.post("/manage/tag/delTag", async function (req, res) {
-  if (typeof req.body.id !== "undefined"){
+  if (typeof req.body.id !== "undefined") {
     const result = await tagModel.delTag(req.body.id);
-    if(result){
-      req.flash("success","Xóa tag thành công");
-    }else{
-      req.flash("error","Xóa tag thất bại");
+    if (result) {
+      req.flash("success", "Xóa tag thành công");
+    } else {
+      req.flash("error", "Xóa tag thất bại");
     }
-  } 
+  }
   res.redirect("/admin/manage/tag");
 });
 
 router.post("/manage/tag/rename", async function (req, res) {
-  if (typeof req.body.id !== "undefined"){
+  if (typeof req.body.id !== "undefined") {
     await tagModel.patch(
       "idTag",
       req.body.id,
@@ -351,10 +365,10 @@ router.post("/manage/tag/rename", async function (req, res) {
       "TenTag",
       req.body.newTagName
     );
-    if(result){
-      req.flash("success","Sửa tên tag thành công");
-    }else{
-      req.flash("error","Sửa tên tag thất bại");
+    if (result) {
+      req.flash("success", "Sửa tên tag thành công");
+    } else {
+      req.flash("error", "Sửa tên tag thất bại");
     }
   }
 
@@ -367,10 +381,10 @@ router.post("/manage/tag/add", async function (req, res) {
       TenTag: req.body.newTag,
     };
   const result = await tagModel.add(tag, "tag");
-  if(result){
-    req.flash("success","Thêm tag thành công");
-  }else{
-    req.flash("error","Thêm tag thất bại");
+  if (result) {
+    req.flash("success", "Thêm tag thành công");
+  } else {
+    req.flash("error", "Thêm tag thất bại");
   }
   res.redirect("/admin/manage/tag");
 });
@@ -419,10 +433,10 @@ router.post("/manage/user/add", async function (req, res) {
 
   const url = req.session.retUrl || "/admin/manage/user";
   const result = await userModel.addUserWithDetail(user, cateID);
-  if(result){
-    req.flash("success","Thêm người dùng thành công");
-  }else{
-    req.flash("error","Thêm người dùng thất bại");
+  if (result) {
+    req.flash("success", "Thêm người dùng thành công");
+  } else {
+    req.flash("error", "Thêm người dùng thất bại");
   }
   res.redirect(url);
 });
@@ -494,12 +508,11 @@ router.get("/manage/user/editor", async function (req, res) {
 });
 
 router.post("/manage/category/delMain", async function (req, res) {
-  if (typeof req.body.id !== "undefined"){
+  if (typeof req.body.id !== "undefined") {
     const result = await cateModel.delMainCate(+req.body.id);
-    if(result){
+    if (result) {
       req.flash("success", "Xóa chuyên mục chính thành công");
-    }    
-    else{
+    } else {
       req.flash("error", "Xóa chuyên mục chính thắt bại");
     }
   }
@@ -507,15 +520,15 @@ router.post("/manage/category/delMain", async function (req, res) {
 });
 
 router.post("/manage/category/delSub", async function (req, res) {
-  if (typeof req.body.id !== "undefined"){
+  if (typeof req.body.id !== "undefined") {
     const result = await cateModel.delSubCate(+req.body.id);
-    if(result){
-      req.flash("success","Xóa chuyên mục phụ thành công");
-    }else{
-      req.flash("error","Xóa chuyên mục phụ thất bại");
+    if (result) {
+      req.flash("success", "Xóa chuyên mục phụ thành công");
+    } else {
+      req.flash("error", "Xóa chuyên mục phụ thất bại");
     }
   }
-    
+
   res.redirect("/admin/manage/category");
 });
 
@@ -525,11 +538,15 @@ router.post("/manage/category/renameMain", async function (req, res) {
       id: req.body.id,
       TenChuyenMuc: req.body.name,
     };
-    const result = await cateModel.patchRow(row, "idChuyenMucChinh", "chuyenmucchinh");
-    if(result){
-      req.flash("success","Đổi tên chuyên mục thành công");
-    }else{
-      req.flash("error","Đổi tên chuyên mục thất bại");
+    const result = await cateModel.patchRow(
+      row,
+      "idChuyenMucChinh",
+      "chuyenmucchinh"
+    );
+    if (result) {
+      req.flash("success", "Đổi tên chuyên mục thành công");
+    } else {
+      req.flash("error", "Đổi tên chuyên mục thất bại");
     }
   }
   res.redirect("/admin/manage/category");
@@ -542,11 +559,15 @@ router.post("/manage/category/patchSub", async function (req, res) {
       TenChuyenMucPhu: req.body.name,
       idChuyenMucChinh: req.body.parentID,
     };
-    const result = await cateModel.patchRow(row, "idChuyenMucPhu", "chuyenmucphu");
-    if(result){
-      req.flash("success","Chỉnh sửa chuyên mục phụ thành công");
-    }else{
-      req.flash("error","Chỉnh sửa chuyên mục phụ thất bại");
+    const result = await cateModel.patchRow(
+      row,
+      "idChuyenMucPhu",
+      "chuyenmucphu"
+    );
+    if (result) {
+      req.flash("success", "Chỉnh sửa chuyên mục phụ thành công");
+    } else {
+      req.flash("error", "Chỉnh sửa chuyên mục phụ thất bại");
     }
   }
   res.redirect("/admin/manage/category");
@@ -557,10 +578,10 @@ router.post("/manage/category/addMain", async function (req, res) {
     TenChuyenMuc: req.body.name,
   };
   const result = await cateModel.add(row, "chuyenmucchinh");
-  if(result){
-    req.flash("success","Thêm chuyên mục thành công");
-  }else{
-    req.flash("error","Thêm chuyên mục thất bại");
+  if (result) {
+    req.flash("success", "Thêm chuyên mục thành công");
+  } else {
+    req.flash("error", "Thêm chuyên mục thất bại");
   }
   res.redirect("/admin/manage/category");
 });
@@ -571,51 +592,54 @@ router.post("/manage/category/addSub", async function (req, res) {
     idChuyenMucChinh: +req.body.newSubCate_parent,
   };
   const result = await cateModel.add(row, "chuyenmucphu");
-  if(result){
-    req.flash("success","Thêm chuyên mục phụ thành công");
-  }else{
-    req.flash("error","Thêm chuyên mục phụ thất bại");
+  if (result) {
+    req.flash("success", "Thêm chuyên mục phụ thành công");
+  } else {
+    req.flash("error", "Thêm chuyên mục phụ thất bại");
   }
   res.redirect("/admin/manage/category");
 });
 
 router.post("/manage/user/delUser", async function (req, res) {
-  if (typeof req.body.id !== "undefined"){
+  if (typeof req.body.id !== "undefined") {
     const result = await userModel.delUser(+req.body.id, req.body.type);
-    if(result){
-      req.flash("success","Xóa người dùng thành công");
-    }else{
-      req.flash("error","Xóa người dùng thất bại");
+    if (result) {
+      req.flash("success", "Xóa người dùng thành công");
+    } else {
+      req.flash("error", "Xóa người dùng thất bại");
     }
   }
-    
+
   res.redirect("/admin/manage/user");
 });
 
 router.post("/manage/user/patchRole", async function (req, res) {
-  if (typeof req.body.id !== "undefined"){
-    const result = await userModel.patchRole(req.body.id, req.body.role, req.body.oldrole);
-    if(result){
-      req.flash("success","Thay đổi vai trò người dùng thành công");
-    }else{
-      req.flash("error","Thay đổi vai trò người dùng thất bại");
+  if (typeof req.body.id !== "undefined") {
+    const result = await userModel.patchRole(
+      req.body.id,
+      req.body.role,
+      req.body.oldrole
+    );
+    if (result) {
+      req.flash("success", "Thay đổi vai trò người dùng thành công");
+    } else {
+      req.flash("error", "Thay đổi vai trò người dùng thất bại");
     }
   }
-    
 
   res.redirect("/admin/manage/user");
 });
 
 router.post("/manage/user/renewal", async function (req, res) {
-  if (typeof req.body.id !== "undefined"){
+  if (typeof req.body.id !== "undefined") {
     const result = await userModel.renewSubs(req.body.id);
-    if(result){
-      req.flash("success","Gia hạn người dùng thành công");
-    }else{
-      req.flash("error","Gia hạn người dùng thất bại");
+    if (result) {
+      req.flash("success", "Gia hạn người dùng thành công");
+    } else {
+      req.flash("error", "Gia hạn người dùng thất bại");
     }
   }
-    
+
   res.redirect("/admin/manage/user/subscriber");
 });
 
