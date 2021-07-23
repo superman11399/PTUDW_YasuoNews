@@ -40,7 +40,7 @@
             $(`#status option:contains({{article.TinhTrangDuyet}})`).attr('selected', true);
             if ($(`#status`).val() === 'Đã xuất bản')
                 $(`#status`).attr('disabled', 'disabled');
-            $(`#avatar`).attr("src", `/img/BaiBao/{{article.AnhDaiDien}}`);
+            $(`#avatar`).attr("src", `/img/BaiBao/{{article.idBaiBao}}/{{article.AnhDaiDien}}`);
         }
     });
 </script>
