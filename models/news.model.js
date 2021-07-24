@@ -602,9 +602,25 @@ module.exports = {
     return db("binhluan").where("idBL", id).del();
   },
 
-  themVaoBaiXuatBan(id){
-    const query = `insert into baibaoduocduyet value(${id},NOW(),0)`;
-    return db.raw(query);
+  async themVaoBaiXuatBan(id, status, NgayDang){
+    const exist = await db("baibaoduocduyet").where("idBaiBao",id);
+    if(exist.length===0){
+      if(status==="Đã xuất bản"){
+        const query = `insert into baibaoduocduyet value(${id},NOW(),0)`;
+        return db.raw(query);
+      }else{
+        const baibao = {idBaiBao: id, NgayDang};
+        return db("baibaoduocduyet").insert(baibao);
+      }
+    }
+    else{
+      if(status==="Đã xuất bản"){
+        const query = `update baibaoduocduyet set NgayDang = NOW() where idBaiBao = ${id}`;
+        return db.raw(query);
+      }else{
+        return db("baibaoduocduyet").where("idBaiBao",id).update("NgayDang",NgayDang);
+      }
+    }
   },
 
   async updatePost(id, subID, status) {

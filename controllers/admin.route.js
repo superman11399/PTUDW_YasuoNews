@@ -103,6 +103,7 @@ router.get("/manage/post/update-content/:id", async function (req, res) {
       article,
       tags: tags,
       listSub: listSub,
+      NgayDang: NgayDang,
       tagsOfNews: list,
       flag: true,
     });
@@ -134,7 +135,9 @@ router.post("/manage/post/add", async function (req, res) {
       const NgayCuoiChinhSua = date.format(now, "YYYY-MM-DD HH:mm:ss");
       const tagList = req.body.arrayOfTags;
       const TinhTrangDuyet = req.body.TinhTrangDuyet;
+      const NgayDang = req.body.NgayDang;
       delete req.body.arrayOfTags;
+      delete req.body.NgayDang;
       let baibao = req.body;
       delete baibao.idBaiBao;
       console.log("avatar", typeof AnhDaiDien);
@@ -149,9 +152,9 @@ router.post("/manage/post/add", async function (req, res) {
       );
       console.log("baibao", baibao);
       const result = await newsModel.ThemBaiViet(baibao);
-      if (TinhTrangDuyet === "Đã xuất bản") {
-        await newsModel.themVaoBaiXuatBan(result);
-      }
+
+      if (TinhTrangDuyet === "Đã xuất bản" || TinhTrangDuyet === "Đã duyệt - Chờ xuất bản")
+        await newsModel.themVaoBaiXuatBan(result, TinhTrangDuyet, NgayDang);
 
       var oldPath = "public\\img\\BaiBao\\" + AnhDaiDien;
       var newPath = "public\\img\\BaiBao\\" + result + "\\" + AnhDaiDien;
@@ -208,7 +211,9 @@ router.post("/manage/post/edit", async function (req, res) {
       const NgayCuoiChinhSua = date.format(now, "YYYY-MM-DD HH:mm:ss");
       const tagList = req.body.arrayOfTags;
       const TinhTrangDuyet = req.body.TinhTrangDuyet;
+      const NgayDang = req.body.NgayDang;
       delete req.body.arrayOfTags;
+      delete req.body.NgayDang;
       const id = req.body.idBaiBao;
       let baibao = req.body;
       if (AnhDaiDien === "") {
@@ -236,14 +241,15 @@ router.post("/manage/post/edit", async function (req, res) {
 
       const result = await newsModel.UpdateBaiViet(id, baibao);
       const delres = await newsModel.XoaTagBaiViet(id);
-      if (TinhTrangDuyet === "Đã xuất bản")
-        await newsModel.themVaoBaiXuatBan(id);
+      if (TinhTrangDuyet === "Đã xuất bản" || TinhTrangDuyet === "Đã duyệt - Chờ xuất bản")
+        await newsModel.themVaoBaiXuatBan(id, TinhTrangDuyet, NgayDang);
 
       if (result === null) {
         console.log("K the update bai");
         req.flash("error", "Chỉnh sửa bài viết thất bại");
         res.redirect("/admin/manage/post");
       }
+
       if (typeof tagList === "string") {
         await newsModel.ThemTagBaiViet(id, +tagList);
       } else {
