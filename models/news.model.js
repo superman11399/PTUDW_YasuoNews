@@ -633,6 +633,12 @@ module.exports = {
       .update("TinhTrangDuyet", status);
   },
 
+  async layNgayDang(id){
+    const row = await db("baibaoduocduyet").where("idBaiBao",id).select("NgayDang");
+    if(row.length===0) return null;
+    return row[0].NgayDang;
+  },
+
   async getDetailOfPostForAdmin(id) {
     row = await db("baibao").where("idBaiBao",id).leftJoin("chuyenmucphu","baibao.idChuyenMucPhu","=","chuyenmucphu.idChuyenMucPhu").leftJoin("phongvien","idTacGia","=","idPV");
     if(row.length===0)
