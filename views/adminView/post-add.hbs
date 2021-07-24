@@ -5,6 +5,8 @@
 {{/section}}
 
 {{#section 'js'}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"
+    integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
 <script src="/js/writer-post.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
 <script>$('.chosen').chosen();</script>
@@ -31,16 +33,30 @@
 
 <script>
     $(document).ready(function () {
-        if ({{flag}}) {
-            $(`#title`).val(`{{article.TieuDe}}`);
-            $(`#abstract`).text(`{{article.TomTat}}`);
-            $(`#content`).html(`{{article.NoiDungChiTiet}}`);
-            $(`#categorySub option[value={{article.idChuyenMucPhu}}]`).attr('selected', true);
-            $(`#isPremiumArticle option[value={{article.Premium}}]`).attr('selected', true);
-            $(`#status option:contains({{article.TinhTrangDuyet}})`).attr('selected', true);
-            if ($(`#status`).val() === 'Đã xuất bản')
-                $(`#status`).attr('disabled', 'disabled');
-            $(`#avatar`).attr("src", `/img/BaiBao/{{article.idBaiBao}}/{{article.AnhDaiDien}}`);
+        if ({{ flag }}) {
+        $(`#title`).val(`{{article.TieuDe}}`);
+        $(`#abstract`).text(`{{article.TomTat}}`);
+        $(`#content`).html(`{{article.NoiDungChiTiet}}`);
+        $(`#categorySub option[value={{article.idChuyenMucPhu}}]`).attr('selected', true);
+        $(`#isPremiumArticle option[value={{article.Premium}}]`).attr('selected', true);
+        $(`#status option:contains({{article.TinhTrangDuyet}})`).attr('selected', true);
+        if ($(`#status`).val() === 'Đã xuất bản'){
+            $(`#status`).attr('disabled', 'disabled');
+        }
+        if ($(`#status`).val() === 'Đã duyệt - Chờ xuất bản'){
+            $('#ngaydang').attr('disabled', false);
+        }         
+        $(`#avatar`).attr("src", `/img/BaiBao/{{article.idBaiBao}}/{{article.AnhDaiDien}}`);
+        }
+    });
+
+    $('#status').on('blur', function () {
+        const status = $(this).val();
+        if (status === "Đã duyệt - Chờ xuất bản") {
+            $('#ngaydang').attr('disabled', false);
+        }
+        else {
+            $('#ngaydang').attr('disabled', 'disabled');
         }
     });
 </script>
@@ -93,9 +109,9 @@
                         <input type="text" id="mode" value="create" hidden>
                     </div>
                     <div class="col-md-4">
-                        <div class="row justify-content-center">
-                            <img id="avatar" alt="User Pic" src="/img/no-image.jpg"
-                                class="rounded img-fluid" style="width: 90%;">
+                        <div class="row justify-content-center mt-3">
+                            <img id="avatar" alt="User Pic" src="/img/no-image.jpg" class="rounded img-fluid"
+                                style="width: 90%;">
                             <input type="file" accept="image/*" name="file" id="file" hidden>
                         </div>
                         <div class="row justify-content-center my-3">
@@ -104,10 +120,10 @@
                         </div>
                         <div class="card">
                             <div class="card-header bg-info">
-                                <h5 class="text-dark p-1">Đăng bài viết</h5>
+                                <h5 class="text-dark p-1 my-auto">Đăng bài viết</h5>
                             </div>
                             <div class="card-body">
-                                <div class="form-group row">
+                                <div class="row">
                                     <label for="categorySub" class="col-12 col-form-label">Chọn chuyên mục</label>
                                     <div class="col-12">
                                         <select id="categorySub" name="idChuyenMucPhu" class="custom-select"
@@ -120,7 +136,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                                <div class="row">
                                     <label for="isPremiumArticle" class="col-12 col-form-label">Set Premium</label>
                                     <div class="col">
                                         <select id="isPremiumArticle" name="Premium" class="custom-select"
@@ -132,7 +148,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                                <div class="row">
                                     <label for="select" class="col-12 col-form-label">Chọn tag</label>
                                     <div class="col">
                                         <select class="form-control form-group chosen" multiple tabindex="4"
@@ -153,7 +169,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                                <div class="row">
                                     <label for="newStatus" class="col-12 col-form-label">Chọn lựa tình trạng bài
                                         báo</label>
                                     <div class="col">
@@ -164,6 +180,14 @@
                                             <option value="Đã duyệt - Chờ xuất bản">Đã duyệt - Chờ xuất bản</option>
                                             <option value="Bị từ chối">Bị từ chối</option>
                                         </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <label for="NgayDang" class="col-12 col-form-label">Chọn ngày đăng</label>
+                                    <div class="col">
+                                        <input id="ngaydang" disabled type="date" name="NgayDang"
+                                            class="form-control form-group" required>
                                     </div>
                                 </div>
 
