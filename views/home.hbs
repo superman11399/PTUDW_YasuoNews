@@ -6,8 +6,8 @@
       <h2>Tin mới</h2>
       <span>(Cập nhật 10 phút trước)</span>
     </div>
-
-    <div class="news-updates--list" data-marquee="true">
+    <div class="news-updates--list" >
+      <marquee>
       <ul class="nav">
         {{#each this.Top10MoiNhat}}
           <li>
@@ -17,6 +17,7 @@
           </li>
         {{/each}}
       </ul>
+      </marquee>
     </div>
   </div>
 </div>
@@ -125,7 +126,6 @@
           <div class="row">
             <!-- Bài Viết theo Chuyên Mục Start -->
             {{#each this.Top10ChuyenMuc}}
-
               <div class="col-md-6 ptop--30 pbottom--30">
                 <!-- Post Items Title Start -->
                 <div class="post--items-title" data-ajax="tab">
@@ -201,8 +201,67 @@
                 <!-- Post Items End -->
               </div>
             {{/each}}
-
             <!-- Bài Viết theo Chuyên Mục End -->
+
+            <!-- Video hot Chuyên Mục Start -->
+              <div class="col-md-12 ptop--30 pbottom--30">
+                <!-- Post Items Title Start -->
+                <div class="post--items-title" data-ajax="tab">
+                  <h2
+                    href="#"
+                    class="h4"
+                  >VIDEO HOT TRONG NGÀY</h2>
+                </div>
+                <!-- Post Items Title End -->
+
+                <!-- Post Items Start -->
+                <div
+                  class="post--items post--items-2"
+                >
+                <ul class="nav row gutter--15">
+                    <li class="col-xs-12">
+                          <iframe
+                              style="width: 100%;height: 500px;"
+                              src="https://www.youtube.com/embed/I_VTQP4UPWE"
+                          ></iframe>
+                
+                      <!-- Post Item End -->
+                    </li>
+                      <!-- Divider Start -->
+                      <hr class="divider" />
+                      <!-- Divider End -->
+                    </li>
+                  </ul>
+                  </div>
+              </div>
+             <!-- Video hot Chuyên Mục Start -->
+              <div class="col-md-12 ptop--30 pbottom--30">
+                <!-- Post Items Title Start -->
+                <div class="post--items-title" data-ajax="tab">
+                  <h2
+                    href="#"
+                    class="h4"
+                  >MUSIC HOT TRONG NGÀY</h2>
+                </div>
+                <!-- Post Items Title End -->
+
+                <!-- Post Items Start -->
+                <div
+                  class="post--items post--items-2"
+                >
+                <ul class="nav row gutter--15">
+                    <li class="col-xs-12">
+                          <iframe width="100%" height="500" src="https://www.youtube.com/embed/a80UUwVfUjA?list=RDa80UUwVfUjA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                
+                      <!-- Post Item End -->
+                    </li>
+                      <!-- Divider Start -->
+                      <hr class="divider" />
+                      <!-- Divider End -->
+                    </li>
+                  </ul>
+                  </div>
+              </div>
           </div>
         </div>
       </div>
