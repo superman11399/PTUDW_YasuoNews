@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const date = require("date-and-time");
+const moment = require('moment');
 const userModel = require("../models/user.model");
 const newsModel = require("../models/news.model");
 const cateModel = require("../models/category.model");
@@ -78,6 +79,8 @@ router.get("/manage/post/update-content/:id", async function (req, res) {
   const tags = await newsModel.LayDanhSachTag();
   const listSub = await newsModel.LayDanhSachChuyenMucPhu();
   const article = await newsModel.ChiTietBaiVietVer2(idBaiBao);
+  var rawNgayDang = await newsModel.layNgayDang(idBaiBao);
+  NgayDang = moment(rawNgayDang,'YYYY-MM-DDTHH:mm:ss.SSS').format('DD/MM/YYYY HH:mm');
   let tagsOfNews = await newsModel.LayDanhSachTagCuaBaiViet(idBaiBao);
   let list = [];
 
@@ -118,7 +121,6 @@ router.post("/manage/post/add", async function (req, res) {
       cb(null, "./public/img/BaiBao");
     },
     filename(req, file, cb) {
-      console.log("log2", file);
       AnhDaiDien = file.originalname;
       cb(null, file.originalname);
     },
@@ -130,17 +132,15 @@ router.post("/manage/post/add", async function (req, res) {
     if (err) {
       console.log(err);
     } else {
-      console.log(req.body);
       const now = new Date();
       const NgayCuoiChinhSua = date.format(now, "YYYY-MM-DD HH:mm:ss");
       const tagList = req.body.arrayOfTags;
       const TinhTrangDuyet = req.body.TinhTrangDuyet;
-      const NgayDang = req.body.NgayDang;
+      const NgayDang = moment(req.body.NgayDang, 'DD/MM/YYYYTHH:mm').format('YYYY-MM-DD HH:mm:ss');
       delete req.body.arrayOfTags;
       delete req.body.NgayDang;
       let baibao = req.body;
       delete baibao.idBaiBao;
-      console.log("avatar", typeof AnhDaiDien);
       baibao = Object.assign(
         {
           idTacGia,
@@ -150,7 +150,6 @@ router.post("/manage/post/add", async function (req, res) {
         },
         baibao
       );
-      console.log("baibao", baibao);
       const result = await newsModel.ThemBaiViet(baibao);
 
       if (TinhTrangDuyet === "Đã xuất bản" || TinhTrangDuyet === "Đã duyệt - Chờ xuất bản")
@@ -211,7 +210,7 @@ router.post("/manage/post/edit", async function (req, res) {
       const NgayCuoiChinhSua = date.format(now, "YYYY-MM-DD HH:mm:ss");
       const tagList = req.body.arrayOfTags;
       const TinhTrangDuyet = req.body.TinhTrangDuyet;
-      const NgayDang = req.body.NgayDang;
+      const NgayDang = moment(req.body.NgayDang, 'DD/MM/YYYYTHH:mm').format('YYYY-MM-DD HH:mm:ss');
       delete req.body.arrayOfTags;
       delete req.body.NgayDang;
       const id = req.body.idBaiBao;
@@ -221,7 +220,6 @@ router.post("/manage/post/edit", async function (req, res) {
       } else {
         var oldPath = "public\\img\\BaiBao\\" + AnhDaiDien;
         var newPath = "public\\img\\BaiBao\\" + id + "\\" + AnhDaiDien;
-        console.log("path", oldPath, newPath);
 
         fs.move(oldPath, newPath, function (err) {
           if (err) return console.error(err);
@@ -237,7 +235,6 @@ router.post("/manage/post/edit", async function (req, res) {
         },
         baibao
       );
-      console.log("baibao-edit", baibao);
 
       const result = await newsModel.UpdateBaiViet(id, baibao);
       const delres = await newsModel.XoaTagBaiViet(id);

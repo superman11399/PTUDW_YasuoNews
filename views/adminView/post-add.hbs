@@ -1,12 +1,14 @@
 {{#section 'css'}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.min.css">
-
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
 <script src="https://cdn.ckeditor.com/4.16.1/standard-all/ckeditor.js"></script>
 {{/section}}
 
 {{#section 'js'}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"
     integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 <script src="/js/writer-post.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
 <script>$('.chosen').chosen();</script>
@@ -32,7 +34,13 @@
 </script>
 
 <script>
+    $('#ngaydang').datetimepicker({
+        format: 'd/m/Y H:i',
+        mask: true
+    });
+
     $(document).ready(function () {
+        $('#ngaydang').attr('disabled', 'disabled');
         if ({{ flag }}) {
         $(`#title`).val(`{{article.TieuDe}}`);
         $(`#abstract`).text(`{{article.TomTat}}`);
@@ -40,14 +48,16 @@
         $(`#categorySub option[value={{article.idChuyenMucPhu}}]`).attr('selected', true);
         $(`#isPremiumArticle option[value={{article.Premium}}]`).attr('selected', true);
         $(`#status option:contains({{article.TinhTrangDuyet}})`).attr('selected', true);
-        if ($(`#status`).val() === 'Đã xuất bản'){
+        if ($(`#status`).val() === 'Đã xuất bản') {
             $(`#status`).attr('disabled', 'disabled');
         }
-        if ($(`#status`).val() === 'Đã duyệt - Chờ xuất bản'){
+        if ($(`#status`).val() === 'Đã duyệt - Chờ xuất bản') {
             $('#ngaydang').attr('disabled', false);
-        }         
-        $(`#avatar`).attr("src", `/img/BaiBao/{{article.idBaiBao}}/{{article.AnhDaiDien}}`);
         }
+        $(`#avatar`).attr("src", `/img/BaiBao/{{article.idBaiBao}}/{{article.AnhDaiDien}}`);
+        $('#ngaydang').val('{{NgayDang}}');
+        console.log('{{NgayDang}}');
+    }
     });
 
     $('#status').on('blur', function () {
@@ -186,8 +196,8 @@
                                 <div class="row">
                                     <label for="NgayDang" class="col-12 col-form-label">Chọn ngày đăng</label>
                                     <div class="col">
-                                        <input id="ngaydang" disabled type="date" name="NgayDang"
-                                            class="form-control form-group" required>
+                                        <input id="ngaydang" type="text" name="NgayDang"
+                                            class="form-control form-group" disabled>
                                     </div>
                                 </div>
 
