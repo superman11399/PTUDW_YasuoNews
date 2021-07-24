@@ -267,6 +267,8 @@ router.get("/manage/post/content/:id", async function (req, res) {
   const comment = await newsModel.getCommentOfArticle(id);
   const subCateList = await cateModel.allSubCate();
   const tags = await tagModel.all();
+  const rawNgayDang = await newsModel.layNgayDang(id);
+  const NgayDang = moment(rawNgayDang,'YYYY-MM-DDTHH:mm:ss.SSS').format('DD/MM/YYYY HH:mm');
   const tagsOfArticle = await newsModel.getAllTagWithDetail();
   var canUpdate = false;
 
@@ -284,6 +286,7 @@ router.get("/manage/post/content/:id", async function (req, res) {
     listSubCate: subCateList,
     listTagOfArticle: tagsOfArticle,
     listTag: tags,
+    NgayDang: NgayDang,
     flag: canUpdate,
   });
 });
@@ -319,9 +322,10 @@ router.post("/manage/post/update", async function (req, res) {
   const id = req.body.postID;
   const subID = req.body.subID;
   const status = req.body.newStatus;
+  const NgayDang = moment(req.body.NgayDang, 'DD/MM/YYYYTHH:mm').format('YYYY-MM-DD HH:mm:ss');
   const url = req.headers.referer || "/admin/manage/post/";
   if (typeof id !== "undefined") {
-    const result = await newsModel.updatePost(id, subID, status);
+    const result = await newsModel.updatePost(id, subID, status, NgayDang);
     if (result) {
       req.flash("success", "Cập nhật bài viết thành công");
     } else {

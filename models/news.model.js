@@ -623,9 +623,9 @@ module.exports = {
     }
   },
 
-  async updatePost(id, subID, status) {
-    if(status==="Đã xuất bản"){
-      await this.themVaoBaiXuatBan(id);
+  async updatePost(id, subID, status, NgayDang) {
+    if(status==="Đã xuất bản"||status==="Đã duyệt - Chờ xuất bản"){
+      await this.themVaoBaiXuatBan(id, status,NgayDang);
     } 
     return db("baibao")
       .where("idBaiBao", id)
