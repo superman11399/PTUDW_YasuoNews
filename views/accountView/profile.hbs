@@ -1,32 +1,59 @@
-{{#section "js"}}
-  <script>
-    function validateEmail(email) { const re =
-    /^(([^<>()[\\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email); }
-  </script>
-  <script>
-    $(document).ready(function () { $('.modal').modal('show'); var color =
-    "aliceblue"; const role = $('#userRole').text(); if (role === 'subscriber'){
-    color = "khaki"; $("#card_content #userRole").text("ĐỘC GIẢ VIP"); } if
-    (role === 'editor'){ color = "greenyellow"; $("#card_content
-    #userRole").text("BIÊN TẬP VIÊN"); } if (role === 'writer'){ var idNguoiDung
-    = $('#idNguoiDung').text();
-    $.getJSON(`/account/get-ButDanh?id=${idNguoiDung}`,function (data2) {
-    console.log(data2); $("#txtButDanh").val(data2); }); color = "lightcoral";
-    $("#card_content #userRole").text("PHÓNG VIÊN"); } if (role === 'admin'){
-    color = "violet"; $("#card_content #userRole").text("QUẢN TRỊ VIÊN"); } if
-    (role === 'guest'){ $("#card_content #userRole").text("ĐỘC GIẢ THƯỜNG"); }
-    $("#card_content").css("background-color", color); });
-    $('#editProfile').on('click', async function (e) {
-    if($("#submitBtn").is(":visible")){ $("#submitBtn").hide();
-    $('#txtName').prop('readonly', true); $('#txtEmail').prop('readonly', true);
-    $('#txtDOB').prop('readonly', true); $("#txtButDanh").prop('readonly',
-    true); } else { $("#submitBtn").show(); $('#txtName').prop('readonly',
-    false); $('#txtEmail').prop('readonly', false);
-    $('#txtDOB').prop('readonly', false); $("#txtButDanh").prop('readonly',
-    false); }; });
++{{#section 'js'}}
+<script>
+    function validateEmail(email) {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+    }
+</script>
+<script>
+    $(document).ready(function () {
+        var color = "aliceblue";
+        const role = $('#userRole').text();
+        if (role === 'subscriber'){
+            color = "khaki";
+            $("#card_content #userRole").text("ĐỘC GIẢ VIP");
+        }
+        if (role === 'editor'){
+            color = "greenyellow";
+            $("#card_content #userRole").text("BIÊN TẬP VIÊN");
+        }
+        if (role === 'writer'){
+            color = "lightcoral";
+            $("#card_content #userRole").text("PHÓNG VIÊN");
+        }
+        if (role === 'admin'){
+            color = "violet";
+            $("#card_content #userRole").text("QUẢN TRỊ VIÊN");
+        }
+        if (role === 'guest'){
+            $("#card_content #userRole").text("ĐỘC GIẢ THƯỜNG");
+        }
+        $("#card_content").css("background-color", color);
+        var idNguoiDung = $('#idNguoiDung').text();
+        $.getJSON(`/account/get-ButDanh?id=${idNguoiDung}`,function (data2) {
+            console.log(data2);
+            $("#txtButDanh").val(data2);
+        });
+    });
 
-  </script>
+    $('#editProfile').on('click', async function (e) {
+        if($("#submitBtn").is(":visible")){
+            $("#submitBtn").hide();
+            $('#txtName').prop('readonly', true);
+            $('#txtEmail').prop('readonly', true);
+            $('#txtDOB').prop('readonly', true);
+            $("#txtButDanh").prop('readonly', true);
+        }
+        else {
+            $("#submitBtn").show();
+            $('#txtName').prop('readonly', false);
+            $('#txtEmail').prop('readonly', false);
+            $('#txtDOB').prop('readonly', false);
+            $("#txtButDanh").prop('readonly', false);
+        };
+    });
+
+    </script>
 {{/section}}
 
 <!-- Main Breadcrumb Start -->
