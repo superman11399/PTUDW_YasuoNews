@@ -161,7 +161,7 @@ module.exports = {
         "BaiBaoDuocDuyet.idBaiBao"
       )
       .limit(1);
-      const id7 = db("BaiBao")
+    const id7 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
       .where("BaiBao.idChuyenMucPhu", "7")
       .join(
@@ -178,7 +178,7 @@ module.exports = {
         "BaiBaoDuocDuyet.idBaiBao"
       )
       .limit(1);
-      const id8 = db("BaiBao")
+    const id8 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
       .where("BaiBao.idChuyenMucPhu", "8")
       .join(
@@ -195,7 +195,7 @@ module.exports = {
         "BaiBaoDuocDuyet.idBaiBao"
       )
       .limit(1);
-      const id9 = db("BaiBao")
+    const id9 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
       .where("BaiBao.idChuyenMucPhu", "9")
       .join(
@@ -212,7 +212,7 @@ module.exports = {
         "BaiBaoDuocDuyet.idBaiBao"
       )
       .limit(1);
-      const id10 = db("BaiBao")
+    const id10 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
       .where("BaiBao.idChuyenMucPhu", "10")
       .join(
@@ -447,6 +447,13 @@ module.exports = {
   ThemBaiBaoDuocDuyet(bb) {
     return db("baibaoduocduyet").insert(bb);
   },
+  SetThoiGianDang(id, NgayDang) {
+    const sql = `CREATE EVENT dang_bai_${id}
+    ON SCHEDULE AT '${NgayDang}'
+    DO
+      update baibao set TinhTrangDuyet="Đã xuất bản" where idBaiBao=${id} and TinhTrangDuyet="Đã duyệt - Chờ xuất bản"`;
+    return db.raw(sql);
+  },
   LayDanhSachTagCuaBaiViet(idBaiBao) {
     const sql = `SELECT * FROM baibao_tag where idBaiBao=${idBaiBao}`;
     const res = db.raw(sql);
@@ -595,54 +602,64 @@ module.exports = {
   },
 
   async getCommentOfArticle(idBaiBao) {
-    return db('binhluan').where("idBaiBao",idBaiBao);
+    return db("binhluan").where("idBaiBao", idBaiBao);
   },
 
   delCom(id) {
     return db("binhluan").where("idBL", id).del();
   },
 
-  async themVaoBaiXuatBan(id, status, NgayDang){
-    const exist = await db("baibaoduocduyet").where("idBaiBao",id);
-    if(exist.length===0){
-      if(status==="Đã xuất bản"){
+  async themVaoBaiXuatBan(id, status, NgayDang) {
+    const exist = await db("baibaoduocduyet").where("idBaiBao", id);
+    if (exist.length === 0) {
+      if (status === "Đã xuất bản") {
         const query = `insert into baibaoduocduyet value(${id},NOW(),0)`;
         return db.raw(query);
-      }else{
-        const baibao = {idBaiBao: id, NgayDang};
+      } else {
+        const baibao = { idBaiBao: id, NgayDang };
         return db("baibaoduocduyet").insert(baibao);
       }
-    }
-    else{
-      if(status==="Đã xuất bản"){
+    } else {
+      if (status === "Đã xuất bản") {
         const query = `update baibaoduocduyet set NgayDang = NOW() where idBaiBao = ${id}`;
         return db.raw(query);
-      }else{
-        return db("baibaoduocduyet").where("idBaiBao",id).update("NgayDang",NgayDang);
+      } else {
+        return db("baibaoduocduyet")
+          .where("idBaiBao", id)
+          .update("NgayDang", NgayDang);
       }
     }
   },
 
   async updatePost(id, subID, status, NgayDang) {
-    if(status==="Đã xuất bản"||status==="Đã duyệt - Chờ xuất bản"){
-      await this.themVaoBaiXuatBan(id, status,NgayDang);
-    } 
+    if (status === "Đã xuất bản" || status === "Đã duyệt - Chờ xuất bản") {
+      await this.themVaoBaiXuatBan(id, status, NgayDang);
+    }
     return db("baibao")
       .where("idBaiBao", id)
       .update("idChuyenMucPhu", subID)
       .update("TinhTrangDuyet", status);
   },
 
-  async layNgayDang(id){
-    const row = await db("baibaoduocduyet").where("idBaiBao",id).select("NgayDang");
-    if(row.length===0) return null;
+  async layNgayDang(id) {
+    const row = await db("baibaoduocduyet")
+      .where("idBaiBao", id)
+      .select("NgayDang");
+    if (row.length === 0) return null;
     return row[0].NgayDang;
   },
 
   async getDetailOfPostForAdmin(id) {
-    row = await db("baibao").where("idBaiBao",id).leftJoin("chuyenmucphu","baibao.idChuyenMucPhu","=","chuyenmucphu.idChuyenMucPhu").leftJoin("phongvien","idTacGia","=","idPV");
-    if(row.length===0)
-      return null;
+    row = await db("baibao")
+      .where("idBaiBao", id)
+      .leftJoin(
+        "chuyenmucphu",
+        "baibao.idChuyenMucPhu",
+        "=",
+        "chuyenmucphu.idChuyenMucPhu"
+      )
+      .leftJoin("phongvien", "idTacGia", "=", "idPV");
+    if (row.length === 0) return null;
     return row[0];
   },
 };

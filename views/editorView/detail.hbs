@@ -43,55 +43,57 @@
                               </textarea>
                             </div>
                         </div>
-                        <!--<input type="text" id="_csrf" name="_csrf" value="{{csrfToken}}" hidden>
-                        <input type="text" id="_articleID" value="{{article._id}}" hidden>
-                        <input type="text" id="categoryMain" value="{{article.categoryMain}}" hidden>
-                        <input type="text" id="writeDate" value="{{article.writeDate}}" hidden>
-                        <input type="text" id="writerMain" value="{{article.writer}}" hidden>-->
                 </div>
-                <div class="col-md-auto">
-                    <label for="text" class="col-12 col-form-label">Ảnh cover cho bài viết</label>
-
-                    <img id="avatar" alt="User Pic" src="/img/BaiBao/{{article.idBaiBao}}/{{article.AnhDaiDien}}" class="img-thumbnail img-fluid">
-                            <div class="form-group row">
-                                <label for="categorySub" class="col-12 col-form-label">Chọn chuyên mục</label>
-                                <div class="col-12">
-                                    <select id="category" name="idChuyenMucPhu" class="custom-select" required="required" {{#unless approve}}disabled{{/unless}}
-                                        style="width: 250px">
-                                        {{#each listSub}}
-                                        <option value="{{idChuyenMucPhu}}" 
-                                        {{#IfEquals idChuyenMucPhu ../article.idChuyenMucPhu}}
-                                        selected {{/IfEquals}}>{{TenChuyenMucPhu}}</option>
-                                        {{/each}}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="select" class="col-12 col-form-label">Chọn tag</label>
-                                <div class="col-8">
-                                    <select class="form-control chosen" multiple tabindex="4" name="tag" id="tag"
-                                        data-placeholder="Hãy chọn ít nhất một thẻ tag" style="width: 250px" required="required">
-                                        <option value=""></option>
-                                        {{# each tags }}
-                                        <option value="{{idTag}}" 
-                                        {{#ifIn idTag ../tagsOfNews}}selected
-                                        {{/ifIn}}>{{TenTag}}</option>
-                                        {{/ each }}
-                                    </select>
-                                </div>
-                            </div>
-                            {{#if approve}}
-                            <button type="button" class="btn btn-info btn-sm" onclick="openDenyModal()">Từ chối</button>
-                            <button type="button" class="btn btn-primary btn-sm"
-                                onclick="openApproveModal()">Duyệt</button>
-                            {{ else }}
-                            <button type="button" class="btn btn-info btn-sm" disabled>Từ chối</button>
-                            <button type="button" form="articleContent" class="btn btn-primary btn-sm"
-                                disabled>Duyệt</button>
-                            {{/if }}
-                    </div>
-                </form>
             </div>
+            <div class="row px-3">
+                <div class="col-xs-12 col-lg-6">
+                    <label for="text" class="col-12 col-form-label">Ảnh cover cho bài viết</label>
+                    <div class="row justify-content-center">
+                      <img id="avatar" alt="User Pic" src="/img/BaiBao/{{article.idBaiBao}}/{{article.AnhDaiDien}}" class="rounded img-fluid" style="max-width: 90%;max-height: 500px">
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-6">
+                  <div class="form-group row">
+                      <label for="categorySub" class="col-12 col-form-label">Chọn chuyên mục</label>
+                      <div class="col-12">
+                          <select id="category" name="idChuyenMucPhu" class="custom-select" required="required" {{#unless approve}}disabled{{/unless}}
+                              style="width: 250px">
+                              {{#each listSub}}
+                              <option value="{{idChuyenMucPhu}}" 
+                              {{#IfEquals idChuyenMucPhu ../article.idChuyenMucPhu}}
+                              selected {{/IfEquals}}>{{TenChuyenMucPhu}}</option>
+                              {{/each}}
+                          </select>
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="select" class="col-12 col-form-label">Chọn tag</label>
+                      <div class="col-8">
+                          <select class="form-control chosen" multiple tabindex="4" name="tag" id="tag"
+                              data-placeholder="Hãy chọn ít nhất một thẻ tag" style="width: 250px" required="required">
+                              <option value=""></option>
+                              {{# each tags }}
+                              <option value="{{idTag}}" 
+                              {{#ifIn idTag ../tagsOfNews}}selected
+                              {{/ifIn}}>{{TenTag}}</option>
+                              {{/ each }}
+                          </select>
+                      </div>
+                  </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-3">
+              {{#if approve}}
+              <button type="button" class="btn btn-info btn-md mx-1" onclick="openDenyModal()">Từ chối</button>
+              <button type="button" class="btn btn-primary btn-md mx-1"
+                  onclick="openApproveModal()">Duyệt</button>
+              {{ else }}
+              <button type="button" class="btn btn-info btn-md mx-1" disabled>Từ chối</button>
+              <button type="button" form="articleContent" class="btn btn-primary btn-md mx-1"
+                  disabled>Duyệt</button>
+              {{/if }}
+            </div>
+              </form>
         </div>
     </div>
 </div>

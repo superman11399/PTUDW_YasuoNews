@@ -86,6 +86,9 @@
                               NgayDang
                               "DD/MM/YYYY"
                             }}</a></li>
+                        {{#if Premium}}
+                        <li><a style="color: #da0000">PREMIUM</a></li>
+                        {{/if}}
                       </ul>
                       <div class="title">
                         <h3><a
@@ -173,6 +176,9 @@
                                     NgayDang
                                     "DD/MM/YYYY"
                                   }}</a></li>
+                              {{#if Premium}}
+                              <li><a style="color: #da0000">PREMIUM</a></li>
+                              {{/if}}
                             </ul>
 
                             <div class="title">
@@ -304,6 +310,9 @@
                                   >{{LuotXem}}</span><i
                                     class="fa fa-eye"
                                   ></i></a></li>
+                              {{#if Premium}}
+                              <li><a style="color: #da0000">PREMIUM</a></li>
+                              {{/if}}
                             </ul>
 
                             <div class="title">
@@ -357,6 +366,9 @@
                           <div class="post--info">
                             <ul class="nav meta">
                               <li><a href="#">{{ButDanh}}</a></li>
+                              {{#if Premium}}
+                              <li><a style="color: #da0000">PREMIUM</a></li>
+                              {{/if}}
                               <li class="pull-right"><a href="#"><span
                                   >{{LuotXem}}</span><i
                                     class="fa fa-eye"

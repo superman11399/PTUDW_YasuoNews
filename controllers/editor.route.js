@@ -147,10 +147,13 @@ router.post("/approve/:id", async function (req, res) {
   }
   const bb = { idBaiBao: id, NgayDang };
   const dang = await news.ThemBaiBaoDuocDuyet(bb);
+  const setTime = await news.SetThoiGianDang(id, NgayDang);
+  console.log("setTime", setTime);
   console.log("dang", dang);
   if (dang === null) {
     console.log("them baibaoduocduyet that bai!");
     req.flash("errors", "Lỗi thêm bài báo dc duyệt");
+    res.redirect("/editor/waiting");
   }
   for (let index = 0; index < tagList.length; ++index) {
     const result2 = await news.ThemTagBaiViet(id, tagList[index]);

@@ -52,6 +52,9 @@
                       class="fa fm fa-eye"
                     ></i>{{this.details.LuotXem}}</span></li>
                 <li><a href="#"><i class="fa fm fa-comments-o"></i>{{this.cmt_count}}</a></li>
+                {{#if this.details.Premium}}
+                <li><a style="color: #da0000">PREMIUM</a></li>
+                {{/if}}
               </ul>
 
               <div class="title">
@@ -257,9 +260,10 @@
                   </div>
                   {{/unless}}
 
+                  {{#if auth}}
                   <div class="col-sm-12">
                     <label>
-                      <span>Comment *</span>
+                      <span>Bình luận *</span>
                       <textarea
                         name="NoiDung" id="NoiDung"
                         class="form-control"
@@ -267,6 +271,7 @@
                       ></textarea>
                     </label>
                   </div>
+                  {{/if}}
 
                   
 
@@ -312,22 +317,27 @@
                 {{#each this.related5}}
                 <li class="col-sm-6 pbottom--30">
                   <!-- Post Item Start -->
-                  <div class="post--item post--layout-1">
+                  <div class="post--item post--layout-1 py-3">
                     <div class="post--img">
-                      <a href="#" class="thumb"><img
+                      <a href="/news/newscontent/{{idBaiBao}}" class="thumb"><img
                       style="height: 250px; width:auto; display: block; margin-left: auto; margin-right: auto;"
                           src="img/BaiBao/{{idBaiBao}}/{{AnhDaiDien}}"
                         /></a>
                       <a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}" class="cat">{{TenChuyenMucPhu}}</a>
-                      <a href="#" class="icon"><i class="fa fa-flash"></i></a>
+                      <a href="/news/newscontent/{{idBaiBao}}" class="icon"><i class="fa fa-flash"></i></a>
 
                       <div class="post--info">
                         <ul class="nav meta">
-                          <li>{{ButDanh}}</li>
-                          <li>{{dateFormat
-                      this.details.NgayDang
-                      "DD/MM/YYYY"
-                    }}</li>
+                          <li><a >{{ButDanh}}</a></li>
+                          <li><a >{{dateFormat
+                            NgayDang
+                            "DD/MM/YYYY"
+                          }}</a>
+                          </li>
+                          <li><a >{{#if Premium}}
+                              <li><a style="color: #da0000">PREMIUM</a></li>
+                              {{/if}}</a>
+                          </li>
                         </ul>
 
                         <div class="title">
@@ -504,6 +514,9 @@
                                   >{{LuotXem}}</span><i
                                     class="fa fa-eye"
                                   ></i></a></li>
+                              {{#if Premium}}
+                              <li><a style="color: #da0000">PREMIUM</a></li>
+                              {{/if}}
                             </ul>
 
                             <div class="title">
@@ -563,6 +576,9 @@
                                                     >{{LuotXem}}</span><i
                                                         class="fa fa-eye"
                                                     ></i></a></li>
+                                                {{#if Premium}}
+                                                <li><a style="color: #da0000">PREMIUM</a></li>
+                                                {{/if}}
                                                 </ul>
 
                                                 <div class="title">

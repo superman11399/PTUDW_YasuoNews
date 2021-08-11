@@ -40,7 +40,7 @@
             <div class="user-pic">
               <img
                 class="img-responsive img-rounded"
-                src="{{avatar}}"
+                src="/img/default-avatar.png"
                 alt="User picture"
               />
             </div>
@@ -56,27 +56,10 @@
             </div>
           </div>
           <!-- sidebar-header  -->
-          <div class="sidebar-search">
-            <div>
-              <div class="input-group">
-                <input
-                  type="text"
-                  class="form-control search-menu"
-                  placeholder="Tìm kiếm..."
-                />
-                <div class="input-group-append">
-                  <span class="input-group-text">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- sidebar-search  -->
           <div class="sidebar-menu">
             <ul>
               <li class="header-menu">
-                <span>Bài viết</span>
+                <span>Quản lý bài viết</span>
               </li>
               <li>
                 <a href="/writer/post">
@@ -114,7 +97,7 @@
         </div>
         <!-- sidebar-content  -->
         <div class="sidebar-footer">
-          <a href="/user/profile">
+          <a href="/account/profile">
             <i class="fa fa-cog my-2"> Cá nhân</i>
           </a>
           <form id="formLogout" action="/account/logout" method="post"></form>
