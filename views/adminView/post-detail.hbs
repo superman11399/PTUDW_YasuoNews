@@ -27,6 +27,9 @@
     if ($('#status').val() === "Đã xuất bản") {
       $('#status').attr('disabled', 'disabled');
     }
+    if ($(`#status`).val() === 'Đã duyệt - Chờ xuất bản') {
+      $('#ngaydang').attr('disabled', false);
+    }
     $("#frmUpdatePost").data("changed", false);
     $('#ngaydang').val('{{NgayDang}}');
   });
