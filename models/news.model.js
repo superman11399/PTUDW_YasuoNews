@@ -1,24 +1,15 @@
 const db = require("../utils/db");
 
 module.exports = {
-  BaiVietNoiBat() {
-    return db("BaiBao")
-      .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
-      .join(
-        "ChuyenMucPhu",
-        "BaiBao.idChuyenMucPhu",
-        "=",
-        "ChuyenMucPhu.idChuyenMucPhu"
-      )
-      .join("PhongVien", "BaiBao.idTacGia", "=", "PhongVien.idPV")
-      .join(
-        "BaiBaoDuocDuyet",
-        "BaiBao.idBaiBao",
-        "=",
-        "BaiBaoDuocDuyet.idBaiBao"
-      )
-      .orderByRaw("RAND()")
-      .limit(4);
+  async BaiVietNoiBat() {
+    const query = `SELECT * FROM BaiBao, ChuyenMucPhu, PhongVien, BaiBaoDuocDuyet 
+    WHERE BaiBao.idChuyenMucPhu = ChuyenMucPhu.idChuyenMucPhu 
+    AND BaiBao.idTacGia = PhongVien.idPV 
+    AND BaiBao.idBaiBao = BaiBaoDuocDuyet.idBaiBao 
+    AND BaiBaoDuocDuyet.NgayDang BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW() 
+    ORDER BY BaiBaoDuocDuyet.LuotXem DESC LIMIT 4`;
+    const result = await db.raw(query);
+    return result[0];
   },
   Top10XemNhieuNhat() {
     return db("BaiBao")
