@@ -164,7 +164,7 @@
                             <li>
                                 <a href="/news/home">Trang Chủ</a>
                             </li>
-                            {{#each this.listCMC}}
+                            {{#each listCMC}}
                             <li class="dropdown megamenu filter">
                                 <a href="/news/newslist/idChuyenMucChinh/{{idChuyenMucChinh}}" data-toggle="dropdown" class="dropdown-toggle" >{{TenChuyenMuc}}<i class="fa flm fa-angle-down"></i></a>
                                 <ul class="dropdown-menu">
@@ -174,7 +174,7 @@
                                                 <!-- Megamenu Filter Start -->
                                                 <div class="megamenu--filter">
                                                     <ul class="nav">
-                                                        {{#each ../this.listCMP}}
+                                                        {{#each ../listCMP}}
                                                         {{#IfEquals idChuyenMucChinh ../idChuyenMucChinh}}
                                                         <li>
                                                             <a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}" data-cat="latin-america">{{TenChuyenMucPhu}}<i class="fa fa-angle-right"></i></a>
@@ -195,12 +195,12 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Danh sách chuyên mục<i class="fa flm fa-angle-down"></i></a>
 
                                 <ul class="dropdown-menu">
-                                    {{#each this.listCMC}}
+                                    {{#each listCMC}}
                                     <li class="dropdown">
                                         <a href="/news/newslist/idChuyenMucChinh/{{idChuyenMucChinh}}">{{TenChuyenMuc}}</a>
 
                                         <ul class="dropdown-menu">
-                                            {{#each ../this.listCMP}}
+                                            {{#each ../listCMP}}
                                             {{#IfEquals idChuyenMucChinh ../idChuyenMucChinh}}
                                             <li><a href="/news/newslist/idChuyenMucPhu/{{idChuyenMucPhu}}">{{TenChuyenMucPhu}}</a></li>
                                             {{/IfEquals}}

@@ -6,6 +6,8 @@ module.exports = function (app) {
         }
         res.locals.auth = req.session.auth;
         res.locals.authUser = req.session.authUser;
+        res.locals.listCMC = req.session.listCMC;
+        res.locals.listCMP = req.session.listCMP;
         next();
       })
 }
