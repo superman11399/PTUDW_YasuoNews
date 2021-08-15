@@ -1,5 +1,6 @@
 const express = require("express");
 const news = require("../models/news.model");
+const users = require("../models/user.model");
 const date = require("date-and-time");
 const router = express.Router();
 
@@ -16,12 +17,10 @@ router.get("/home", async function (req, res) {
   const listCMP = await news.LayDanhSachChuyenMucPhu();
   req.session.listCMC = listCMC;
   req.session.listCMP = listCMP;
-  if (!res.locals.listCMC)
-  {
+  if (!res.locals.listCMC) {
     res.locals.listCMC = listCMC;
   }
-  if (!res.locals.listCMP)
-  {
+  if (!res.locals.listCMP) {
     res.locals.listCMP = listCMP;
   }
   res.render("home", {
@@ -66,12 +65,10 @@ router.get("/newslist/idChuyenMucPhu/:id", async function (req, res) {
   const listCMP = await news.LayDanhSachChuyenMucPhu();
   req.session.listCMC = listCMC;
   req.session.listCMP = listCMP;
-  if (!res.locals.listCMC)
-  {
+  if (!res.locals.listCMC) {
     res.locals.listCMC = listCMC;
   }
-  if (!res.locals.listCMP)
-  {
+  if (!res.locals.listCMP) {
     res.locals.listCMP = listCMP;
   }
   res.render("newsView/newslist_CMP", {
@@ -112,12 +109,10 @@ router.get("/newslist/idTag/:id", async function (req, res) {
   const listCMP = await news.LayDanhSachChuyenMucPhu();
   req.session.listCMC = listCMC;
   req.session.listCMP = listCMP;
-  if (!res.locals.listCMC)
-  {
+  if (!res.locals.listCMC) {
     res.locals.listCMC = listCMC;
   }
-  if (!res.locals.listCMP)
-  {
+  if (!res.locals.listCMP) {
     res.locals.listCMP = listCMP;
   }
   res.render("newsView/newslist_Tag", {
@@ -161,12 +156,10 @@ router.get("/newslist/idChuyenMucChinh/:id", async function (req, res) {
   const listCMP = await news.LayDanhSachChuyenMucPhu();
   req.session.listCMC = listCMC;
   req.session.listCMP = listCMP;
-  if (!res.locals.listCMC)
-  {
+  if (!res.locals.listCMC) {
     res.locals.listCMC = listCMC;
   }
-  if (!res.locals.listCMP)
-  {
+  if (!res.locals.listCMP) {
     res.locals.listCMP = listCMP;
   }
   res.render("newsView/newslist_CMC", {
@@ -207,12 +200,10 @@ router.get("/newslist", async function (req, res) {
   const listCMP = await news.LayDanhSachChuyenMucPhu();
   req.session.listCMC = listCMC;
   req.session.listCMP = listCMP;
-  if (!res.locals.listCMC)
-  {
+  if (!res.locals.listCMC) {
     res.locals.listCMC = listCMC;
   }
-  if (!res.locals.listCMP)
-  {
+  if (!res.locals.listCMP) {
     res.locals.listCMP = listCMP;
   }
   res.render("newsView/newslist_search", {
@@ -246,12 +237,10 @@ router.get("/newscontent/:id", async function (req, res) {
   const listCMP = await news.LayDanhSachChuyenMucPhu();
   req.session.listCMC = listCMC;
   req.session.listCMP = listCMP;
-  if (!res.locals.listCMC)
-  {
+  if (!res.locals.listCMC) {
     res.locals.listCMC = listCMC;
   }
-  if (!res.locals.listCMP)
-  {
+  if (!res.locals.listCMP) {
     res.locals.listCMP = listCMP;
   }
   // console.log("res", result);
@@ -264,12 +253,20 @@ router.get("/newscontent/:id", async function (req, res) {
   }
   let allowRead = false;
   if (details.Premium === 1) {
-    if (
-      req.session.auth &&
-      (req.session.authUser.LoaiNguoiDung === "subscriber" ||
-        req.session.authUser.LoaiNguoiDung === "admin")
-    ) {
-      allowRead = true;
+    if (req.session.auth) {
+      if (req.session.authUser.LoaiNguoiDung === "admin") {
+        allowRead = true;
+      } else if (req.session.authUser.LoaiNguoiDung === "subscriber") {
+        if (new Date(req.session.authUser.NgayHetHan) > new Date()) {
+          allowRead = true;
+          console.log("ConHan");
+        } else {
+          const thuHoi = await users.ThuHoiSubscriber(
+            req.session.authUser.idNguoiDung
+          );
+          console.log("HetHan", thuHoi);
+        }
+      }
     }
   } else {
     allowRead = true;

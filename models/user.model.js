@@ -169,8 +169,8 @@ WHERE nd.TinhTrang != 0`;
     return row[0];
   },
 
-  findWriter(){
-    return db('phongvien');
+  findWriter() {
+    return db("phongvien");
   },
 
   async findWriterWithDetail() {
@@ -237,5 +237,10 @@ WHERE nd.TinhTrang != 0`;
     } else {
       return row;
     }
+  },
+
+  ThuHoiSubscriber(id) {
+    const query = `update nguoidung set LoaiNguoiDung = "guest" where idNguoiDung = '${id}'`;
+    return db.raw(query);
   },
 };

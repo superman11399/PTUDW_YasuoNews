@@ -249,6 +249,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("Premium", "desc")
       .offset(offset)
       .limit(6);
   },
@@ -275,6 +276,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("Premium", "desc")
       .offset(offset)
       .limit(6);
   },
@@ -313,6 +315,7 @@ module.exports = {
         "BaiBaoDuocDuyet.idBaiBao"
       )
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
+      .orderBy("Premium", "desc")
       .offset(offset)
       .limit(6);
   },
@@ -487,7 +490,7 @@ module.exports = {
     const query =
       "SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4 ON t1.idBaiBao = t4.idBaiBao WHERE t1.TinhTrangDuyet='Đã xuất bản' AND MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('" +
       text +
-      "' IN NATURAL LANGUAGE MODE) LIMIT " +
+      "' IN NATURAL LANGUAGE MODE) ORDER BY Premium DESC LIMIT " +
       offset +
       ",6;";
     return db.raw(query);

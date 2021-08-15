@@ -13,7 +13,8 @@ module.exports = {
   findByUsername(username) {
     return db("nguoidung")
       .whereNot("TinhTrang", 0)
-      .where("TenDangNhap", username);
+      .where("TenDangNhap", username)
+      .leftJoin("subscriber", "nguoidung.idNguoiDung", "subscriber.idDocGia");
   },
   findById(id) {
     return db("nguoidung").whereNot("TinhTrang", 0).where("idNguoiDung", id);
