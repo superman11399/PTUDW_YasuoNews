@@ -40,9 +40,10 @@ module.exports = {
     if (hourDiff > 3) return false;
     return true;
   },
-  async checkUniqueEmail(email) {
+  async checkUniqueEmail(email,id) {
     const rows = await db("nguoidung")
       .whereNot("TinhTrang", 0)
+      .whereNot("idNguoiDung",id)
       .where("Email", email);
     console.log(rows);
     if (rows.length === 0) return true;

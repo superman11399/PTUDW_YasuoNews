@@ -7,6 +7,7 @@
 </script>
 <script>
     $(document).ready(function () {
+        $('.modal').modal('show');
         var color = "aliceblue";
         const role = $('#userRole').text();
         if (role === 'subscriber'){
@@ -137,6 +138,19 @@
                       />
                     </label>
                   </div>
+                  <div class="form-group">
+                    <label>
+                      <input
+                        style="color: black; font-style: italic;"
+                        type="hidden"
+                        name="id"
+                        hidden="true"
+                        value="{{authUser.idNguoiDung}}"
+                        class="form-control"
+                        required
+                      />
+                    </label>
+                  </div>
                   {{#IfEquals authUser.LoaiNguoiDung "writer"}}
                     <div class="form-group">
                       <label>
@@ -226,42 +240,22 @@
 <!-- Main Content Section End -->
 
 {{#if this.profile_message}}
-  <!-- The modal -->
-  <div
-    class="modal fade"
-    id="flipFlop"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="modalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h4
-            class="modal-title"
-            style="font-weight: bolder;"
-            id="modalLabel"
-          >Thông báo</h4>
-        </div>
-        <div class="modal-body">
-          {{this.profile_message}}</div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >Đóng</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- The modal -->
+<div class="modal fade" id="flipFlop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+<h4 class="modal-title" style="font-weight: bolder;" id="modalLabel">Thông báo</h4>
+</div>
+<div class="modal-body">
+{{this.profile_message}}</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+</div>
+</div>
+</div>
+</div>
 {{/if}}
