@@ -227,7 +227,6 @@ router.post("/manage/post/edit", async function (req, res) {
       }
       baibao = Object.assign(
         {
-          // idTacGia: idTacGia,
           AnhDaiDien,
           NgayCuoiChinhSua,
           TinhTrangDuyet,
