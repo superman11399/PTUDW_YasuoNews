@@ -175,10 +175,11 @@ router.get("/newslist/idChuyenMucChinh/:id", async function (req, res) {
 
 router.get("/newslist", async function (req, res) {
   var textSearch = req.query.search || "nullllll";
+  var searchType = req.query.search_param || "all";
   const limit = 6;
   const page = req.query.page || 1;
   if (page < 1) page = 1;
-  const total = await news.countSearch(textSearch);
+  const total = await news.countSearch(textSearch,searchType);
   let nPages = Math.floor(total / limit);
   if (total % limit > 0) nPages++;
   const page_numbers = [];
@@ -191,7 +192,7 @@ router.get("/newslist", async function (req, res) {
   }
   console.log(page_numbers);
   const offset = (page - 1) * limit;
-  const listBaiBao = await news.search(textSearch, offset);
+  const listBaiBao = await news.search(textSearch, searchType, offset);
   const listTag = await news.LayTagBaiBao();
   const listUniqueTag = await news.LayDanhSachTag();
   const listMoiNhat = await news.Top10MoiNhat();
