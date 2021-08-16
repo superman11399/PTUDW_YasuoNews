@@ -4,6 +4,7 @@
 {{/section}}
 
 {{#section 'js'}}
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js" integrity="sha256-5YmaxAwMjIpMrVlK84Y/+NjCpKnFYa8bWWBbUHSBGfU=" crossorigin="anonymous"></script>
 <script>
     function onlyNumberKey(evt) {
@@ -12,12 +13,13 @@
         if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
             return false;
         return true;
-    }
-    function validateEmail(email) {
+    };
+    function validateEmail(email){
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
-    }
+    };
 </script>
+
 <script>
     $('#formRegister').on('submit', async function (e) {
     const OTP = $('#txtOTP').val();
@@ -74,6 +76,7 @@
                     } else {
                         $('.form-group').hide();
                         $('#OTPbox').show();
+                        $('#captcha').show();
                         alert('Đã gửi OTP đến Email của bạn. Vui lòng kiểm tra để hoàn tất đăng ký!');
                     }
             });
@@ -149,6 +152,13 @@
                             <label>
                                 <span>OTP</span>
                                 <input id="txtOTP" type="text" name="OTP" class="form-control" onkeypress="return onlyNumberKey(event)" maxlength="6" required>
+                            </label>
+                        </div>
+                        <div class="form-group" >
+                            <label>
+                        <div class="g-recaptcha" 
+                                data-sitekey="6LewkgQcAAAAALFzkZ4w-f2xacDQyHC5tTmoUWHN">
+                        </div>
                             </label>
                         </div>
 
