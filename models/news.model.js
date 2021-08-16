@@ -486,24 +486,90 @@ module.exports = {
     return db("binhluan").insert(cmt);
   },
 
-  search(text, offset) {
-    const query =
-      "SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4 ON t1.idBaiBao = t4.idBaiBao WHERE t1.TinhTrangDuyet='Đã xuất bản' AND MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('" +
+  search(text, search_type, offset) {
+    if (search_type == "title")
+    {
+      const query =
+      `SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe) AGAINST ('"` +
       text +
-      "' IN NATURAL LANGUAGE MODE) ORDER BY Premium DESC LIMIT " +
+      `"' IN NATURAL LANGUAGE MODE) ORDER BY Premium DESC LIMIT ` +
       offset +
-      ",6;";
+      `,6;`;
+      return db.raw(query);
+    }
+    else if (search_type == "abstract")
+    {
+      const query =
+      `SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TomTat) AGAINST ('"` +
+      text +
+      `"' IN NATURAL LANGUAGE MODE) ORDER BY Premium DESC LIMIT ` +
+      offset +
+      `,6;`;
+      return db.raw(query);
+    }
+    else if (search_type == "detail")
+    {
+      const query =
+      `SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.NoiDungChiTiet) AGAINST ('"` +
+      text +
+      `"' IN NATURAL LANGUAGE MODE) ORDER BY Premium DESC LIMIT ` +
+      offset +
+      `,6;`;
+      return db.raw(query);
+    }
+    else
+    {
+    const query =
+      `SELECT * FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('"` +
+      text +
+      `"' IN NATURAL LANGUAGE MODE) ORDER BY Premium DESC LIMIT ` +
+      offset +
+      `,6;`;
     return db.raw(query);
+    }
   },
 
-  async countSearch(text) {
-    const query =
-      "SELECT COUNT(*) total FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('" +
+  async countSearch(text, search_type) {
+    if (search_type == "title")
+    {
+      const query =
+      `SELECT COUNT(*) total FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe) AGAINST ('"` +
       text +
-      "' IN NATURAL LANGUAGE MODE);";
+      `"' IN NATURAL LANGUAGE MODE);`;
+
+      const rows = await db.raw(query);
+      return rows[0][0].total;
+    }
+    else if (search_type == "abstract")
+    {
+      const query =
+      `SELECT COUNT(*) total FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TomTat) AGAINST ('"` +
+      text +
+      `"' IN NATURAL LANGUAGE MODE);`;
+
+      const rows = await db.raw(query);
+      return rows[0][0].total;
+    }
+    else if (search_type == "detail")
+    {
+      const query =
+      `SELECT COUNT(*) total FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.NoiDungChiTiet) AGAINST ('"` +
+      text +
+      `"' IN NATURAL LANGUAGE MODE);`;
+
+      const rows = await db.raw(query);
+      return rows[0][0].total;
+    }
+    else
+    {
+    const query =
+      `SELECT COUNT(*) total FROM BaiBao t1 INNER JOIN ChuyenMucPhu t2 ON t1.idChuyenMucPhu=t2.idChuyenMucPhu  INNER JOIN PhongVien t3 ON t1.idTacGia = t3.idPV INNER JOIN BaiBaoDuocDuyet t4  ON t1.idBaiBao = t4.idBaiBao WHERE MATCH (t1.TieuDe,t1.TomTat,t1.NoiDungChiTiet) AGAINST ('"` +
+      text +
+      `"' IN NATURAL LANGUAGE MODE);`;
+
     const rows = await db.raw(query);
-    console.log(rows[0][0]);
     return rows[0][0].total;
+    }
   },
   all() {
     return db("baibao")
