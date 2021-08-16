@@ -56,7 +56,7 @@ require("./middlewares/passport.mdw.js")(app);
 app.use(flash());
 require("./middlewares/routes.mdw.js")(app);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
   console.log(`EC Web App listening at http://localhost:${PORT}`);
 });
