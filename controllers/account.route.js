@@ -197,7 +197,7 @@ router.get('/profile',authen.isAuth, function (req, res) {
 });
 
 router.post('/change_profile',authen.isAuth, async function (req, res) {
-  if (await authen.checkUniqueEmail(req.body.email) === true)
+  if (await authen.checkUniqueEmail(req.body.email,req.body.id) === true)
   {
   const dob = req.body.dob + ' 00:00:00';
   await authen.CapNhat(req.session.authUser.idNguoiDung,req.body.fullname,req.body.email,dob);
@@ -208,11 +208,11 @@ router.post('/change_profile',authen.isAuth, async function (req, res) {
   req.session.authUser.HoTen=req.body.fullname;
   req.session.authUser.Email=req.body.email;
   req.session.authUser.NgaySinh=dob;
-  req.flash('profile_message','Thông tin đã được thay đổi!')
+  req.flash('profile_message','Thông tin đã được thay đổi!');
   }
   else
   {
-    req.flash('profile_message','Email của bạn đã bị trùng, vui lòng sử dụng email khác!')
+    req.flash('profile_message','Email của bạn đã bị trùng, vui lòng sử dụng email khác!');
   }
   res.redirect('profile');
 })
@@ -235,7 +235,7 @@ router.post('/profile_password',authen.isAuth, async function (req, res) {
   }
   else
   {
-    req.flash('password_message','Mật khẩu cũ không chính xác!')
+    req.flash('password_message','Mật khẩu cũ không chính xác!');
   }
   res.redirect('profile_password');
 })
