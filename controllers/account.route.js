@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const authen = require('../models/authen.model');
 const passport = require('passport');
 const router = express.Router();
+const fetch = require("isomorphic-fetch");
 var nodemailer =  require('nodemailer');
 function sendOTP(email) {
     var transporter =  nodemailer.createTransport({ // config mail server
@@ -13,6 +14,7 @@ function sendOTP(email) {
         }
     });
     const randomOTP = Math.floor(100000 + Math.random() * 900000);
+    console.log(randomOTP);
     var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
         from: 'Yasuo News',
         to: email,
@@ -77,12 +79,30 @@ router.post('/register',authen.isNotAuth, async function (req, res) {
     TinhTrang: 1
   }
   const OTPcheck = await authen.checkOTP(req.body.OTP,req.body.email);
-  const emailCheck = await authen.checkUniqueEmail(req.body.email);
-  if (OTPcheck && emailCheck)
-    {
+  const emailCheck = await authen.checkUniqueEmailWhenRegister(req.body.email);
+
+  const response_key = req.body["g-recaptcha-response"];
+  const secret_key = "6LewkgQcAAAAAFkuzAqjVOToLwA2frkcREbwxG4G";
+  const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${response_key}`;
+  var captchaCheck = true;
+  await fetch(url, {
+    method: "post",
+  })
+    .then((response) => response.json())
+    .then((google_response) => {
+      console.log(google_response);
+      if (google_response.success == false) {
+        captchaCheck = false;
+      }
+    })
+  if (OTPcheck && emailCheck && captchaCheck)
+  {
     await authen.addGuest(user);
     req.flash('succ_message','Đã đăng ký thành công! Vui lòng đăng nhập.');
-    }
+  }
+  else if (!captchaCheck) {
+    req.flash('err_message','Captcha lỗi!');
+  }
   else if (!OTPcheck) {
     req.flash('err_message','OTP bị lỗi hoặc đã quá hạn!');
   }
@@ -123,7 +143,7 @@ router.get('/is-available', async function (req, res) {
   }
   else if (req.query.email) {
     const email = req.query.email;
-    const check = await authen.checkUniqueEmail(email);
+    const check = await authen.checkUniqueEmailWhenRegister(email);
     if (check) {
       return res.json(false);
     }

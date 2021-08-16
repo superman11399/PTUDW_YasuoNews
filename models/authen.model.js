@@ -49,6 +49,14 @@ module.exports = {
     if (rows.length === 0) return true;
     return false;
   },
+  async checkUniqueEmailWhenRegister(email) {
+    const rows = await db("nguoidung")
+      .whereNot("TinhTrang", 0)
+      .where("Email", email);
+    console.log(rows);
+    if (rows.length === 0) return true;
+    return false;
+  },
   isAuth(req, res, next) {
     if (res.locals.auth) {
       next();
