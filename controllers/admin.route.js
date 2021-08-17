@@ -364,7 +364,7 @@ router.post("/manage/tag/delTag", async function (req, res) {
 
 router.post("/manage/tag/rename", async function (req, res) {
   if (typeof req.body.id !== "undefined") {
-    await tagModel.patch(
+    const result = await tagModel.patch(
       "idTag",
       req.body.id,
       "tag",
@@ -650,12 +650,20 @@ router.post("/manage/user/renewal", async function (req, res) {
 });
 
 router.post("/manage/user/assignCate", async function (req, res) {
-  row = {
-    idBTV: req.body.ideditor,
-    idChuyenMucChinh: req.body.idcate,
-  };
+  if (typeof req.body.ideditor !== "undefined") {
+    row = {
+      idBTV: req.body.ideditor,
+      idChuyenMucChinh: req.body.idcate,
+    };
 
-  userModel.assignCate(row);
+    const result = await userModel.assignCate(row);
+
+    if (result) {
+      req.flash("success", "Phân công chuyên mục thành công");
+    } else {
+      req.flash("error", "Phân công chuyên mục thất bại");
+    }
+  }
   res.redirect("/admin/manage/user/editor");
 });
 
