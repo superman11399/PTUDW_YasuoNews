@@ -106,7 +106,8 @@ module.exports = {
     }
   },
   layButDanh(idNguoiDung) {
-    return db("phongvien").where("idPV", idNguoiDung);
+    rows = db("phongvien").where("idPV", idNguoiDung);
+    return rows;
   },
   CapNhat(idNguoiDung, HoTen, Email, NgaySinh) {
     return db("nguoidung")
@@ -198,13 +199,5 @@ module.exports = {
       .whereNot("TinhTrang", 0)
       .where("idNguoiDung", id)
       .update({ MatKhau: hash });
-  },
-  findByFacebookID(FacebookID) {
-    return db("nguoidung")
-      .whereNot("TinhTrang", 0)
-      .where("FacebookID", FacebookID);
-  },
-  addNewFacebookUser(newUser) {
-    return db("nguoidung").insert(newUser);
   },
 };

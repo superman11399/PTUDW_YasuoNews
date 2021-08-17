@@ -31,10 +31,13 @@
         }
         $("#card_content").css("background-color", color);
         var idNguoiDung = $('#idNguoiDung').text();
-        $.getJSON(`/account/get-ButDanh?id=${idNguoiDung}`,function (data2) {
+        if (role == 'writer')
+        {
+          $.getJSON(`/account/get-ButDanh?id=${idNguoiDung}`,function (data2) {
             console.log(data2);
             $("#txtButDanh").val(data2);
-        });
+          });
+        }
     });
 
     $('#editProfile').on('click', async function (e) {

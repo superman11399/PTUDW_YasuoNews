@@ -66,6 +66,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     const id2 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
@@ -83,6 +84,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     const id3 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
@@ -100,6 +102,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     const id4 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
@@ -117,6 +120,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     const id5 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
@@ -134,6 +138,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     const id6 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
@@ -151,6 +156,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     const id7 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
@@ -168,6 +174,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     const id8 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
@@ -185,6 +192,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     const id9 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
@@ -202,6 +210,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     const id10 = db("BaiBao")
       .where("BaiBao.TinhTrangDuyet", "Đã xuất bản")
@@ -219,6 +228,7 @@ module.exports = {
         "=",
         "BaiBaoDuocDuyet.idBaiBao"
       )
+      .orderBy("NgayDang", "desc")
       .limit(1);
     return db
       .union(id1, true)

@@ -206,7 +206,7 @@ router.get('/get-ButDanh',authen.isAuth, async function (req, res) {
   if (rows === null) {
     return res.json('NULL');
   }
-  res.json(rows[0].ButDanh);
+  else res.json(rows[0].ButDanh);
 });
 
 router.get('/profile',authen.isAuth, function (req, res) {
