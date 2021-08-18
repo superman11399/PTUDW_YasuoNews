@@ -186,6 +186,7 @@ router.get("/newslist", async function (req, res) {
   for (i = 1; i <= nPages; i++) {
     page_numbers.push({
       search: textSearch,
+      search_param: searchType,
       value: i,
       isCurrent: i === +page,
     });
